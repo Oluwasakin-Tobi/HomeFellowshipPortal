@@ -52,6 +52,11 @@ public interface InquiryDao {
 	public List<AuditLog> getAuditReportByAffiliate(String affiliate);
 
 	List<Custactivities> getcustactivities(String flag);
+	
+	
+	
+
+	List<PrayerRequest> getPrayerRequest();
 
 	
 

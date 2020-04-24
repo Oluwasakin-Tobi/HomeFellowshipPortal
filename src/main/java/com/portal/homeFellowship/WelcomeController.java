@@ -1190,4 +1190,15 @@ public class WelcomeController {
 				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
 		return "redirect:/prayerRequest";
 	}
+	
+	@RequestMapping(value = "/viewPrayerRequest", method = RequestMethod.GET)
+	public String viewPrayerRequest(ModelMap model) throws Exception {
+
+		List<PrayerRequest> response = inquiryService.getPrayerRequest();
+		model.addAttribute("prayer", response);
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "viewPrayer";
+	}
 }

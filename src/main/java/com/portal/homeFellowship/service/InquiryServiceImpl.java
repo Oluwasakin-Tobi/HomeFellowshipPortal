@@ -233,6 +233,12 @@ public class InquiryServiceImpl implements InquiryService {
 	}
 	
 	
+	@Override
+	public List<PrayerRequest> getPrayerRequest(){
+		return dao.getPrayerRequest();
+	}
+	
+	
 
 
 

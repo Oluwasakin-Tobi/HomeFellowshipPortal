@@ -49,5 +49,10 @@ public interface InquiryService {
 	
 
 	Response sendSMS(Sms request);
+	
+	
+	
+
+	List<PrayerRequest> getPrayerRequest();
 
 }

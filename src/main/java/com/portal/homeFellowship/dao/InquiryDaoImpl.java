@@ -884,5 +884,35 @@ public class InquiryDaoImpl implements InquiryDao {
 
 	
 	
+	
+	
+	
+	@SuppressWarnings("all")
+	@Override
+	public List<PrayerRequest> getPrayerRequest() {
+		SimpleJdbcCall getPrayerRequest = new SimpleJdbcCall(jdbcTemplate);
+		getPrayerRequest.withProcedureName(baseUtilityPackage + ".get_prayer_request")
+				.withoutProcedureColumnMetaDataAccess()
+				.declareParameters(new SqlOutParameter("r_details", Types.REF_CURSOR))
+				.returningResultSet("r_details", new RowMapper<PrayerRequest>() {
+
+					@Override
+					public PrayerRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
+						PrayerRequest request = new PrayerRequest();
+						request.setName(rs.getString("requester"));
+						request.setPrayer(rs.getString("prayer_request"));
+						return request;
+					}
+				});
+
+		getPrayerRequest.compile();
+
+		Map<String, Object> returningResultSet = getPrayerRequest.execute();
+
+		List<PrayerRequest> response = (List<PrayerRequest>) returningResultSet.get("r_details");
+
+		return response == null || response.isEmpty() ? new ArrayList<>() : response;
+	}
+	
 
 }

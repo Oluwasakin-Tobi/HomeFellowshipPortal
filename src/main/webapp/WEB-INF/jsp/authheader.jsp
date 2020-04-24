@@ -225,6 +225,9 @@
 									
 							<li><i class="fa fa-book"></i><a
 									href="<c:url value="/prayerRequest" />">Prayer Request</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/viewPrayerRequest" />">View Prayer Request</a></li>
 						</ul></li>
 
 					<sec:authorize access="hasRole('ADMIN') or hasRole('CUSTOM')">
