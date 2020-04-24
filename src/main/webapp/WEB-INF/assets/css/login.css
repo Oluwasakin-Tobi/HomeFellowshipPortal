@@ -1,0 +1,86 @@
+body{
+    background-color: #fff;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+  /*  filter: blur(5px);
+   -webkit-filter: blur(5px);
+    left: 0px;
+    top: 0px;
+    z-index: -1;*/
+    width: 100%;
+    height: 100%;
+    background: url(../img/ECO.jpg) no-repeat center center fixed;
+    background-size: cover;
+    opacity: 0.9;
+    box-sizing: border-box;
+       
+}
+
+.loginbox {
+    border-radius: 12px;
+    box-sizing: border-box;
+}
+
+.headertxt1{
+    color: #023448;
+    font-size: 65px;
+    font-weight: 400;
+    height: 100px;
+    margin-top: 50px auto;
+    font-family: monospace;
+}
+
+.headertxt2{
+    color: rgba(0, 0, 0, 0.56);
+    font-size: 24px;
+    font-weight: 800;
+    margin-top: 30px auto;
+    font-family: system-ui;
+}
+
+.form-area{
+    margin: 30px;
+    margin-top: 0px;
+}
+
+.inputarea{
+    border: 2px solid #023448;
+    border-radius: 10px;
+    height: 50px;
+}
+
+.inputarea-header{
+    display: flex;
+    justify-content: left;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.56);
+    font-family: system-ui;
+    margin-left: -12px;
+    font-size: 16px;
+
+}
+
+.login-panel {
+    margin-top: 25% !important;
+  }
+
+.custpanel:hover {
+    opacity: 0.9 !important;
+}  
+
+.login-btn{
+    background-color: #023448;
+    color: #fff;
+    font-weight: 600;
+    margin-top: 30px;
+    font-family: Arial;
+    box-sizing: border-box;
+}
+
+.login-btn:hover{
+    opacity: 0.8;
+    color: #fff;
+}
+
+

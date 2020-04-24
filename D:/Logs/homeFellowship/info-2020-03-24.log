@@ -1,0 +1,259 @@
+20480 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24164 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20483 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20485 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21429 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 52  - Set MaxSwallowSize 50000000
+21442 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21443 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21443 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21853 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22644 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.376 seconds (JVM running for 22.841)
+75997 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20499 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24165 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20502 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20504 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21406 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 52  - Set MaxSwallowSize 50000000
+21417 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21417 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21417 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21807 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22596 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.318 seconds (JVM running for 22.824)
+141353 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20515 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24166 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20518 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20520 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21375 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 54  - Set MaxSwallowSize 50000000
+21386 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21386 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21386 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21771 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22572 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.271 seconds (JVM running for 22.802)
+83397 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20527 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24167 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20530 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20531 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21425 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21438 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21438 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21439 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21834 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22605 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.328 seconds (JVM running for 22.811)
+84514 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20498 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24168 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20501 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20503 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21471 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21485 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21485 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21485 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21954 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22872 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.604 seconds (JVM running for 23.076)
+98837 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20502 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24169 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20505 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20507 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21419 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21430 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21430 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21431 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21827 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22612 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.341 seconds (JVM running for 22.831)
+17411426 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20538 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24389 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20542 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20544 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21473 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21486 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21486 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21487 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21913 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22714 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.414 seconds (JVM running for 22.931)
+281046 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20605 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24392 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20608 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20610 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21497 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21511 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21512 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21512 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21908 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22778 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.416 seconds (JVM running for 23.007)
+122654 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20470 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24393 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20473 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20475 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21377 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21392 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21392 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21392 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21828 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22612 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.355 seconds (JVM running for 22.814)
+486136 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20483 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24397 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20487 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20489 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21365 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21375 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21376 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21376 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21765 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22574 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.294 seconds (JVM running for 22.798)
+197114 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20491 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24398 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20495 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20497 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21444 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21462 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21463 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21463 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21864 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22674 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.402 seconds (JVM running for 22.87)
+66129 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20536 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24399 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20539 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20540 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21401 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21413 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21413 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21414 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21803 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22629 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.334 seconds (JVM running for 22.831)
+140024 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20486 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24434 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20490 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20492 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21332 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21342 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21342 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21343 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21746 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22524 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.245 seconds (JVM running for 22.724)
+425692 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20578 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24450 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20581 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20582 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21449 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21459 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21459 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21460 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21874 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22726 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.381 seconds (JVM running for 22.974)
+12849781 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20546 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24524 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20549 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20551 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21394 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21402 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21403 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21403 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21771 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22580 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.269 seconds (JVM running for 22.792)
+128090 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20609 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24547 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20612 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20613 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21486 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21496 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21497 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21497 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21874 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22803 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.461 seconds (JVM running for 23.018)
+162697 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20689 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24579 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20692 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20693 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21562 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21573 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21573 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21573 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+22056 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22855 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.418 seconds (JVM running for 23.102)
+276055 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20507 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24600 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20511 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20512 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21386 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21399 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21399 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21399 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21961 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22821 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.525 seconds (JVM running for 23.039)
+368927 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20591 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24625 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20594 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20595 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21432 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21442 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21443 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21443 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21917 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22700 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.336 seconds (JVM running for 22.913)
+237164 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20616 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24648 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20620 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20621 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21576 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21587 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21587 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21587 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+22109 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22968 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.634 seconds (JVM running for 23.197)
+565699 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20544 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24680 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20547 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20549 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21565 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21579 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21579 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21579 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+22106 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22962 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.659 seconds (JVM running for 23.192)
+232748 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20590 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24681 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20593 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20595 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21449 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21460 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21460 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21460 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+22027 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22922 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.589 seconds (JVM running for 23.142)
+150501 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20623 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24682 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20626 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20628 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21515 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21528 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21528 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21529 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+22010 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22902 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.546 seconds (JVM running for 23.14)
+237974 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20552 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24684 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20555 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20556 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21452 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21465 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21465 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21465 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21849 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22632 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.285 seconds (JVM running for 22.865)
+108595 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20573 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24696 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20576 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20578 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21486 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21499 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21499 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21500 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21886 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22648 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.325 seconds (JVM running for 22.822)
+415682 [Thread-3] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
+20556 [main] INFO   o.s.boot.StartupInfoLogger.logStarting 50  - Starting App on Oluwasakins-MacBook-Pro.local with PID 24708 (/Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/target/classes started by oluwasakinoluwatobi in /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship)
+20561 [main] DEBUG  o.s.boot.StartupInfoLogger.logStarting 53  - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+20562 [main] INFO   o.s.boot.SpringApplication.logStartupProfileInfo 659  - No active profile set, falling back to default profiles: default
+21491 [main] INFO   com.portal.homeFellowship.App$1.customizeConnector 55  - Set MaxSwallowSize 50000000
+21516 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getArchiveFileDocumentRoot 82  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21516 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getExplodedWarFileDocumentRoot 126  - Code archive: /Users/oluwasakinoluwatobi/.m2/repository/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar
+21517 [main] DEBUG  o.s.b.w.servlet.server.DocumentRoot.getValidDirectory 70  - Document root: /Users/oluwasakinoluwatobi/eclipse-workspace/homeFellowship/src/main/webapp
+21923 [main] INFO   c.p.h.c.JdbcConfiguration.startup 29  - ***************************APPLICATION CONTEXT STARTED******************************
+22782 [main] INFO   o.s.boot.StartupInfoLogger.logStarted 59  - Started App in 22.469 seconds (JVM running for 22.992)

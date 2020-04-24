@@ -1,0 +1,2 @@
+80518139 [http-nio-1100-exec-1] INFO   c.p.homeFellowship.WelcomeController.loginPage 141  - login here
+105657368 [Thread-9] INFO   c.p.h.c.JdbcConfiguration.destroy 85  - **********************Application Destroyed...**********************
