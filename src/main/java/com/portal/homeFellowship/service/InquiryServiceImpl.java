@@ -222,20 +222,28 @@ public class InquiryServiceImpl implements InquiryService {
 		header.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		
 		HttpEntity<?> requestEntity = new HttpEntity<>(request, header);
-		String url = "https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=mg4agSmzVy42Z5f6DeJGYhNUrI1ddIIatcXKjNM21byE335IwAzGBo4CHvP9&from=CITH&to=08101899045&body=HI, WELCOME TO CHURCH";
+		String url = "https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=foaECnwfBW4Hro7eh277LE3g5SFluyXvjFOpvmWyTBnIxJAqktEfFP1xJLjP&from=CITH Portal&to="+request.getPhoneNo()+"&body="+request.getMessage();
 		
-		LOGGER.info("sms response "+request);
+		LOGGER.info("sms response "+request);//support@bulksmsnigeria.com
 		
-		ResponseEntity<?> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Response.class);
+		ResponseEntity<SmsResponse> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, SmsResponse.class);
 		LOGGER.info("sms response "+response.getBody());
+		if("success".equalsIgnoreCase(response.getBody().getData().getStatus())) {
+			return new Response("00", "Message Sent");
+		}
 		
-		return new Response("00", "Message sent");
+		return new Response("99", "Message Not Sent");
 	}
 	
 	
 	@Override
 	public List<PrayerRequest> getPrayerRequest(){
 		return dao.getPrayerRequest();
+	}
+
+	@Override
+	public List<Welfare> getWelfareRequest() {
+		return dao.getWelfareRequest();
 	}
 	
 	

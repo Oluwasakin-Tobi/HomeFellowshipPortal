@@ -339,6 +339,63 @@ public class AdminDaoImpl implements AdminDao {
 		
 		return response;
 	}
+	
+	@Override
+	public Response welfareRequest(Welfare request) {
+		SimpleJdbcCall prayerRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		prayerRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".welfare_request")
+		.declareParameters(new SqlParameter("p_name", Types.VARCHAR),
+						   new SqlParameter("p_welfare", Types.VARCHAR),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_name", request.getName())
+									 .addValue("p_welfare", request.getWelfare());
+		
+		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
+	
+	@Override
+	public Response specialAnnouncement(Announcement request) {
+		SimpleJdbcCall prayerRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		prayerRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".special_announcement")
+		.declareParameters(new SqlParameter("p_name", Types.VARCHAR),
+						   new SqlParameter("p_announcement", Types.VARCHAR),
+						   new SqlParameter("p_category", Types.VARCHAR),
+						   new SqlParameter("p_username", Types.VARCHAR),
+						   new SqlParameter("p_event_date", Types.DATE),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_name", request.getName())
+									 .addValue("p_announcement", request.getAnnouncement())
+									 .addValue("p_category", request.getCategory())
+									 .addValue("p_username", request.getCreatedBy());
+		
+		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
 
 	
 }

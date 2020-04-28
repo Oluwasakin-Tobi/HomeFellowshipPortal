@@ -55,4 +55,6 @@ public interface InquiryService {
 
 	List<PrayerRequest> getPrayerRequest();
 
+	List<Welfare> getWelfareRequest();
+
 }

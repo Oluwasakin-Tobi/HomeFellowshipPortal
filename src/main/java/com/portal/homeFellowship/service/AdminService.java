@@ -31,4 +31,8 @@ public interface AdminService {
 
 	Response prayerRequest(PrayerRequest request);
 
+	Response welfareRequest(Welfare request);
+
+	Response specialAnnouncement(Announcement request);
+
 }

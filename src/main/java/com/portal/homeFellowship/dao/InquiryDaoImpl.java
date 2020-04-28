@@ -915,4 +915,32 @@ public class InquiryDaoImpl implements InquiryDao {
 	}
 	
 
+	@SuppressWarnings("all")
+	@Override
+	public List<Welfare> getWelfareRequest() {
+		SimpleJdbcCall getPrayerRequest = new SimpleJdbcCall(jdbcTemplate);
+		getPrayerRequest.withProcedureName(baseUtilityPackage + ".get_welfare_request")
+				.withoutProcedureColumnMetaDataAccess()
+				.declareParameters(new SqlOutParameter("r_details", Types.REF_CURSOR))
+				.returningResultSet("r_details", new RowMapper<Welfare>() {
+
+					@Override
+					public Welfare mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Welfare request = new Welfare();
+						request.setName(rs.getString("requester"));
+						request.setWelfare(rs.getString("welfare_request"));
+						return request;
+					}
+				});
+
+		getPrayerRequest.compile();
+
+		Map<String, Object> returningResultSet = getPrayerRequest.execute();
+
+		List<Welfare> response = (List<Welfare>) returningResultSet.get("r_details");
+
+		return response == null || response.isEmpty() ? new ArrayList<>() : response;
+	}
+	
+
 }

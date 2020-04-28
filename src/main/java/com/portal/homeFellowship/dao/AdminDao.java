@@ -1,6 +1,5 @@
 package com.portal.homeFellowship.dao;
 
-import java.util.List;
 
 import com.portal.homeFellowship.model.*;
 
@@ -32,6 +31,10 @@ public interface AdminDao {
 	
 
 	Response prayerRequest(PrayerRequest request);
+
+	Response welfareRequest(Welfare request);
+
+	Response specialAnnouncement(Announcement request);
 
 	
 }

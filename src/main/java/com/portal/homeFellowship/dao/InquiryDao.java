@@ -58,6 +58,8 @@ public interface InquiryDao {
 
 	List<PrayerRequest> getPrayerRequest();
 
+	List<Welfare> getWelfareRequest();
+
 	
 
 }

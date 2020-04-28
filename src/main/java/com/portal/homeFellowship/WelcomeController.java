@@ -1161,6 +1161,11 @@ public class WelcomeController {
 
 	@RequestMapping(value = "/sendSMS", method = RequestMethod.POST)
 	public String sendSMS(@Valid Sms request, ModelMap model, RedirectAttributes redirectAttributes) throws Exception {
+		String phone = request.getPhoneNo().replace(" ", "");
+
+		LOGGER.info("phone " + request);
+		LOGGER.info("phone " + phone);
+		request.setPhoneNo(phone);
 		Response response = inquiryService.sendSMS(request);
 
 		LOGGER.info("response " + response);
@@ -1169,6 +1174,10 @@ public class WelcomeController {
 				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
 		return "redirect:/sendSMS";
 	}
+	
+	
+	
+	
 
 	@RequestMapping(value = "/prayerRequest", method = RequestMethod.GET)
 	public String prayerRequest(ModelMap model) throws Exception {
@@ -1200,5 +1209,73 @@ public class WelcomeController {
 		model.addAttribute("username", getPrincipal().getAdUsername());
 
 		return "viewPrayer";
+	}
+	
+	
+	
+	
+	@RequestMapping(value = "/welfareRequest", method = RequestMethod.GET)
+	public String welfareRequest(ModelMap model) throws Exception {
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "welfare";
+	}
+
+	@RequestMapping(value = "/welfareRequest", method = RequestMethod.POST)
+	public String welfareRequest(@Valid Welfare request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		Response response = adminService.welfareRequest(request);
+
+		LOGGER.info("response " + response);
+
+		redirectAttributes.addFlashAttribute("successMessage",
+				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+		return "redirect:/welfareRequest";
+	}
+	
+	@RequestMapping(value = "/viewWelfareRequest", method = RequestMethod.GET)
+	public String viewWelfareRequest(ModelMap model) throws Exception {
+
+		List<Welfare> response = inquiryService.getWelfareRequest();
+		model.addAttribute("welfare", response);
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "viewWelfare";
+	}
+	
+	@RequestMapping(value = "/announcement", method = RequestMethod.GET)
+	public String announcement(ModelMap model) throws Exception {
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "announcement";
+	}
+	
+
+	@RequestMapping(value = "/announcement", method = RequestMethod.POST)
+	public String announcement(@Valid Announcement request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		Response response = adminService.specialAnnouncement(request);
+
+		LOGGER.info("response " + response);
+
+		redirectAttributes.addFlashAttribute("successMessage",
+				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+		return "redirect:/announcement";
+	}
+	
+	@RequestMapping(value = "/viewAnnouncement", method = RequestMethod.GET)
+	public String viewAnnouncement(ModelMap model) throws Exception {
+
+		List<Welfare> response = inquiryService.getWelfareRequest();
+		model.addAttribute("welfare", response);
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "viewWelfare";
 	}
 }

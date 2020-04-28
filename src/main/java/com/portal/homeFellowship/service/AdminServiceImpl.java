@@ -195,7 +195,16 @@ public class AdminServiceImpl implements AdminService{
 	public Response prayerRequest(PrayerRequest request) {
 		return adminDao.prayerRequest(request);
 	}
+	
+	@Override
+	public Response welfareRequest(Welfare request) {
+		return adminDao.welfareRequest(request);
+	}
 
 
+	@Override
+	public Response specialAnnouncement(Announcement request) {
+		return adminDao.specialAnnouncement(request);
+	}
 
 }

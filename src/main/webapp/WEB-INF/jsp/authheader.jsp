@@ -228,6 +228,15 @@
 									
 							<li><i class="fa fa-book"></i><a
 									href="<c:url value="/viewPrayerRequest" />">View Prayer Request</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/welfareRequest" />">Welfare Request</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/viewWelfareRequest" />">View Welfare Request</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/announcement" />">Create Announcement</a></li>
 						</ul></li>
 
 					<sec:authorize access="hasRole('ADMIN') or hasRole('CUSTOM')">
