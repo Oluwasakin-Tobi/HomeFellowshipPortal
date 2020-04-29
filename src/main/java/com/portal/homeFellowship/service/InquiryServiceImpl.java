@@ -247,7 +247,10 @@ public class InquiryServiceImpl implements InquiryService {
 	}
 	
 	
-
+	@Override
+	public List<Announcement> getAnnouncement() {
+		return dao.getAnnouncement();
+	}
 
 
 }

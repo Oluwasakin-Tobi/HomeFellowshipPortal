@@ -57,4 +57,6 @@ public interface InquiryService {
 
 	List<Welfare> getWelfareRequest();
 
+	List<Announcement> getAnnouncement();
+
 }

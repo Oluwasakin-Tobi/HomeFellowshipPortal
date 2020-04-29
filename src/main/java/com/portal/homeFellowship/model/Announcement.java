@@ -10,8 +10,8 @@ public class Announcement implements Serializable{
 	 */
 	private static final long serialVersionUID = 1067981357309291460L;
 	private String name;
-	private String announcement;
-	private Date eventDate;
+	private String announce;
+	private String eventDate;
 	private String createdBy;
 	private String category;
 	
@@ -27,29 +27,33 @@ public class Announcement implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getAnnouncement() {
-		return announcement;
-	}
-	public void setAnnouncement(String announcement) {
-		this.announcement = announcement;
-	}
-	public Date getEventDate() {
-		return eventDate;
-	}
-	public void setEventDate(Date eventDate) {
-		this.eventDate = eventDate;
-	}
 	public String getCreatedBy() {
 		return createdBy;
 	}
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
+	public String getAnnounce() {
+		return announce;
+	}
+	public void setAnnounce(String announce) {
+		this.announce = announce;
+	}
+	public String getEventDate() {
+		return eventDate;
+	}
+	public void setEventDate(String eventDate) {
+		this.eventDate = eventDate;
+	}
 	@Override
 	public String toString() {
-		return "Announcement [name=" + name + ", announcement=" + announcement + ", eventDate=" + eventDate
-				+ ", createdBy=" + createdBy + ", category=" + category + "]";
+		return "Announcement [name=" + name + ", announce=" + announce + ", eventDate=" + eventDate + ", createdBy="
+				+ createdBy + ", category=" + category + "]";
 	}
+	
+
+	
+
 	
 
 	

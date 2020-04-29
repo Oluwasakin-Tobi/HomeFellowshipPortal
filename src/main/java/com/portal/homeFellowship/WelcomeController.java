@@ -1256,9 +1256,10 @@ public class WelcomeController {
 	}
 	
 
-	@RequestMapping(value = "/announcement", method = RequestMethod.POST)
-	public String announcement(@Valid Announcement request, ModelMap model, RedirectAttributes redirectAttributes)
+	@RequestMapping(value = "/loadAnnouncement", method = RequestMethod.POST)
+	public String loadAnnouncement(@Valid Announcement request, ModelMap model, RedirectAttributes redirectAttributes)
 			throws Exception {
+		LOGGER.info("request " + request);
 		Response response = adminService.specialAnnouncement(request);
 
 		LOGGER.info("response " + response);
@@ -1271,11 +1272,11 @@ public class WelcomeController {
 	@RequestMapping(value = "/viewAnnouncement", method = RequestMethod.GET)
 	public String viewAnnouncement(ModelMap model) throws Exception {
 
-		List<Welfare> response = inquiryService.getWelfareRequest();
-		model.addAttribute("welfare", response);
+		List<Announcement> response = inquiryService.getAnnouncement();
+		model.addAttribute("announce", response);
 		model.addAttribute("loggedinuser", getPrincipal());
 		model.addAttribute("username", getPrincipal().getAdUsername());
 
-		return "viewWelfare";
+		return "viewAnnouncement";
 	}
 }

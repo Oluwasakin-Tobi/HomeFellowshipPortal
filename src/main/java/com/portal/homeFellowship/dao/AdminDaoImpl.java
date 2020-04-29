@@ -379,8 +379,9 @@ public class AdminDaoImpl implements AdminDao {
 						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
 		
 		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_name", request.getName())
-									 .addValue("p_announcement", request.getAnnouncement())
+									 .addValue("p_announcement", request.getAnnounce())
 									 .addValue("p_category", request.getCategory())
+									 .addValue("p_event_date", request.getEventDate())
 									 .addValue("p_username", request.getCreatedBy());
 		
 		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);

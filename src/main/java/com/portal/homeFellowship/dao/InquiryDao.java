@@ -60,6 +60,8 @@ public interface InquiryDao {
 
 	List<Welfare> getWelfareRequest();
 
+	List<Announcement> getAnnouncement();
+
 	
 
 }

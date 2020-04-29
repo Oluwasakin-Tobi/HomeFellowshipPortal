@@ -31,10 +31,10 @@
 						<strong class="card-title">CREATE SPECIAL ANNOUNCEMENT</strong>
 					</div>
 					<div class="card-body">
-						<c:url var="announcement" value="/announcement" />
-						<mvc:form method="POST" action="${announcement}"
+						<c:url var="loadAnnouncement" value="/loadAnnouncement" />
+						<mvc:form method="POST" action="${loadAnnouncement}"
 							enctype="multipart/form-data" id="demo-form2"
-							modelAttribute="announcement"
+							modelAttribute="Announcement"
 							class="form-horizontal form-label-left">
 
 							<div class="row">
@@ -45,14 +45,14 @@
 								<div class="col-md-6">
 									<label class="bmd-label-floating">Name*</label> <input
 										class="form-control" type="text" name="name" id="name"
-										value="${username}" path="name" required readonly
+										value="${request.name}" path="name" required readonly
 										autocomplete="off">
 								</div>
 								
-								<div class="col-md-6">
+							 	<div class="col-md-6">
 									<label class="bmd-label-floating">Category*</label> <select
 										class="form-control" type="text" name="category" id="category"
-										value="${username}" path="category" required ng-model="choice">
+										path="category" required ng-model="choice">
 										<option value="">Select option</option>
 										<option value="BIRTHDAY">BIRTHDAY</option>
 										<option value="WEDDING ANNIVERSARY">WEDDING ANNIVERSARY</option>
@@ -64,7 +64,7 @@
 										class="form-control" type="text" name="category" id="category"
 										value="${request.category}" path="category" ng-required="choice=='OTHERS'"
 										autocomplete="off">
-								</div>
+								</div> 
 								
 								<!-- <div class="col-md-6" > -->
 									
@@ -72,23 +72,23 @@
 
 							</div>
 							<br>
-							<div class="row">
+							 <div class="row">
 
-								<div class="col-md-6">
+								 <div class="col-md-6">
 									<label class="bmd-label-floating">Announcement*</label> <textarea
-										class="form-control" type="text" name="announcement" id="announcement"
-										value="${request.announcement}" path="announcement" required
+										class="form-control" type="text" name="announce" id="announce"
+										value="${request.announce}" path="announce" required
 										autocomplete="off"></textarea>
-								</div>
+								</div> 
 								
-								<div class="col-md-6">
+								 <div class="col-md-6">
 									<label class="bmd-label-floating">Event Date*</label> <input
 										class="form-control" type="date" name="eventDate" id="eventDate"
 										value="${request.eventDate}" path="eventDate" required
 										autocomplete="off">
-								</div>
+								</div> 
 								
-							</div>
+							</div> 
 							
 
 							<a href="<c:url value="/dashboard" />">

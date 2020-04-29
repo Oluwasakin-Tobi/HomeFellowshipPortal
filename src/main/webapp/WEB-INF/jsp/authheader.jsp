@@ -222,21 +222,51 @@
 									
 							<li><i class="fa fa-book"></i><a
 									href="<c:url value="/sendSMS" />">Send SMS</a></li>
-									
-							<li><i class="fa fa-book"></i><a
-									href="<c:url value="/prayerRequest" />">Prayer Request</a></li>
-									
-							<li><i class="fa fa-book"></i><a
-									href="<c:url value="/viewPrayerRequest" />">View Prayer Request</a></li>
+						</ul></li>
+						
+						<li class="menu-item-has-children dropdown"><a href="#"
+						class="dropdown-toggle" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"> <i
+							class="menu-icon fa fa-book"></i>WELFARE
+					</a>
+						<ul class="sub-menu children dropdown-menu">
 									
 							<li><i class="fa fa-book"></i><a
 									href="<c:url value="/welfareRequest" />">Welfare Request</a></li>
 									
 							<li><i class="fa fa-book"></i><a
 									href="<c:url value="/viewWelfareRequest" />">View Welfare Request</a></li>
+						</ul></li>
+						
+						<li class="menu-item-has-children dropdown"><a href="#"
+						class="dropdown-toggle" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"> <i
+							class="menu-icon fa fa-book"></i>PRAYER
+					</a>
+						<ul class="sub-menu children dropdown-menu">
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/prayerRequest" />">Prayer Request</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/viewPrayerRequest" />">View Prayer Request</a></li>
+						</ul></li>
+						
+						<li class="menu-item-has-children dropdown"><a href="#"
+						class="dropdown-toggle" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"> <i
+							class="menu-icon fa fa-book"></i>ANNOUNCEMENT
+					</a>
+						<ul class="sub-menu children dropdown-menu">
 									
 							<li><i class="fa fa-book"></i><a
 									href="<c:url value="/announcement" />">Create Announcement</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/viewAnnouncement" />">View Announcement</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/financial" />">Donation</a></li>
 						</ul></li>
 
 					<sec:authorize access="hasRole('ADMIN') or hasRole('CUSTOM')">

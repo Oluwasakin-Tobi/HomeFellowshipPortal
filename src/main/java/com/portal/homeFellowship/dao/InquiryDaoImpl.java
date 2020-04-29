@@ -942,5 +942,34 @@ public class InquiryDaoImpl implements InquiryDao {
 		return response == null || response.isEmpty() ? new ArrayList<>() : response;
 	}
 	
+	@SuppressWarnings("all")
+	@Override
+	public List<Announcement> getAnnouncement() {
+		SimpleJdbcCall getPrayerRequest = new SimpleJdbcCall(jdbcTemplate);
+		getPrayerRequest.withProcedureName(baseUtilityPackage + ".get_special_announcement")
+				.withoutProcedureColumnMetaDataAccess()
+				.declareParameters(new SqlOutParameter("r_details", Types.REF_CURSOR))
+				.returningResultSet("r_details", new RowMapper<Announcement>() {
+
+					@Override
+					public Announcement mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Announcement request = new Announcement();
+						request.setName(rs.getString("REQUESTER"));
+						request.setAnnounce(rs.getString("ANNOUNCEMENT"));
+						request.setCategory(rs.getString("CATEGORY_ID").replace(",", ""));
+						request.setEventDate(rs.getString("EVENT_DATE"));
+						return request;
+					}
+				});
+
+		getPrayerRequest.compile();
+
+		Map<String, Object> returningResultSet = getPrayerRequest.execute();
+
+		List<Announcement> response = (List<Announcement>) returningResultSet.get("r_details");
+
+		return response == null || response.isEmpty() ? new ArrayList<>() : response;
+	}
+	
 
 }
