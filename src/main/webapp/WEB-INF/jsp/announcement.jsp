@@ -45,7 +45,7 @@
 								<div class="col-md-6">
 									<label class="bmd-label-floating">Name*</label> <input
 										class="form-control" type="text" name="name" id="name"
-										value="${request.name}" path="name" required readonly
+										value="${username}" path="name" required readonly
 										autocomplete="off">
 								</div>
 								
@@ -56,7 +56,10 @@
 										<option value="">Select option</option>
 										<option value="BIRTHDAY">BIRTHDAY</option>
 										<option value="WEDDING ANNIVERSARY">WEDDING ANNIVERSARY</option>
+										<option value="NAMING CEREMONY">NAMING CEREMONY</option>
+										<option value="CHILD DEDICATION">CHILD DEDICATION</option>
 										<option value="WEDDING">WEDDING</option>
+										<option value="MEETING">MEETING</option>
 										<option value="OTHERS">OTHERS</option>
 										 </select>
 										 
@@ -66,9 +69,33 @@
 										autocomplete="off">
 								</div> 
 								
-								<!-- <div class="col-md-6" > -->
-									
-								<!-- </div> -->
+								
+								<div class="col-md-6" ng-show="choice=='MEETING'">
+									<label class="bmd-label-floating">Meeting Type*</label> <select
+										class="form-control" type="text" name="meetingType" id="meetingType"
+										path="meetingType" ng-required="choice=='MEETING'" ng-model="meetingType">
+										<option value="">Select option</option>
+										<option value="GENERAL MEETING">GENERAL MEETING</option>
+										<option value="ANNUAL MEETING">ANNUAL MEETING</option>
+										<option value="DISTRICT MEETING">DISTRICT MEETING</option>
+										<option value="PRAYER MEETING">PRAYER MEETING</option>
+										<option value="REVIEW MEETING">REVIEW MEETING</option>
+										<option value="ANNUAL RETREAT">ANNUAL RETREAT</option>
+										<option value="OTHER MEETINGS">OTHERS</option>
+										 </select>
+										 
+										 <input ng-show="meetingType=='OTHER MEETINGS'"
+										class="form-control" type="text" name="meetingType" id="meetingType"
+										value="${request.meetingType}" path="meetingType" ng-required="meetingType=='OTHER MEETINGS'"
+										autocomplete="off">
+								</div>
+								
+								<div class="col-md-6" ng-show="choice=='MEETING'">
+									<label class="bmd-label-floating">Meeting Link</label> <textarea
+										class="form-control" type="text" name="meetingLink" id="meetingLink"
+										value="${request.meetingLink}" path="meetingLink"
+										autocomplete="off"></textarea>
+								</div> 
 
 							</div>
 							<br>
@@ -86,7 +113,23 @@
 										class="form-control" type="date" name="eventDate" id="eventDate"
 										value="${request.eventDate}" path="eventDate" required
 										autocomplete="off">
-								</div> 
+								</div>
+								
+								<div class="col-md-6" ng-show="choice=='MEETING'">
+									<label class="bmd-label-floating">Send To*</label> <select
+										class="form-control" type="text" name="sendTo" id="sendTo"
+										path="sendTo" ng-required="choice=='MEETING'" ng-model="sender">
+										<option value="">Select option</option>
+										<option value="ALL">ALL</option>
+										<option value="MEMBERS">MEMBERS</option>
+										<option value="OTHER USER">USER</option>
+										 </select>
+										 
+										 <input ng-show="sender=='OTHER USER'"
+										class="form-control" type="text" name="sendToAUser" id="sendToAUser"
+										value="${request.sendToAUser}" path="sendToAUser" ng-required="sender=='OTHER USER'"
+										autocomplete="off">
+								</div>  
 								
 							</div> 
 							

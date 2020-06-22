@@ -5,6 +5,7 @@ import org.apache.coyote.http11.AbstractHttp11Protocol;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.MessageSource;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -28,6 +30,7 @@ import com.portal.homeFellowship.utility.SSLClientFactory;
  */
 @SpringBootApplication
 @Import({JdbcConfiguration.class, MvcConfiguration.class})
+@EnableScheduling
 public class App extends SpringBootServletInitializer
 {
 	
@@ -42,39 +45,36 @@ public class App extends SpringBootServletInitializer
         SpringApplication.run(App.class, args);
     }
     
+//    @Bean
+//    public TomcatServletWebServerFactory containerFactory() {
+//        return new TomcatServletWebServerFactory() {
+//            protected void customizeConnector(Connector connector) {
+//                int maxSize = 50000000;
+//                super.customizeConnector(connector);
+//                connector.setMaxPostSize(maxSize);
+//                connector.setMaxSavePostSize(maxSize);
+//                if (connector.getProtocolHandler() instanceof AbstractHttp11Protocol) {
+//
+//                    ((AbstractHttp11Protocol <?>) connector.getProtocolHandler()).setMaxSwallowSize(maxSize);
+//                    logger.info("Set MaxSwallowSize "+ maxSize);
+//                }
+//            }
+//        };
+//
+//    }
+    
     @Bean
     public TomcatServletWebServerFactory containerFactory() {
-        return new TomcatServletWebServerFactory() {
-            protected void customizeConnector(Connector connector) {
-                int maxSize = 50000000;
-                super.customizeConnector(connector);
-                connector.setMaxPostSize(maxSize);
-                connector.setMaxSavePostSize(maxSize);
-                if (connector.getProtocolHandler() instanceof AbstractHttp11Protocol) {
-
-                    ((AbstractHttp11Protocol <?>) connector.getProtocolHandler()).setMaxSwallowSize(maxSize);
-                    logger.info("Set MaxSwallowSize "+ maxSize);
-                }
+        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
+        factory.addConnectorCustomizers(new TomcatConnectorCustomizer() {
+            @Override
+            public void customize(Connector connector) {
+                ((AbstractHttp11Protocol<?>) connector.getProtocolHandler()).setMaxSwallowSize(-1);
             }
-        };
-
+        });
+        return factory;
     }
     
-//    @Bean
-//	public EmbeddedServletContainerCustomizer containerCustomizer() {
-//
-//		return new EmbeddedServletContainerCustomizer() {
-//			@Override
-//			public void customize(ConfigurableEmbeddedServletContainer container) {
-//
-//				ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/error/401.html");
-//				ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/404.html");
-//				ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
-//
-//				container.addErrorPages(error401Page, error404Page, error500Page);
-//			}
-//		};
-//	}
     
     @Bean
 	public RestTemplate restTemplate(){ 

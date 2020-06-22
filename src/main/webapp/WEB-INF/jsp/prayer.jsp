@@ -24,9 +24,14 @@
 				</div>
 
 			</c:if>
+			
 
 			<div class="col-md-12">
 				<div class="card">
+				
+			<a href="<c:url value = '/viewPrayerPerUser'/>">
+			<button type = "button" class="btn btn-primary">View Request</button></a>
+			
 					<div class="card-header">
 						<strong class="card-title">PRAYER REQUEST</strong>
 					</div>

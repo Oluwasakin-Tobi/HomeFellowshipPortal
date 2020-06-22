@@ -183,24 +183,6 @@
 
 					<h3 class="menu-title"></h3>
 					<!-- /.menu-title -->
-
-					<%-- <sec:authorize
-						access="hasRole('OPERATIONS') or hasRole('ADMIN') or hasRole('CUSTOM')">
-					<li class="menu-item-has-children dropdown"><a href="#"
-						class="dropdown-toggle" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false"> <i
-							class="menu-icon fa fa-laptop"></i>Transactions
-					</a>
-						<ul class="sub-menu children dropdown-menu">
-							<li><i class="fa fa-puzzle-piece"></i><a href="<c:url value='/getordersfromariba'/>">Maker</a></li>
-							<li><i class="fa fa-id-badge"></i><a href="<c:url value='/getvalidatedorders'/>">Checker</a></li>
-
-						</ul></li>
-						</sec:authorize> 
-				
-
-					<h3 class="menu-title"></h3> --%>
-					<!-- /.menu-title -->
 					<li class="menu-item-has-children dropdown"><a href="#"
 						class="dropdown-toggle" data-toggle="dropdown"
 						aria-haspopup="true" aria-expanded="false"> <i
@@ -209,6 +191,18 @@
 						<ul class="sub-menu children dropdown-menu">
 							<li><i class="fa fa-book"></i><a
 									href="<c:url value="/weeklyReport" />">Weekly Report</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/getWeeklyReport" />">View Weekly Report</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/monthlyReport" />">Monthly Report</a></li>
+							
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/directorReport" />">Director Report</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/getDirectorReport" />">View Director Report</a></li>
 						</ul></li>
 						
 					<li class="menu-item-has-children dropdown"><a href="#"
@@ -222,6 +216,9 @@
 									
 							<li><i class="fa fa-book"></i><a
 									href="<c:url value="/sendSMS" />">Send SMS</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/sendMail" />">Send Mail</a></li>
 						</ul></li>
 						
 						<li class="menu-item-has-children dropdown"><a href="#"
@@ -236,6 +233,18 @@
 									
 							<li><i class="fa fa-book"></i><a
 									href="<c:url value="/viewWelfareRequest" />">View Welfare Request</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/incident" />">Incident Report</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/viewIncident" />">View Incident Report</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/whistleBlowing" />">Whistle Blowing Report</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/viewWhistleBlowing" />">View Whistle Blowing Report</a></li>
 						</ul></li>
 						
 						<li class="menu-item-has-children dropdown"><a href="#"
@@ -265,8 +274,65 @@
 							<li><i class="fa fa-book"></i><a
 									href="<c:url value="/viewAnnouncement" />">View Announcement</a></li>
 									
+							
+									
 							<li><i class="fa fa-book"></i><a
-									href="<c:url value="/financial" />">Donation</a></li>
+									href="<c:url value="/viewWeeklyOutline" />">View Weekly Outline</a></li>
+									
+							
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/getCalendarEvent" />">View Event Calendar</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/socialEvents" />">Social Event</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/viewSocialEvent" />">View Social Events</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/liveStreaming" />">Streaming</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/centreDirectory" />">Centre Directory</a></li>
+						</ul></li>
+						
+						<li class="menu-item-has-children dropdown"><a href="#"
+						class="dropdown-toggle" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"> <i
+							class="menu-icon fa fa-book"></i>FINANCIALS
+					</a>
+						<ul class="sub-menu children dropdown-menu">
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/expenseRequest" />">Expense Request</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/viewExpenseRequest" />">View Expense</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/communityProject" />">Community Impact Project</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/viewCommunityProject" />">View Community Impact Project</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/donation" />">Donation</a></li>
+						</ul></li>
+						
+						
+						<li class="menu-item-has-children dropdown"><a href="#"
+						class="dropdown-toggle" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"> <i
+							class="menu-icon fa fa-book"></i>DOCUMENT MANAGEMENT
+					</a>
+						<ul class="sub-menu children dropdown-menu">
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/weeklyOutline" />">Create Weekly Outline</a></li>
+									
+							<li><i class="fa fa-book"></i><a
+									href="<c:url value="/calendar" />">Create Event Calendar</a></li>
 						</ul></li>
 
 					<sec:authorize access="hasRole('ADMIN') or hasRole('CUSTOM')">
@@ -281,63 +347,39 @@
 								<li><i class="fa fa-puzzle-piece"></i><a
 									href="<c:url value='/createuser'/>"><spring:message
 											code="create.user.setting" /></a></li>
+											
+								<li><i class="fa fa-puzzle-piece"></i><a
+									href="<c:url value='/authoriseuser'/>"><spring:message
+											code="authorise.user.setting" /></a></li>
 								
 								<li><i class="fa fa-id-badge"></i><a
 									href="<c:url value='/edituser'/>"><spring:message
 											code="edit.usertorole.setting" /></a></li>
 											
-											
-								<%-- <li><i class="fa fa-puzzle-piece"></i><a
-									href="<c:url value='/authoriseuser'/>"><spring:message
-											code="authorise.user.setting" /></a></li>
 								<li><i class="fa fa-id-badge"></i><a
-									href="<c:url value="/approveuserdetails" />"><spring:message
-											code="approve.userdetails.setting" /></a></li>
-
-								<li><i class="menu-icon fa fa-chain"></i><a
-									href="<c:url value="/approveenableuser" />"><spring:message
-											code="approve.enabled.setting" /></a></li>
-
-								<li><i class="menu-icon fa fa-chain"></i><a
-									href="<c:url value="/approvedisableuser" />"><spring:message
-											code="approve.disabled.setting" /></a></li> --%>
+									href="<c:url value='/changePassword'/>">Change Password</a></li>
 
 							</ul></li>
-
-						<%-- <li class="menu-item-has-children dropdown"><a href="#"
+					</sec:authorize>
+					
+					<sec:authorize access="hasRole('MEMBER')">
+						<h3 class="menu-title">USER MANAGEMENT</h3>
+						<!-- /.menu-title -->
+						<li class="menu-item-has-children dropdown"><a href="#"
 							class="dropdown-toggle" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false"> <i
-								class="menu-icon fa fa-users"></i>Role Settings
+								class="menu-icon fa fa-users"></i>User Settings
 						</a>
 							<ul class="sub-menu children dropdown-menu">
-								<li><i class="fa fa-puzzle-piece"></i><a
-									href="<c:url value="/createusertorole" />"><spring:message
-											code="create.usertorole.setting" /></a></li>
+								
 								<li><i class="fa fa-id-badge"></i><a
-									href="<c:url value="/authusertorole" />"><spring:message
-											code="auth.usertorole.setting" /></a></li>
-								<li><i class="fa fa-puzzle-piece"></i><a
-									href="<c:url value="/removeusertorole" />">Remove User From
-										Role</a></li>
-								<li><i class="fa fa-puzzle-piece"></i><a
-									href="<c:url value="/approveeditrole" />"><spring:message
-											code="approve.edituser.setting" /></a></li>
-								<li><i class="menu-icon fa fa-chain"></i><a
-									href="<c:url value="/createcustom" />"><spring:message
-											code="create.cust.feat" /></a></li>
+									href="<c:url value='/edituserdetails'/>"><spring:message
+											code="edit.usertorole.setting" /></a></li>
+											
+								<li><i class="fa fa-id-badge"></i><a
+									href="<c:url value='/changePassword'/>">Change Password</a></li>
 
-								<li><i class="menu-icon fa fa-chain"></i><a
-									href="<c:url value="/authcustomrole" />"><spring:message
-											code="auth.pend.custom" /></a></li>
-								<li><i class="menu-icon fa fa-chain"></i><a
-									href="<c:url value="/modifycreatecustom" />"><spring:message
-											code="modify.cust.feat" /></a></li>
-
-								<li><i class="menu-icon fa fa-chain"></i><a
-									href="<c:url value="/authmodcustomrole" />"><spring:message
-											code="auth.pend.mod.custom" /></a></li>
-
-							</ul></li> --%>
+							</ul></li>
 					</sec:authorize>
 
 					<h3 class="menu-title"></h3>

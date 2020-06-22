@@ -1,16 +1,20 @@
 package com.portal.homeFellowship.utility;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.zip.ZipEntry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
@@ -28,6 +33,15 @@ import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.NumberToTextConverter;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.ContentAccessor;
@@ -49,7 +63,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class BasicUtil {
 	final static DateFormat MARSHARLLERDATEFORMAT = new SimpleDateFormat("yyyy-MM-dd");
-	final static DateFormat POSTINGDATEFORMAT = new SimpleDateFormat("YYYY-MM-dd");
+	final static DateFormat FILENAMEDATEFORMATTER = new SimpleDateFormat("YYYY-MM-dd");
 	final static DateFormat TRYPOSTINGDATEFORMAT = new SimpleDateFormat("YYYY/MM/dd");
 	final static DateFormat MARSHARLLERDATEFORMAT2 = new SimpleDateFormat("yyyy-MM-dd");
 	private static final Logger LOGGER = LoggerFactory.getLogger(BasicUtil.class);
@@ -450,5 +464,200 @@ public class BasicUtil {
 	        File f = new File(target);
 	        template.save(f);
 	    }
+	    
+	    public static String sendMailMessage(String message, String filePath) { 
+			  StringBuilder responseSB = new StringBuilder();
+
+				LOGGER.info("********Show me filepath **********" + filePath);
+			//Files.lines(Paths.get(filePath), StandardCharsets.UTF_8).forEach(System.out::println); 
+			try {
+		Files.lines(Paths.get(filePath), StandardCharsets.UTF_8).forEach(line -> responseSB.append(line));
+		} catch (IOException e) { e.printStackTrace();
+				LOGGER.error("********Oops Something went wrong **********" + e);
+			} 
+			return
+				responseSB.toString()!=null?responseSB.toString()
+					.replace("[message]", message)
+					:""
+		;
+		 }	
+	    
+	    public static byte[] loadFile(InputStream is, long fileLength, String fileName) {
+			byte[] bytes = null;
+			try {
+				if (fileLength > Integer.MAX_VALUE) {
+					// File is too large
+				}
+				bytes = new byte[(int) fileLength];
+				LOGGER.info("********fileLength ***" + fileLength);
+				LOGGER.info("********byteslength ***" + bytes.length);
+				int offset = 0;
+				int numRead = 0;
+				while (offset < bytes.length && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
+					offset += numRead;
+				}
+
+				if (offset < bytes.length) {
+					throw new IOException("Could not completely read file " + fileName);
+				}
+
+				is.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				LOGGER.error("********Oops Something went wrong **********" + e);
+			} finally {
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+					LOGGER.error("********Oops Something went wrong **********" + e);
+				}
+			}
+			return bytes;
+		}
+	    
+	    public static String getFilename(String originalFileName) throws ParseException {
+			return originalFileName.replace(".", FILENAMEDATEFORMATTER.format(new Date()) + ".");
+		}
+	    
+	    public static String getStringFromInputStream(InputStream is) {
+
+			BufferedReader br = null;
+			StringBuilder sb = new StringBuilder();
+
+			String line;
+			try {
+
+				br = new BufferedReader(new InputStreamReader(is));
+				while ((line = br.readLine()) != null) {
+					sb.append(line);
+				}
+
+			} catch (IOException e) {
+				LOGGER.error("********Oops Something went wrong **********" + e);
+			} finally {
+				if (br != null) {
+					try {
+						br.close();
+					} catch (IOException e) {
+						LOGGER.error("********Oops Something went wrong **********" + e);
+					}
+				}
+			}
+
+			return sb.toString();
+
+		}
+	    
+		public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+	        File destFile = new File(destinationDir, zipEntry.getName());
+	         
+	        String destDirPath = destinationDir.getCanonicalPath();
+	        String destFilePath = destFile.getCanonicalPath();
+	         
+	        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+	            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+	        }
+	         
+	        return destFile;
+	    } 
+		
+		
+//		public static String notifyARIBAReviewerOnRejectBody(String supplierId, String purchaseOrderNo, String reviewer,
+//				String authorizer, String comment, String filePath) {
+//			StringBuilder responseSB = new StringBuilder();
+//
+//			LOGGER.info("********Show me filepath **********" + filePath);
+//			LOGGER.info("********Show me **********" + supplierId+purchaseOrderNo+reviewer+authorizer+comment);
+//			// Files.lines(Paths.get(filePath),
+//			// StandardCharsets.UTF_8).forEach(System.out::println);
+//			try {
+//				Files.lines(Paths.get(filePath), StandardCharsets.UTF_8).forEach(line -> responseSB.append(line));
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				LOGGER.error("********Oops Something went wrong **********" + e);
+//			}
+//			return responseSB.toString() != null
+//					? responseSB.toString().replace("[supplierId]", supplierId)
+//							.replace("[purchaseOrderNo]", purchaseOrderNo).replace("[Reviewer]", reviewer)
+//							.replace("[authorizer]", authorizer).replace("[comment]", comment)
+//					// .replace("[appServerandPort]", appServerAndPort)
+//					: "";
+//		}
+		
+		@SuppressWarnings("all")
+		public static List<String[]> readXcelAccounts(InputStream file, int startRow) throws Exception {
+
+			ArrayList<String[]> trans = new ArrayList<String[]>();
+
+			Workbook workbook = WorkbookFactory.create(file);
+			
+			LOGGER.debug("show me workbook on basic util" + workbook.toString());
+
+			FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+
+			// Get first sheet from the workbook
+			Sheet sheet = workbook.getSheetAt(0);
+			
+		        
+
+			for (int rowIndex = startRow; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+
+				//STARTING FROM THE 1ST INDEX
+				Row row = sheet.getRow(rowIndex);
+				
+				
+				LOGGER.debug("show me row index " + rowIndex);
+				LOGGER.debug("show me on basic util row value " + row.getCell(0) + ("and row index ")+rowIndex);
+				
+				if (row==null) {
+					continue;
+					}
+				
+				  
+				
+				String[] tran = new String[row.getLastCellNum()];
+				
+
+				for (int colIndex = 0; colIndex < row.getLastCellNum(); colIndex++) {
+
+					Cell cell = row.getCell(colIndex);
+
+					CellValue cellValue = evaluator.evaluate(cell);
+					
+
+					if (cellValue == null) {
+						tran[colIndex] = "";
+						continue;
+					}
+
+					switch (cellValue.getCellType()) {
+					case NUMERIC:
+						if (DateUtil.isCellDateFormatted(cell)) {
+							SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+							tran[colIndex] = dateFormat.format(cell.getDateCellValue());
+						} else {
+							tran[colIndex] = NumberToTextConverter.toText(cell.getNumericCellValue());
+						}
+						break;
+					case STRING:
+						tran[colIndex] = cell.getStringCellValue();
+						break;
+
+					case BLANK:
+						tran[colIndex] = "";
+
+					default:
+						throw new Exception("Error in Document at Row " + (rowIndex + 1 + ", Column " + (colIndex + 1)));
+					}
+				}
+				trans.add(tran); // adds a record
+
+			}
+			LOGGER.debug("End");
+			LOGGER.debug("show me trans util" + trans);
+			return trans;
+
+		}
 	    
 }

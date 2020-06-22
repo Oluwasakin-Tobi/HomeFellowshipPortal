@@ -1,26 +1,18 @@
 package com.portal.homeFellowship.service;
 
+import java.io.IOException;
+
+import javax.validation.Valid;
+
 import com.portal.homeFellowship.model.*;
 
 public interface AdminService {
 	
 	Response ADAuthenticateUser(String username, String pwd);
 
-	Response createUser(User1 user, UserAdmin principal);
-
-	Response assignUsertoRole(UsertoRoleReq userToRole, UserAdmin principal);
-
-	Response authpendusertorole(String userToRoleID, String flag, UserAdmin principal);
-
 	Response userNameCheck(String userName);
 
-	Response disableusertorole(EditUserDetails user, UserAdmin principal);
-
-	Response authdisableusertorole(String userID, String roleName, String flag, UserAdmin principal);
-
 	Response edituser(EditUserDetails user, UserAdmin principal);
-
-	Response authedituser(String userID, String flag, UserAdmin principal);
 
 	Response authpenduser(String userID, String flag, UserAdmin principal);
 	
@@ -34,5 +26,47 @@ public interface AdminService {
 	Response welfareRequest(Welfare request);
 
 	Response specialAnnouncement(Announcement request);
+
+	Response incidentRequest(Incident request);
+
+	Response updateIncidentRequest(Incident request);
+
+	Response updatePrayerRequest(PrayerRequest request);
+
+	Response updateWelfareRequest(Welfare request);
+
+	Response expenseRequest(Expenses request);
+
+	Response communityProject(Expenses request);
+
+	Response weeklyReport(WeeklyReport request);
+
+	Response weeklyOutline(WeeklyOutline request);
+
+	Response whistleBlowing(Incident request);
+
+	Response directorReport(DirectorReport request);
+
+	Response saveOTP(Otp otp);
+
+	Response updateWhistleBlowingRequest(Incident request);
+
+	Response calendarEvent(CalendarDetail request);
+
+	Response updateCalendarEvent(CalendarDetail request);
+
+	Response createOutlineDocument(DocManagerRequest docMangerRequest) throws IOException;
+
+	Response createSocialEvent(SocialEvent request);
+
+	Response createSocialEventDocument(DocManagerRequest docMangerRequest) throws IOException;
+
+	Response createUser(UserDetails userDetails);
+
+	Response monthlyReport(MonthlyReport request);
+
+	Response updateSocialEvent(SocialEvent request);
+
+	Response changePassword(ChangePassword request);
 
 }

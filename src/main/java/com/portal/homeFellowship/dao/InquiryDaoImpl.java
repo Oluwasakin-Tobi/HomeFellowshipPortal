@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,8 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
 
 import com.portal.homeFellowship.model.*;
@@ -35,6 +39,7 @@ import com.portal.homeFellowship.utility.BasicUtil;
 public class InquiryDaoImpl implements InquiryDao {
 
 	static final Logger LOGGER = LoggerFactory.getLogger(InquiryDaoImpl.class);
+	final static DateFormat MARSHARLLERDATEFORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Autowired
 	private Environment environment;
@@ -46,81 +51,36 @@ public class InquiryDaoImpl implements InquiryDao {
 	private String baseUtilityPackage;
 
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public UserToRoleResponse get_user_role_opps(RoleForUser roleforuser) {
-		SimpleJdbcCall get_user_role_oppsSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-		get_user_role_oppsSimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_user_role_opps")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("pUSER_ID", Types.NUMERIC),
-						new SqlParameter("p_USERNAME", Types.VARCHAR), new SqlParameter("p_SERVERIP", Types.VARCHAR),
-						new SqlOutParameter("p_code", Types.VARCHAR), new SqlOutParameter("p_message", Types.VARCHAR),
-						new SqlOutParameter("r_role_for_user", Types.REF_CURSOR),
-						new SqlOutParameter("r_operation_flag", Types.REF_CURSOR))
-				.returningResultSet("r_role_for_user", new RowMapper<UserRole>() {
-					@Override
-					public UserRole mapRow(ResultSet rs, int rowNum) throws SQLException {
-						UserRole GetUserRole = new UserRole();
-						GetUserRole.setRoleID(rs.getLong(1));
-						GetUserRole.setRoleName(rs.getString(2));
-						GetUserRole.setOperationRole(rs.getBoolean(3));
-						return GetUserRole;
-					}
-				}).returningResultSet("r_operation_flag", new RowMapper<UserRoleOpp>() {
-					@Override
-					public UserRoleOpp mapRow(ResultSet rs, int rowNum) throws SQLException {
-						UserRoleOpp GetUserRole1 = new UserRoleOpp();
-						GetUserRole1.setRoleID(rs.getLong(1));
-						GetUserRole1.setRoleName(rs.getString(2));
-						GetUserRole1.setOperationRole(rs.getBoolean(3));
-						GetUserRole1.setStepID(rs.getLong(4));
-						return GetUserRole1;
-					}
-				});
-		get_user_role_oppsSimpleJdbcCall.compile();
-
-		SqlParameterSource inParams = new MapSqlParameterSource().addValue("pUSER_ID", roleforuser.getUserID())
-				.addValue("p_USERNAME", roleforuser.getUserName()).addValue("p_SERVERIP", roleforuser.getServerIP());
-
-		Map<String, Object> returningResultSet = get_user_role_oppsSimpleJdbcCall.execute(inParams);
-
-		List<UserRole> rs1 = (List<UserRole>) returningResultSet.get("r_role_for_user");
-		List<UserRoleOpp> rs2 = (List<UserRoleOpp>) returningResultSet.get("r_operation_flag");
-
-		UserToRoleResponse response = new UserToRoleResponse();
-		response.setUserRole(rs1);
-		response.setUserRoleOpp(rs2);
-		return response;
-	}
-
+	
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public UserResp get_user_profile(UserProfile userProfile) {
 		SimpleJdbcCall get_user_profileSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
 		get_user_profileSimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_user_profile")
 				.withoutProcedureColumnMetaDataAccess().declareParameters(new SqlParameter("pUSER_ID", Types.NUMERIC),
-						// new SqlParameter("pAFFILIATE_ID", Types.NUMERIC),
 						new SqlParameter("p_USERNAME", Types.VARCHAR), new SqlParameter("p_SERVERIP", Types.VARCHAR),
 						new SqlOutParameter("p_code", Types.VARCHAR), new SqlOutParameter("p_message", Types.VARCHAR),
 						new SqlOutParameter("r_user_profile", Types.REF_CURSOR))
-				.returningResultSet("r_user_profile", new RowMapper<User1>() {
+				.returningResultSet("r_user_profile", new RowMapper<UserDetails>() {
 					@Override
-					public User1 mapRow(ResultSet rs, int rowNum) throws SQLException {
-						User1 user = new User1();
-						user.setUserID(rs.getLong(1));
-						user.setAffiliateCode(rs.getString(2));
-						user.setUserTransactionLimit(rs.getBigDecimal(3));
-						user.setActive(rs.getBoolean(4));
-						user.setUserRoles(rs.getString(5));
-						user.setOperationUser(rs.getBoolean(6));
-						user.setUserFullName(rs.getString(7));
-						user.setUserEmailAdd(rs.getString(8));
-						user.setUserBranch(rs.getString(9));
-						user.setPasswordExpiryPolicy(rs.getString(10));
-						user.setAuthorisedUserFlag(rs.getBoolean(11));
-						user.setUserName(rs.getString(12));
-						user.setEditedFlag(rs.getBoolean(23));
-						user.setEditedRoleFlag(rs.getBoolean(24));
+					public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
+						UserDetails user = new UserDetails();
+						user.setUserID(rs.getLong("USER_ID"));
+						user.setAffiliateCode(rs.getString("AFFILIATE_CODE"));
+						user.setPhoneNo(rs.getString("PHONE_NO"));
+						user.setActive(rs.getBoolean("IS_ACTIVE"));
+						user.setUserRoles(rs.getString("USER_ROLES"));
+						user.setOperationUser(rs.getBoolean("IS_OPERATION_USER"));
+						user.setUserFullName(rs.getString("USER_FULL_NAME"));
+						user.setUserEmailAdd(rs.getString("USER_EMAIL_ADD"));
+						user.setAuthorisedUserFlag(rs.getBoolean("AUTHORISED_USER_FLAG"));
+						user.setUserName(rs.getString("USERNAME"));
+						user.setEditedFlag(rs.getBoolean("EDITED_FLAG"));
+						user.setEditedRoleFlag(rs.getBoolean("EDIT_ROLE_FLAG"));
+						user.setFirstName(rs.getString("FIRST_NAME"));
+						user.setSurname(rs.getString("SURNAME"));
+						user.setPassword(rs.getString("USER_PASSWORD"));
 
 						return user;
 
@@ -129,14 +89,13 @@ public class InquiryDaoImpl implements InquiryDao {
 		get_user_profileSimpleJdbcCall.compile();
 
 		SqlParameterSource inParams = new MapSqlParameterSource().addValue("pUSER_ID", userProfile.getUserID())
-				// .addValue("pAFFILIATE_ID", userProfile.getUserID())
 				.addValue("p_USERNAME", userProfile.getUserName()).addValue("p_SERVERIP", userProfile.getServerIP());
 
 		Map<String, Object> returningResultSet = get_user_profileSimpleJdbcCall.execute(inParams);
 
-		List<User1> dbResponse = (List<User1>) returningResultSet.get("r_user_profile");
+		List<UserDetails> dbResponse = (List<UserDetails>) returningResultSet.get("r_user_profile");
 
-		User1 rs1 = (dbResponse == null || dbResponse.isEmpty()) ? new User1() : dbResponse.get(0);
+		UserDetails rs1 = (dbResponse == null || dbResponse.isEmpty()) ? new UserDetails() : dbResponse.get(0);
 		String responseCode = (String) returningResultSet.get("p_code");
 		String validResponseCode = responseCode != null ? responseCode : "99";
 		String responseMsg = (String) returningResultSet.get("p_message");
@@ -150,125 +109,29 @@ public class InquiryDaoImpl implements InquiryDao {
 
 	}
 
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Affiliate> getAuthorisedAffiliates() {
-		SimpleJdbcCall get_affiliate_clientSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-		get_affiliate_clientSimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_affiliate_client")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlOutParameter("r_affiliate_client", Types.REF_CURSOR))
-				.returningResultSet("r_affiliate_client", new RowMapper<Affiliate>() {
-					@Override
-					public Affiliate mapRow(ResultSet rs, int rowNum) throws SQLException {
-						Affiliate affiliateClient = new Affiliate();
-						affiliateClient.setAffiliateCode(rs.getString(1));
-						return affiliateClient;
-					}
-				});
-		get_affiliate_clientSimpleJdbcCall.compile();
-
-		Map<String, Object> returningResultSet = get_affiliate_clientSimpleJdbcCall.execute();
-
-		List<Affiliate> response = (List<Affiliate>) returningResultSet.get("r_affiliate_client");
-
-		return response == null | response.isEmpty() ? new ArrayList<>() : response;
-	}
-
-	// TODO FIX REMOVE P_CODE AND P_MESSAGE
-	@SuppressWarnings("unchecked")
-	@Override
-	public UserStepPositionResp get_user_step_position(UserStepPosition userStepPosition) {
-		SimpleJdbcCall get_user_step_positionSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-		get_user_step_positionSimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_user_step_position")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("p_USERNAME", Types.VARCHAR),
-						new SqlParameter("p_SERVERIP", Types.VARCHAR),
-						// new SqlOutParameter("p_code", Types.VARCHAR), new
-						// SqlOutParameter("p_message", Types.VARCHAR),
-						new SqlOutParameter("r_user_step_position", Types.REF_CURSOR))
-				.returningResultSet("r_user_step_position", new RowMapper<UserStepPositionResp>() {
-					@Override
-					public UserStepPositionResp mapRow(ResultSet rs, int rowNum) throws SQLException {
-						UserStepPositionResp userStepPositionResp = new UserStepPositionResp();
-						userStepPositionResp.setStepPosition(rs.getLong(1));
-						userStepPositionResp.setStepName(rs.getString(2));
-						return userStepPositionResp;
-					}
-				});
-		get_user_step_positionSimpleJdbcCall.compile();
-
-		SqlParameterSource inParams = new MapSqlParameterSource().addValue("p_USERNAME", userStepPosition.getUserName())
-				.addValue("p_SERVERIP", userStepPosition.getServerIP());
-
-		Map<String, Object> returningResultSet = get_user_step_positionSimpleJdbcCall.execute(inParams);
-		LOGGER.info("returningResultSet user position" + returningResultSet);
-		List<UserStepPositionResp> response = (List<UserStepPositionResp>) returningResultSet
-				.get("r_user_step_position");
-
-		return response == null || response.isEmpty() ? new UserStepPositionResp() : response.get(0);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Branch> get_branch(String affiliateCode) {
-		SimpleJdbcCall get_branchSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-		get_branchSimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_branch")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("paffiliate_code", Types.VARCHAR),
-						new SqlOutParameter("r_branch", Types.REF_CURSOR))
-				.returningResultSet("r_branch", new RowMapper<Branch>() {
-					@Override
-
-					public Branch mapRow(ResultSet rs, int rowNum) throws SQLException {
-						Branch branch = new Branch();
-						branch.setBranchCode(rs.getString(1));
-						branch.setBranchName(rs.getString(2));
-						branch.setBranchEMail(rs.getString(3));
-						branch.setAffiliateCode(rs.getString(4));
-						branch.setCreateUser(rs.getString(5));
-						branch.setCreateDate(rs.getDate(6));
-						branch.setVerifyUser(rs.getString(7));
-						branch.setVerifyUser(rs.getString(8));
-						branch.setStatus(rs.getString(8));
-						return branch;
-					}
-				});
-		get_branchSimpleJdbcCall.compile();
-
-		SqlParameterSource inParams = new MapSqlParameterSource().addValue("paffiliate_code", affiliateCode);
-
-		Map<String, Object> returningResultSet = get_branchSimpleJdbcCall.execute(inParams);
-
-		List<Branch> response = (List<Branch>) returningResultSet.get("r_branch");
-
-		return response == null || response.isEmpty() ? new ArrayList<Branch>() : response;
-
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<User> get_auth_users(String affiliateCode) {
+	public List<UserDetails> get_auth_users(String affiliateCode) {
 		SimpleJdbcCall get_auth_users = new SimpleJdbcCall(jdbcTemplate);
 		get_auth_users.withProcedureName(baseUtilityPackage + ".get_pend_auth_users")
 				.withoutProcedureColumnMetaDataAccess()
 				.declareParameters(new SqlParameter("p_AFFILIATE_CODE", Types.VARCHAR),
 						new SqlOutParameter("r_users", Types.REF_CURSOR))
-				.returningResultSet("r_users", new RowMapper<User>() {
+				.returningResultSet("r_users", new RowMapper<UserDetails>() {
 
 					@Override
-					public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-						User user = new User();
-						user.setUserID(rs.getLong(1));
-						user.setAffiliateCode(rs.getString(2));
-						user.setUserTransactionLimit(rs.getBigDecimal(3));
-						user.setUserRoles(rs.getString(4));
-						user.setOperationUser(rs.getBoolean(5));
-						user.setUserFullName(rs.getString(6));
-						user.setUserEmailAdd(rs.getString(7));
-						user.setUserBranch(rs.getString(8));
-						user.setUserName(rs.getString(9));
-						user.setCreatedBy(rs.getString(10));
-						user.setDateCreated(rs.getDate(11));
+					public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
+						UserDetails user = new UserDetails();
+						user.setUserID(rs.getLong("USER_ID"));
+						user.setAffiliateCode(rs.getString("AFFILIATE_CODE"));
+						user.setUserRoles(rs.getString("USER_ROLES"));
+						user.setOperationUser(rs.getBoolean("IS_OPERATION_USER"));
+						user.setUserFullName(rs.getString("USER_FULL_NAME"));
+						user.setUserEmailAdd(rs.getString("USER_EMAIL_ADD"));
+						user.setUserName(rs.getString("USERNAME"));
+						user.setCentre(rs.getString("CENTRE"));
+						user.setDateCreated(rs.getString("DATE_CREATED"));
 						return user;
 					}
 				});
@@ -277,9 +140,9 @@ public class InquiryDaoImpl implements InquiryDao {
 		SqlParameterSource inParams = new MapSqlParameterSource().addValue("p_AFFILIATE_CODE", affiliateCode);
 
 		Map<String, Object> returningResultSet = get_auth_users.execute(inParams);
-		List<User> response = (List<User>) returningResultSet.get("r_users");
+		List<UserDetails> response = (List<UserDetails>) returningResultSet.get("r_users");
 
-		return response == null || response.isEmpty() ? new ArrayList<User>() : response;
+		return response == null || response.isEmpty() ? new ArrayList<UserDetails>() : response;
 
 	}
 
@@ -309,40 +172,7 @@ public class InquiryDaoImpl implements InquiryDao {
 
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<UserToRoleResp> get_users_roles(UserProfile user) {
-		SimpleJdbcCall get_affiliate_currencySimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-		get_affiliate_currencySimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_users_roles")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("puserid", Types.NUMERIC),
-						new SqlOutParameter("r_users", Types.REF_CURSOR))
-				.returningResultSet("r_users", new RowMapper<UserToRoleResp>() {
-
-					@Override
-					public UserToRoleResp mapRow(ResultSet rs, int rowNum) throws SQLException {
-						UserToRoleResp user = new UserToRoleResp();
-						user.setUserID(rs.getLong(1));
-						user.setUserName(rs.getString(2));
-						user.setStepID(rs.getLong(5));
-						user.setRoleID(rs.getLong(3));
-						user.setRoleName(rs.getString(4));
-						user.setStepName(rs.getString(6));
-
-						return user;
-					}
-				});
-		get_affiliate_currencySimpleJdbcCall.compile();
-
-		SqlParameterSource inParams = new MapSqlParameterSource().addValue("puserid", user.getUserID());
-
-		Map<String, Object> returningResultSet = get_affiliate_currencySimpleJdbcCall.execute(inParams);
-
-		List<UserToRoleResp> response = (List<UserToRoleResp>) returningResultSet.get("r_users");
-
-		return response == null || response.isEmpty() ? new ArrayList<UserToRoleResp>() : response;
-
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -357,21 +187,17 @@ public class InquiryDaoImpl implements InquiryDao {
 					@Override
 					public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 						User user = new User();
-						String username = rs.getString(12);
-						user.setUserID(rs.getLong(1));
-						user.setAffiliateCode(rs.getString(2));
-						user.setUserTransactionLimit(rs.getBigDecimal(3));
-						user.setActive(rs.getBoolean(4));
-						user.setUserRoles(rs.getString(5));
-						user.setOperationUser(rs.getBoolean(6));
-						user.setUserFullName(rs.getString(7));
-						user.setUserEmailAdd(rs.getString(8));
-						user.setUserBranch(rs.getString(9));
-						user.setPasswordExpiryPolicy(rs.getString(10));
-						user.setAuthorisedUserFlag(rs.getBoolean(11));
+						String username = rs.getString("USERNAME");
+						user.setUserID(rs.getLong("USER_ID"));
+						user.setAffiliateCode(rs.getString("AFFILIATE_CODE"));
+						user.setActive(rs.getBoolean("IS_ACTIVE"));
+						user.setUserRoles(rs.getString("USER_ROLES"));
+						user.setOperationUser(rs.getBoolean("IS_OPERATION_USER"));
+						user.setUserFullName(rs.getString("USER_FULL_NAME"));
+						user.setUserEmailAdd(rs.getString("USER_EMAIL_ADD"));
+						user.setAuthorisedUserFlag(rs.getBoolean("AUTHORISED_USER_FLAG"));
 						user.setUserName(username == null ? "" : username.toUpperCase());
-						user.setTokenGroup(rs.getString(13));
-						user.setDeleteFlag(rs.getString(27));
+						user.setDeleteFlag(rs.getString("DISABLE_FLAG"));
 						return user;
 					}
 				});
@@ -387,262 +213,27 @@ public class InquiryDaoImpl implements InquiryDao {
 
 	}
 
+
+	
+
+	
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Response getbranchname(String branchcode) {
-		SimpleJdbcCall getbranchname = new SimpleJdbcCall(jdbcTemplate);
-		getbranchname.withProcedureName(baseUtilityPackage + ".get_branch_name").withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("p_branchcode", Types.VARCHAR),
-						new SqlOutParameter("p_code", Types.VARCHAR), new SqlOutParameter("p_message", Types.VARCHAR));
-
-		getbranchname.compile();
-
-		SqlParameterSource inparams = new MapSqlParameterSource().addValue("p_branchcode", branchcode);
-
-		Map<String, Object> returningResultSet = getbranchname.execute(inparams);
-
-		String responseCode = (String) returningResultSet.get("p_code");
-		String validResponseCode = responseCode != null ? responseCode : "99";
-		String responseMsg = (String) returningResultSet.get("p_message");
-		String validResponseMsg = responseMsg != null ? responseMsg : "";
-
-		Response response = new Response();
-		response.setResponseCode(validResponseCode);
-		response.setResponseMessage(validResponseMsg);
-		return response;
-
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<User> get_auth_edit_users(Flag flag) {
-		SimpleJdbcCall get_affiliate_currencySimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-		get_affiliate_currencySimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_pend_auth_users1")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("p_flag", Types.VARCHAR),
-						new SqlParameter("p_affiliate", Types.VARCHAR),
-						new SqlOutParameter("r_users", Types.REF_CURSOR))
-				.returningResultSet("r_users", new RowMapper<User>() {
-
-					@Override
-					public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-						User user = new User();
-						user.setUserID(rs.getLong(1));
-						user.setAffiliateCode(rs.getString(2));
-						user.setUserTransactionLimit(rs.getBigDecimal(3));
-						user.setActive(rs.getBoolean(4));
-						user.setUserRoles(rs.getString(5));
-						user.setOperationUser(rs.getBoolean(6));
-						user.setUserFullName(rs.getString(7));
-						user.setUserEmailAdd(rs.getString(8));
-						user.setUserBranch(rs.getString(9));
-						user.setPasswordExpiryPolicy(rs.getString(10));
-						user.setAuthorisedUserFlag(rs.getBoolean(11));
-						user.setUserName(rs.getString(12));
-						return user;
-					}
-				});
-		get_affiliate_currencySimpleJdbcCall.compile();
-
-		SqlParameterSource inParams = new MapSqlParameterSource().addValue("p_flag", flag.getPflag())
-				.addValue("p_affiliate", flag.getAffiliate());
-
-		Map<String, Object> returningResultSet = get_affiliate_currencySimpleJdbcCall.execute(inParams);
-		List<User> response = (List<User>) returningResultSet.get("r_users");
-
-		return response == null || response.isEmpty() ? new ArrayList<User>() : response;
-
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<EditUser> get_edit_users1(Flag flag) {
-		SimpleJdbcCall get_affiliate_currencySimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-		get_affiliate_currencySimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_pend_auth_users1")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("p_flag", Types.VARCHAR),
-						new SqlParameter("p_affiliate", Types.VARCHAR),
-						new SqlOutParameter("r_users", Types.REF_CURSOR))
-				.returningResultSet("r_users", new RowMapper<EditUser>() {
-
-					@Override
-					public EditUser mapRow(ResultSet rs, int rowNum) throws SQLException {
-						EditUser user = new EditUser();
-						user.setUserID(rs.getLong(1));
-						user.setUserName(rs.getString(2));
-						user.setOldUserEmailAdd((rs.getString(3)));
-						user.setNewUserEmailAdd((rs.getString(4)));
-						user.setOldUserTransactionLimit(rs.getLong(5));
-						user.setNewUserTransactionLimit(rs.getLong(6));
-						user.setOldUserBranch(rs.getString(7));
-						user.setNewUserBranch(rs.getString(8));
-						user.setOldUserFullName(rs.getString(9));
-						user.setNewUserFullName(rs.getString(10));
-						user.setOldAffiliateCode(rs.getString(12));
-						user.setNewAffiliateCode(rs.getString(13));
-						user.setCreatedBy(rs.getString(14));
-						return user;
-					}
-				});
-		get_affiliate_currencySimpleJdbcCall.compile();
-
-		SqlParameterSource inParams = new MapSqlParameterSource().addValue("p_flag", flag.getPflag())
-				.addValue("p_affiliate", flag.getAffiliate());
-
-		Map<String, Object> returningResultSet = get_affiliate_currencySimpleJdbcCall.execute(inParams);
-		List<EditUser> response = (List<EditUser>) returningResultSet.get("r_users");
-
-		return response == null || response.isEmpty() ? new ArrayList<EditUser>() : response;
-
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<UserToRoleApp> get_PEND_USERTOROLE(String userName) {
-		SimpleJdbcCall get_affiliate_currencySimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-		get_affiliate_currencySimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_PEND_USERTOROLE")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("PUSERNAME", Types.VARCHAR),
-						new SqlOutParameter("r_users", Types.REF_CURSOR))
-				.returningResultSet("r_users", new RowMapper<UserToRoleApp>() {
-
-					@Override
-					public UserToRoleApp mapRow(ResultSet rs, int rowNum) throws SQLException {
-						UserToRoleApp user = new UserToRoleApp();
-						user.setRoleName(rs.getString(3));
-						user.setStepName(rs.getString(4));
-						user.setUsertoroleID(rs.getLong(1));
-						user.setUserName(rs.getString(2));
-						user.setCreatedBy(rs.getString(5));
-						return user;
-					}
-				});
-		get_affiliate_currencySimpleJdbcCall.compile();
-
-		SqlParameterSource inParams = new MapSqlParameterSource().addValue("PUSERNAME", userName);
-
-		Map<String, Object> returningResultSet = get_affiliate_currencySimpleJdbcCall.execute(inParams);
-		List<UserToRoleApp> response = (List<UserToRoleApp>) returningResultSet.get("r_users");
-
-		return response == null || response.isEmpty() ? new ArrayList<UserToRoleApp>() : response;
-
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<UserRemoveRole> getPendingRemoveUser(String affiliateCode) {
-		SimpleJdbcCall getPendingRemoveUser = new SimpleJdbcCall(jdbcTemplate);
-		getPendingRemoveUser.withProcedureName(baseUtilityPackage + ".get_pending_disableuserrole")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("p_affiliate", Types.VARCHAR),
-						new SqlOutParameter("r_pedings", Types.REF_CURSOR))
-				.returningResultSet("r_pedings", new RowMapper<UserRemoveRole>() {
-					@Override
-
-					public UserRemoveRole mapRow(ResultSet rs, int rowNum) throws SQLException {
-						UserRemoveRole userToRole = new UserRemoveRole();
-						userToRole.setUserName(rs.getString(1));
-						userToRole.setUserID(rs.getLong(2));
-						userToRole.setRoleID(rs.getString(3));
-						userToRole.setStepID(rs.getString(4));
-						userToRole.setProductID(rs.getLong(5));
-						userToRole.setId(rs.getLong("ID"));
-						userToRole.setUserBranch(rs.getString("USER_BRANCH"));
-						userToRole.setAffiliateCode(rs.getString("AFFILIATE_CODE"));
-						userToRole.setUserFullName(rs.getString("USER_FULL_NAME"));
-						userToRole.setUserEmailAdd(rs.getString("USER_EMAIL_ADD"));
-						userToRole.setUserRoles(rs.getString("ROLENAME"));
-						userToRole.setServerIP(rs.getString(6));
-						userToRole.setDateCreated(rs.getString("DISABLED_DATE"));
-						return userToRole;
-					}
-				});
-		getPendingRemoveUser.compile();
-
-		SqlParameterSource inParams = new MapSqlParameterSource().addValue("p_affiliate", affiliateCode);
-
-		Map<String, Object> returningResultSet = getPendingRemoveUser.execute(inParams);
-		List<UserRemoveRole> response = (List<UserRemoveRole>) returningResultSet.get("r_pedings");
-
-		return response == null || response.isEmpty() ? new ArrayList<UserRemoveRole>() : response;
-	}
-
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<UserStepPositionResp> getSteps() {
-		SimpleJdbcCall get_steps_for_productsSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-		get_steps_for_productsSimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_steps")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlOutParameter("r_steps", Types.REF_CURSOR),
-						new SqlOutParameter("p_code", Types.VARCHAR), new SqlOutParameter("p_message", Types.VARCHAR))
-				.returningResultSet("r_steps", new RowMapper<UserStepPositionResp>() {
-					@Override
-					public UserStepPositionResp mapRow(ResultSet rs, int rowNum) throws SQLException {
-						UserStepPositionResp userStepPositionResp = new UserStepPositionResp();
-						// userStepPositionResp.setStepPosition(rs.getLong(1));
-						userStepPositionResp.setStepName(rs.getString(1));
-						userStepPositionResp.setStepid(rs.getLong(2));
-						return userStepPositionResp;
-					}
-				});
-		get_steps_for_productsSimpleJdbcCall.compile();
-
-		Map<String, Object> returningResultSet = get_steps_for_productsSimpleJdbcCall.execute();
-
-		List<UserStepPositionResp> response = (List<UserStepPositionResp>) returningResultSet.get("r_steps");
-
-		return response == null || response.isEmpty() ? new ArrayList<>() : response;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Affiliate> getAffiliateDetails(String username) {
-		SimpleJdbcCall getAffiliateDetails = new SimpleJdbcCall(jdbcTemplate);
-		getAffiliateDetails.withProcedureName(baseUtilityPackage + ".get_affiliate_detail")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("p_username", Types.VARCHAR),
-						new SqlOutParameter("r_details", Types.REF_CURSOR))
-				.returningResultSet("r_details", new RowMapper<Affiliate>() {
-
-					@Override
-					public Affiliate mapRow(ResultSet rs, int rowNum) throws SQLException {
-
-						Affiliate affiliate = new Affiliate();
-						affiliate.setAffiliateID(rs.getLong(1));
-						affiliate.setAffiliateCode(rs.getString(2));
-						affiliate.setAffiliateCurrency(rs.getString(3));
-						return affiliate;
-					}
-				});
-
-		getAffiliateDetails.compile();
-
-		SqlParameterSource inparams = new MapSqlParameterSource().addValue("p_username", username);
-
-		Map<String, Object> returningResultSet = getAffiliateDetails.execute(inparams);
-
-		List<Affiliate> response = (List<Affiliate>) returningResultSet.get("r_details");
-
-		return response == null || response.isEmpty() ? new ArrayList<>() : response;
-
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<User1> getUserDetails(String username) {
+	public List<UserDetails> getUserDetails(String username) {
 		SimpleJdbcCall getUserDetails = new SimpleJdbcCall(jdbcTemplate);
 		getUserDetails.withProcedureName(baseUtilityPackage + ".get_user_detail").withoutProcedureColumnMetaDataAccess()
 				.declareParameters(new SqlParameter("p_username", Types.VARCHAR),
 						new SqlOutParameter("r_details", Types.REF_CURSOR))
-				.returningResultSet("r_details", new RowMapper<User1>() {
+				.returningResultSet("r_details", new RowMapper<UserDetails>() {
 
 					@Override
-					public User1 mapRow(ResultSet rs, int rowNum) throws SQLException {
+					public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-						User1 affiliate = new User1();
-						affiliate.setAffiliateCode(rs.getString(2));
-						affiliate.setUserRoles(rs.getString(5));
+						UserDetails affiliate = new UserDetails();
+						affiliate.setAffiliateCode(rs.getString("AFFILIATE_CODE"));
+						affiliate.setUserRoles(rs.getString("USER_ROLES"));
+						affiliate.setUserFullName(rs.getString("USER_FULL_NAME"));
 						return affiliate;
 					}
 				});
@@ -653,117 +244,10 @@ public class InquiryDaoImpl implements InquiryDao {
 
 		Map<String, Object> returningResultSet = getUserDetails.execute(inparams);
 
-		List<User1> response = (List<User1>) returningResultSet.get("r_details");
+		List<UserDetails> response = (List<UserDetails>) returningResultSet.get("r_details");
 
-		return response == null || response.isEmpty() ? new ArrayList<User1>() : response;
+		return response == null || response.isEmpty() ? new ArrayList<UserDetails>() : response;
 
-	}
-	
-
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public StepOperationResp getUserEnabledActivitiesnew(String username) {
-		SimpleJdbcCall get_step_operationsSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-		get_step_operationsSimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_step_operations1")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("p_USERNAME", Types.VARCHAR),
-						new SqlParameter("p_SERVERIP", Types.VARCHAR), new SqlOutParameter("p_code", Types.VARCHAR),
-						new SqlOutParameter("p_message", Types.VARCHAR),
-						new SqlOutParameter("r_stepoperations", Types.REF_CURSOR))
-				.returningResultSet("r_stepoperations", new RowMapper<StepOperRequest>() {
-					@Override
-					public StepOperRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
-						StepOperRequest stepOppsResp = new StepOperRequest();
-						stepOppsResp.setOperationID(rs.getLong(1));
-						stepOppsResp.setOperationName(rs.getString(2));
-						stepOppsResp.setStepID(rs.getLong(3));
-						return stepOppsResp;
-					}
-				});
-		get_step_operationsSimpleJdbcCall.compile();
-
-		SqlParameterSource inParams = new MapSqlParameterSource().addValue("p_USERNAME", username)
-				.addValue("p_SERVERIP", BasicUtil.getClientIp());
-
-		Map<String, Object> returningResultSet = get_step_operationsSimpleJdbcCall.execute(inParams);
-
-		List<StepOperRequest> rs1 = (List<StepOperRequest>) returningResultSet.get("r_stepoperations");
-		String responseCode = (String) returningResultSet.get("p_code");
-		String validResponseCode = responseCode != null ? responseCode : "99";
-		String responseMsg = (String) returningResultSet.get("p_message");
-		String validResponseMsg = responseMsg != null ? responseMsg : "";
-
-		StepOperationResp response = new StepOperationResp();
-		response.setOperations(rs1);
-		response.setResponseCode(validResponseCode);
-		response.setResponseMessage(validResponseMsg);
-		return response;
-
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<String> getActivities(String string, String flag) {
-		SimpleJdbcCall getActivities = new SimpleJdbcCall(jdbcTemplate);
-		getActivities.withProcedureName(baseUtilityPackage + ".get_cust_acctivitiesbyid")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("p_id", Types.NUMERIC), new SqlParameter("p_flag", Types.VARCHAR),
-						new SqlOutParameter("p_code", Types.VARCHAR), new SqlOutParameter("p_message", Types.VARCHAR),
-						new SqlOutParameter("r_posting", Types.REF_CURSOR))
-				.returningResultSet("r_posting", new RowMapper<String>() {
-
-					@Override
-					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-						return rs.getString(1);
-					}
-				});
-
-		getActivities.compile();
-
-		SqlParameterSource inparams = new MapSqlParameterSource().addValue("p_id", string).addValue("p_flag", flag);
-
-		Map<String, Object> returningResultSet = getActivities.execute(inparams);
-
-		LOGGER.info("+++++show me result set===>>" + returningResultSet);
-		List<String> response = (List<String>) returningResultSet.get("r_posting");
-		return response == null || response.isEmpty() ? new ArrayList<>() : response;
-	}
-
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Custactivities> getcustactivities(String flag) {
-		SimpleJdbcCall get_cmpltd_trans_by_prodSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-		LOGGER.info("+++++show me result set===>>" +flag);
-		get_cmpltd_trans_by_prodSimpleJdbcCall.withProcedureName(baseUtilityPackage+".get_cust_acctivities")
-				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlParameter("p_flag", Types.VARCHAR),						
-						new SqlOutParameter("p_code", Types.VARCHAR), new SqlOutParameter("p_message", Types.VARCHAR),
-						new SqlOutParameter("r_posting", Types.REF_CURSOR))
-				.returningResultSet("r_posting", new RowMapper<Custactivities>() {
-					
-					@Override
-					public Custactivities mapRow(ResultSet rs, int rowNum) throws SQLException {
-						Custactivities act = new Custactivities();						
-						act.setId(rs.getLong(1));
-						act.setActName(rs.getString(2));
-						return act;
-					}
-				});
-
-		get_cmpltd_trans_by_prodSimpleJdbcCall.compile();
-		
-		SqlParameterSource inparams = new MapSqlParameterSource().addValue("p_flag", flag);
-
-		Map<String, Object> returningResultSet = get_cmpltd_trans_by_prodSimpleJdbcCall.execute(inparams);
-
-		LOGGER.info("+++++show me result set===>>" + returningResultSet);
-		List<Custactivities> response = (List<Custactivities>) returningResultSet.get("r_posting");
-
-		LOGGER.info("+++++show me result set23===>>" + response);
-
-		return response;
 	}
 	
 	
@@ -889,16 +373,19 @@ public class InquiryDaoImpl implements InquiryDao {
 	
 	@SuppressWarnings("all")
 	@Override
-	public List<PrayerRequest> getPrayerRequest() {
+	public List<PrayerRequest> getPrayerRequest(PrayerRequest request) {
 		SimpleJdbcCall getPrayerRequest = new SimpleJdbcCall(jdbcTemplate);
 		getPrayerRequest.withProcedureName(baseUtilityPackage + ".get_prayer_request")
 				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlOutParameter("r_details", Types.REF_CURSOR))
+				.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+						new SqlOutParameter("r_details", Types.REF_CURSOR))
 				.returningResultSet("r_details", new RowMapper<PrayerRequest>() {
 
 					@Override
 					public PrayerRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
 						PrayerRequest request = new PrayerRequest();
+						request.setPrayerId(rs.getString("prayer_id"));
+						request.setStatus(rs.getString("status"));
 						request.setName(rs.getString("requester"));
 						request.setPrayer(rs.getString("prayer_request"));
 						return request;
@@ -906,8 +393,10 @@ public class InquiryDaoImpl implements InquiryDao {
 				});
 
 		getPrayerRequest.compile();
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getName());
 
-		Map<String, Object> returningResultSet = getPrayerRequest.execute();
+		Map<String, Object> returningResultSet = getPrayerRequest.execute(inparam);
 
 		List<PrayerRequest> response = (List<PrayerRequest>) returningResultSet.get("r_details");
 
@@ -917,11 +406,12 @@ public class InquiryDaoImpl implements InquiryDao {
 
 	@SuppressWarnings("all")
 	@Override
-	public List<Welfare> getWelfareRequest() {
+	public List<Welfare> getWelfareRequest(Welfare request) {
 		SimpleJdbcCall getPrayerRequest = new SimpleJdbcCall(jdbcTemplate);
 		getPrayerRequest.withProcedureName(baseUtilityPackage + ".get_welfare_request")
 				.withoutProcedureColumnMetaDataAccess()
-				.declareParameters(new SqlOutParameter("r_details", Types.REF_CURSOR))
+				.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+								   new SqlOutParameter("r_details", Types.REF_CURSOR))
 				.returningResultSet("r_details", new RowMapper<Welfare>() {
 
 					@Override
@@ -929,13 +419,19 @@ public class InquiryDaoImpl implements InquiryDao {
 						Welfare request = new Welfare();
 						request.setName(rs.getString("requester"));
 						request.setWelfare(rs.getString("welfare_request"));
+						request.setWelfareId(rs.getString("WELFARE_ID"));
+						request.setStatus(rs.getString("STATUS"));
+						request.setComment(rs.getString("STATUS_COMMENT"));
 						return request;
 					}
 				});
 
 		getPrayerRequest.compile();
+		
 
-		Map<String, Object> returningResultSet = getPrayerRequest.execute();
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getName());
+
+		Map<String, Object> returningResultSet = getPrayerRequest.execute(inparam);
 
 		List<Welfare> response = (List<Welfare>) returningResultSet.get("r_details");
 
@@ -958,6 +454,7 @@ public class InquiryDaoImpl implements InquiryDao {
 						request.setAnnounce(rs.getString("ANNOUNCEMENT"));
 						request.setCategory(rs.getString("CATEGORY_ID").replace(",", ""));
 						request.setEventDate(rs.getString("EVENT_DATE"));
+						request.setMeetingLink(rs.getString("MEETING_LINK"));
 						return request;
 					}
 				});
@@ -970,6 +467,609 @@ public class InquiryDaoImpl implements InquiryDao {
 
 		return response == null || response.isEmpty() ? new ArrayList<>() : response;
 	}
+	
+	@SuppressWarnings("all")
+	@Override
+	public List<Incident> getIncident(Incident request) {
+		SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+		getIncident.withProcedureName(baseUtilityPackage + ".get_incident_request")
+				.withoutProcedureColumnMetaDataAccess()
+				.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+						new SqlOutParameter("r_details", Types.REF_CURSOR))
+				.returningResultSet("r_details", new RowMapper<Incident>() {
+
+					@Override
+					public Incident mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Incident request = new Incident();
+						request.setIncidentId(rs.getString("INCIDENT_ID"));
+						request.setName(rs.getString("REQUESTER"));
+						request.setIncident(rs.getString("INCIDENT_REQUEST"));
+						request.setStatus(rs.getString("STATUS"));
+						request.setComment(rs.getString("STATUS_COMMENT"));
+						return request;
+					}
+				});
+
+		getIncident.compile();
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getName());
+
+		Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+		List<Incident> response = (List<Incident>) returningResultSet.get("r_details");
+
+		return response == null || response.isEmpty() ? new ArrayList<>() : response;
+	}
+
+	@SuppressWarnings("all")
+	@Override
+	public List<Expenses> getCommunityProject(Expenses request) {
+		SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+		getIncident.withProcedureName(baseUtilityPackage + ".get_community_project")
+				.withoutProcedureColumnMetaDataAccess()
+				.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+						new SqlOutParameter("r_details", Types.REF_CURSOR))
+				.returningResultSet("r_details", new RowMapper<Expenses>() {
+
+					@Override
+					public Expenses mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Expenses request = new Expenses();
+						request.setExpenseId(rs.getString("PROJECT_ID"));
+						request.setName(rs.getString("REQUESTER"));
+						request.setExpense(rs.getString("COMMUNITY_PROJECT"));
+						request.setCategory(rs.getString("CATEGORY"));
+						request.setAmount(rs.getBigDecimal("AMOUNT"));
+						return request;
+					}
+				});
+
+		getIncident.compile();
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getName());
+
+		Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+		List<Expenses> response = (List<Expenses>) returningResultSet.get("r_details");
+
+		return response == null || response.isEmpty() ? new ArrayList<>() : response;
+	}
+
+	@SuppressWarnings("all")
+	@Override
+	public List<Expenses> getExpenses(Expenses request) {
+		SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+		getIncident.withProcedureName(baseUtilityPackage + ".get_expenses")
+				.withoutProcedureColumnMetaDataAccess()
+				.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+						new SqlOutParameter("r_details", Types.REF_CURSOR))
+				.returningResultSet("r_details", new RowMapper<Expenses>() {
+
+					@Override
+					public Expenses mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Expenses request = new Expenses();
+						request.setExpenseId(rs.getString("EXPENSE_ID"));
+						request.setName(rs.getString("REQUESTER"));
+						request.setExpense(rs.getString("EXPENSE"));
+						request.setCategory(rs.getString("CATEGORY"));
+						request.setAmount(rs.getBigDecimal("AMOUNT"));
+						return request;
+					}
+				});
+
+		getIncident.compile();
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getName());
+
+		Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+		List<Expenses> response = (List<Expenses>) returningResultSet.get("r_details");
+
+		return response == null || response.isEmpty() ? new ArrayList<>() : response;
+	}
+
+	@SuppressWarnings("all")
+	@Override
+	public List<WeeklyOutline> getWeeklyOutline(WeeklyOutline request) {
+		SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+		getIncident.withProcedureName(baseUtilityPackage + ".get_weekly_outline")
+				.withoutProcedureColumnMetaDataAccess()
+				.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+						new SqlOutParameter("r_details", Types.REF_CURSOR))
+				.returningResultSet("r_details", new RowMapper<WeeklyOutline>() {
+
+					@Override
+					public WeeklyOutline mapRow(ResultSet rs, int rowNum) throws SQLException {
+						WeeklyOutline request = new WeeklyOutline();
+						request.setOutline(rs.getString("WEEKLY_OUTLINE"));
+						request.setName(rs.getString("REQUESTER"));
+						request.setTopic(rs.getString("TOPIC").toUpperCase());
+						request.setUploadFlag(rs.getString("UPLOAD_FLAG"));
+						request.setOutlineID(rs.getString("OUTLINE_ID"));
+						request.setDateCreated(MARSHARLLERDATEFORMAT.format(rs.getDate("DATE_CREATED")));
+						return request;
+					}
+				});
+
+		getIncident.compile();
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getName());
+
+		Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+		List<WeeklyOutline> response = (List<WeeklyOutline>) returningResultSet.get("r_details");
+
+		return response == null || response.isEmpty() ? new ArrayList<>() : response;
+	}
+	
+	@SuppressWarnings("all")
+	@Override
+	public List<Incident> getWhistleBlowing(Incident request) {
+		SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+		getIncident.withProcedureName(baseUtilityPackage + ".get_whistle_blow")
+				.withoutProcedureColumnMetaDataAccess()
+				.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+						new SqlOutParameter("r_details", Types.REF_CURSOR))
+				.returningResultSet("r_details", new RowMapper<Incident>() {
+
+					@Override
+					public Incident mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Incident request = new Incident();
+						request.setIncidentId(rs.getString("WHISTLE_BLOW_ID"));
+						request.setName(rs.getString("REQUESTER"));
+						request.setIncident(rs.getString("WHISTLE_BLOW"));
+						request.setStatus(rs.getString("STATUS"));
+						request.setComment(rs.getString("STATUS_COMMENT"));
+						return request;
+					}
+				});
+
+		getIncident.compile();
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getName());
+
+		Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+		List<Incident> response = (List<Incident>) returningResultSet.get("r_details");
+
+		return response == null || response.isEmpty() ? new ArrayList<>() : response;
+	}
+
+		@SuppressWarnings("all")
+		@Override
+		public List<Otp> getOTP(Otp req) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_otp")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<Otp>() {
+
+						@Override
+						public Otp mapRow(ResultSet rs, int rowNum) throws SQLException {
+							Otp request = new Otp();
+							request.setOtp(rs.getString("OTP"));
+							request.setPhoneNo(rs.getString("PHONE_NO"));
+							request.setSessionID(rs.getString("SESSION_ID"));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", req.getSessionID());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<Otp> response = (List<Otp>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
+		@SuppressWarnings("all")
+		@Override
+		public List<CalendarDetail> getCalendarEvent(CalendarDetail req) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_calendar_event")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<CalendarDetail>() {
+
+						@Override
+						public CalendarDetail mapRow(ResultSet rs, int rowNum) throws SQLException {
+							CalendarDetail request = new CalendarDetail();
+							request.setCalendarID(rs.getString("CALENDAR_ID"));
+							request.setEvent(rs.getString("EVENT"));
+							request.setEventDateD(rs.getDate("EVENT_DATE"));
+							request.setCreatedBy(rs.getString("CREATED_BY") +" on "+rs.getString("DATE_CREATED"));
+							request.setSendTo(rs.getString("SEND_TO"));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", req.getCalendarID());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<CalendarDetail> response = (List<CalendarDetail>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
+		@SuppressWarnings("all")
+		@Override
+		public List<CalendarDetail> getCalendarEventToSend() {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_calendar_event_to_send")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<CalendarDetail>() {
+
+						@Override
+						public CalendarDetail mapRow(ResultSet rs, int rowNum) throws SQLException {
+							CalendarDetail request = new CalendarDetail();
+							request.setCalendarID(rs.getString("CALENDAR_ID"));
+							request.setEvent(rs.getString("EVENT"));
+							request.setEventDate(rs.getString("EVENT_DATE"));
+							request.setCreatedBy(rs.getString("CREATED_BY") +" on "+rs.getString("DATE_CREATED"));
+							request.setSendTo(rs.getString("SEND_TO"));
+							request.setSendToUser(rs.getString("SEND_TO_USER"));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			Map<String, Object> returningResultSet = getIncident.execute();
+
+			List<CalendarDetail> response = (List<CalendarDetail>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public List<UserDetails> userToSendRemainder(String value, String user) {
+			SimpleJdbcCall get_user_profileSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
+			get_user_profileSimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_userto_sendreminder")
+					.withoutProcedureColumnMetaDataAccess().declareParameters(
+							new SqlParameter("p_value", Types.VARCHAR), 
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<UserDetails>() {
+						@Override
+						public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
+							UserDetails user = new UserDetails();
+							user.setUserID(rs.getLong("USER_ID"));
+							user.setAffiliateCode(rs.getString("AFFILIATE_CODE"));
+							user.setPhoneNo(rs.getString("PHONE_NO"));
+							user.setActive(rs.getBoolean("IS_ACTIVE"));
+							user.setUserRoles(rs.getString("USER_ROLES"));
+							user.setOperationUser(rs.getBoolean("IS_OPERATION_USER"));
+							user.setUserFullName(rs.getString("USER_FULL_NAME"));
+							user.setUserEmailAdd(rs.getString("USER_EMAIL_ADD"));
+							user.setAuthorisedUserFlag(rs.getBoolean("AUTHORISED_USER_FLAG"));
+							user.setUserName(rs.getString("USERNAME"));
+							user.setEditedFlag(rs.getBoolean("EDITED_FLAG"));
+							user.setEditedRoleFlag(rs.getBoolean("EDIT_ROLE_FLAG"));
+							user.setFirstName(rs.getString("FIRST_NAME"));
+							user.setSurname(rs.getString("SURNAME"));
+
+							return user;
+
+						}
+					});
+			get_user_profileSimpleJdbcCall.compile();
+
+			SqlParameterSource inParams = new MapSqlParameterSource().addValue("p_value", value).addValue("p_value_user", user);
+
+			Map<String, Object> returningResultSet = get_user_profileSimpleJdbcCall.execute(inParams);
+
+
+			List<UserDetails> response = (List<UserDetails>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+
+		}
+		
+		
+		@SuppressWarnings("unchecked")
+	    @Override
+	    public DocManagerRequest getOutlineDocument(String id) {
+
+	        SimpleJdbcCall get_documentby_docuniqueidSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
+	        get_documentby_docuniqueidSimpleJdbcCall.withProcedureName(baseUtilityPackage+ ".get_outline_document")
+	                .withoutProcedureColumnMetaDataAccess()
+	                .declareParameters(new SqlParameter("p_value", Types.VARCHAR), 
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+	                .returningResultSet("r_details", new RowMapper<DocManagerRequest>() {
+
+	                    @Override
+	                    public DocManagerRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+	                        LobHandler lobHandler = new DefaultLobHandler();
+	                        DocManagerRequest docMangerRequest = new DocManagerRequest();
+
+	                        docMangerRequest.setDocName(rs.getString("DOCUMENT_NAME"));
+	                        docMangerRequest.setDocumentUniqueID(rs.getString("DOCUMENT_UNIQUE_ID"));
+	                        docMangerRequest.setInputStream(lobHandler.getBlobAsBinaryStream(rs, "INPUTSTREAM"));
+	                        docMangerRequest.setFiletype(rs.getString("CONTENT_TYPE"));
+	                        docMangerRequest.setInputStreamLength(rs.getInt("DOCUMENT_LENGTH"));
+	                        docMangerRequest.setCompressed(rs.getBoolean("COMPRESSED"));
+	                        LOGGER.info(
+	                                "++++ Document Manager Response ==> " + docMangerRequest.getInputStream() + " ++++");
+
+	                        return docMangerRequest;
+	                    }
+	                });
+	        get_documentby_docuniqueidSimpleJdbcCall.compile();
+
+	        SqlParameterSource inParams = new MapSqlParameterSource()
+	                .addValue("p_value", id);
+
+
+	        Map<String, Object> returningResultSet = get_documentby_docuniqueidSimpleJdbcCall.execute(inParams);
+	        String responseCode = (String) returningResultSet.get("p_code");
+	        String validResponseCode = responseCode != null ? responseCode : "99";
+	        LOGGER.info("+++ validResponseCode ==> " + validResponseCode + " +++");
+	        String responseMsg = (String) returningResultSet.get("p_message");
+	        String validResponseMsg = responseMsg != null ? responseMsg : "";
+	        LOGGER.info("+++ validResponseMsg ==> " + validResponseMsg + " +++");
+	        LOGGER.info("+++ returningResultSet ==> \n" + returningResultSet + " +++");
+
+	        List<DocManagerRequest> dbResponse1 = ((List<DocManagerRequest>) returningResultSet
+	                .get("r_details"));
+
+	        return dbResponse1==null||dbResponse1.isEmpty()?new DocManagerRequest():dbResponse1.get(0);
+
+	    }
+
+		
+		@SuppressWarnings("all")
+		@Override
+		public List<SocialEvent> getSocialEvent(SocialEvent request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_social_event")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<SocialEvent>() {
+
+						@Override
+						public SocialEvent mapRow(ResultSet rs, int rowNum) throws SQLException {
+							SocialEvent request = new SocialEvent();
+							request.setEvent(rs.getString("SOCIAL_EVENT"));
+							request.setName(rs.getString("REQUESTER"));
+							request.setTopic(rs.getString("TOPIC"));
+							request.setUploadFlag(rs.getString("UPLOAD_FLAG"));
+							request.setEventID(rs.getString("EVENT_ID"));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getName());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<SocialEvent> response = (List<SocialEvent>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
+		
+		@SuppressWarnings("unchecked")
+	    @Override
+	    public List<DocManagerRequest> getSocialEventDocument(String outlineID)  {
+
+	        SimpleJdbcCall get_documentby_docuniqueidSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
+	        get_documentby_docuniqueidSimpleJdbcCall.withProcedureName(baseUtilityPackage+ ".get_event_document")
+	                .withoutProcedureColumnMetaDataAccess()
+	                .declareParameters(new SqlParameter("p_value", Types.VARCHAR), 
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+	                .returningResultSet("r_details", new RowMapper<DocManagerRequest>() {
+
+	                    @Override
+	                    public DocManagerRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+	                        LobHandler lobHandler = new DefaultLobHandler();
+	                        DocManagerRequest docMangerRequest = new DocManagerRequest();
+
+	                        docMangerRequest.setDocName(rs.getString("DOCUMENT_NAME"));
+	                        docMangerRequest.setDocumentUniqueID(rs.getString("DOCUMENT_UNIQUE_ID"));
+	                        docMangerRequest.setInputStream(lobHandler.getBlobAsBinaryStream(rs, "INPUTSTREAM"));
+	                        docMangerRequest.setFiletype(rs.getString("CONTENT_TYPE"));
+	                        docMangerRequest.setInputStreamLength(rs.getInt("DOCUMENT_LENGTH"));
+	                        docMangerRequest.setCompressed(rs.getBoolean("COMPRESSED"));
+	                        docMangerRequest.setTopic(rs.getString("INPUT"));
+	                        LOGGER.info(
+	                                "++++ Document Manager Response ==> " + docMangerRequest.getInputStream() + " ++++");
+
+	                        return docMangerRequest;
+	                    }
+	                });
+	        get_documentby_docuniqueidSimpleJdbcCall.compile();
+
+	        SqlParameterSource inParams = new MapSqlParameterSource()
+	                .addValue("p_value", outlineID);
+
+
+	        Map<String, Object> returningResultSet = get_documentby_docuniqueidSimpleJdbcCall.execute(inParams);
+	        String responseCode = (String) returningResultSet.get("p_code");
+	        String validResponseCode = responseCode != null ? responseCode : "99";
+	        LOGGER.info("+++ validResponseCode ==> " + validResponseCode + " +++");
+	        String responseMsg = (String) returningResultSet.get("p_message");
+	        String validResponseMsg = responseMsg != null ? responseMsg : "";
+	        LOGGER.info("+++ validResponseMsg ==> " + validResponseMsg + " +++");
+	        LOGGER.info("+++ returningResultSet ==> \n" + returningResultSet + " +++");
+
+	        List<DocManagerRequest> dbResponse1 = ((List<DocManagerRequest>) returningResultSet
+	                .get("r_details"));
+
+	        return dbResponse1==null||dbResponse1.isEmpty()?new ArrayList<>():dbResponse1;
+
+	    }
+
+		@SuppressWarnings("all")
+		@Override
+		public List<WeeklyReport> getWeeklyReport(Filter request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_weekly_report")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_from", Types.DATE),
+							new SqlParameter("p_to", Types.DATE),
+							new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<WeeklyReport>() {
+
+						@Override
+						public WeeklyReport mapRow(ResultSet rs, int rowNum) throws SQLException {
+							WeeklyReport request = new WeeklyReport();
+//							request.setAdultPresent(rs.getString("ADULT_PRESENT"));
+//							request.setArea(rs.getString("AREA"));
+//							request.setCentre(rs.getString("CENTRE"));
+//							request.setCentreAddress(rs.getString("CENTRE_ADDRESS"));
+//							request.setChildPresent(rs.getString("CHILD_PRESENT"));
+//							
+//							request.setHostName(rs.getString("HOST_NAME"));
+//							request.setLeaderName(rs.getString("LEADER_NAME"));
+//							request.setVisitors(rs.getString("VISITORS"));
+//							request.setOffering(rs.getString("OFFERING"));
+							
+							request.setCentre(rs.getString(1));
+							request.setCentreAddress(rs.getString(2));
+							request.setHostName(rs.getString(3));
+							request.setLeaderName(rs.getString(4));
+							request.setOffering(rs.getString(5));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFrom())
+					.addValue("p_to", request.getDateTo())
+					.addValue("p_value", request.getDateToStr());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<WeeklyReport> response = (List<WeeklyReport>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+
+		@SuppressWarnings("all")
+		@Override
+		public List<MonthlyReport> getMonthlyReport(Filter request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_monthly_report")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_from", Types.DATE),
+							new SqlParameter("p_to", Types.DATE),
+							new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<MonthlyReport>() {
+
+						@Override
+						public MonthlyReport mapRow(ResultSet rs, int rowNum) throws SQLException {
+							MonthlyReport request = new MonthlyReport();
+//							request.setAdultPresent(rs.getString("ADULT_PRESENT"));
+//							request.setArea(rs.getString("AREA"));
+//							request.setCentre(rs.getString("CENTRE"));
+//							request.setCentreAddress(rs.getString("CENTRE_ADDRESS"));
+//							request.setChildPresent(rs.getString("CHILD_PRESENT"));
+//							
+//							request.setHostName(rs.getString("HOST_NAME"));
+//							request.setLeaderName(rs.getString("LEADER_NAME"));
+//							request.setVisitors(rs.getString("VISITORS"));
+//							request.setOffering(rs.getString("OFFERING"));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFrom())
+					.addValue("p_to", request.getDateTo())
+					.addValue("p_value", request.getDateToStr());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<MonthlyReport> response = (List<MonthlyReport>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+
+		@SuppressWarnings("all")
+		@Override
+		public List<DirectorReport> getDirectorReport(Filter request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_director_report")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_from", Types.DATE),
+							new SqlParameter("p_to", Types.DATE),
+							new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<DirectorReport>() {
+
+						@Override
+						public DirectorReport mapRow(ResultSet rs, int rowNum) throws SQLException {
+							DirectorReport request = new DirectorReport();
+							request.setCenter(rs.getString("CENTER_NAME"));
+							request.setNoOfCenter(rs.getString("NO_OF_CENTER"));
+							request.setNoOfIndependentMember(rs.getString("NO_OF_INDPNDNT_MEMBER"));
+							request.setAvAttendanceOfMember(rs.getString("AV_ATTNDNCE_OF_MEMBER"));
+							request.setTotalNoOfNewConvert(rs.getString("TOTAL_NO_NEW_CONVERT"));
+							request.setNoOfFirstTimerFollowUp(rs.getString("NO_FIRST_TIMER_FOLLOWUP"));
+							request.setNoOfFirstTimerCoverted(rs.getString("NO_FIRST_TIMER_CONVERTED"));
+							request.setNoOfWeeklyReportSubmitted(rs.getString("NO_WEEKLY_REP_SUBMITTED"));
+							request.setNoOfEvanProject(rs.getString("NO_OF_EVANG_PROJECT"));
+							request.setNoOfcommImpactProject(rs.getString("NO_OF_COMM_IMP_PROJECT"));
+							request.setNoOfNamingCeremony(rs.getString("NO_OF_NAMING_CEREMONY"));
+							request.setNoOfburial(rs.getString("NO_OF_BURIAL"));
+							request.setNoOfArea(rs.getString("NO_OF_AREA"));
+							request.setNoOfIntern(rs.getString("NO_OF_INTERN"));
+							request.setNoOfAsstLeader(rs.getString("NO_OF_ASST_LEADER"));
+							request.setNoOfLeader(rs.getString("NO_OF_LEADER"));
+							request.setNoOfAreaSupervisor(rs.getString("NO_OF_AREA_SUPERVISOR"));
+							request.setTotalOffering(rs.getString("TOTAL_OFFERING"));
+							request.setNoOfNewLeaderIntroduced(rs.getString("NO_NEW_LEADER_INTRODUCED"));
+							request.setNoOfNewLeaderTrained(rs.getString("NO_NEW_LEADER_TRAINED"));
+							request.setNoOfNewHostIntroduced(rs.getString("NO_NEW_HOST_INTRODUCED"));
+							request.setNoOfNewHostTrained(rs.getString("NO_NEW_HOST_TRAINED"));
+							request.setDateCreated(rs.getDate("DATE_CREATED"));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFrom())
+					.addValue("p_to", request.getDateTo())
+					.addValue("p_value", request.getDateToStr());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<DirectorReport> response = (List<DirectorReport>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+
+		@Override
+		public Response updateSentToCalendar(String calendarID) {
+			SimpleJdbcCall incidentRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+			incidentRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".update_sendreminder")
+			.declareParameters(new SqlParameter("p_calendar_id", Types.NUMERIC),
+							   new SqlOutParameter("p_code", Types.VARCHAR),
+							   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+			
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_calendar_id", calendarID);
+			
+			Map<String, Object> resultSet = incidentRequestJdbc.execute(inparam);
+			String responseCode = (String) resultSet.get("p_code");
+			
+			String validResponseCode = responseCode != null ? responseCode : "99";
+			String responseMsg = (String) resultSet.get("p_message");
+			String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+			Response response = new Response();
+			response.setResponseCode(validResponseCode);
+			response.setResponseMessage(validResponseMsg);
+			
+			return response;
+		}
+
+		
 	
 
 }

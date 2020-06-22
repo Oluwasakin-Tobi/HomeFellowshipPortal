@@ -25,7 +25,6 @@ public class UserAdmin implements Serializable {
     private static final long serialVersionUID = 2285461287386274373L; 
     private Long userID;
     private String affiliate;
-    private BigDecimal limitAmount;
     private boolean active;
     private String userRolesStr;
     private boolean operationUser;
@@ -33,8 +32,6 @@ public class UserAdmin implements Serializable {
     private String firstName;
     private String lastName;
     private String email; 
-    private String branchCode;
-    private String passwordExpiryPolicy;  
     private boolean authorised;
     private String adUsername; 
     private String password;
@@ -46,71 +43,14 @@ public class UserAdmin implements Serializable {
 	private boolean editedFlag;
 	private boolean editedRoleFlag;
 	
-	
-     
-    
-	public boolean isEditedFlag() {
-		return editedFlag;
+	private String phoneNo;
+
+	public Long getUserID() {
+		return userID;
 	}
 
-	public void setEditedFlag(boolean editedFlag) {
-		this.editedFlag = editedFlag;
-	}
-
-	public boolean isEditedRoleFlag() {
-		return editedRoleFlag;
-	}
-
-	public void setEditedRoleFlag(boolean editedRoleFlag) {
-		this.editedRoleFlag = editedRoleFlag;
-	}
-
-	public Date getDateCreated() {
-		return dateCreated;
-	}
-
-	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-
-	public List<String> getCustomActivities() {
-		return customActivities;
-	}
-
-	public void setCustomActivities(List<String> customActivities) {
-		this.customActivities = customActivities;
-	}
-
-	public String getUserFullName() {
-		return userFullName;
-	}
-
-	public void setUserFullName(String userFullName) {
-		this.userFullName = userFullName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setUserID(Long userID) {
+		this.userID = userID;
 	}
 
 	public String getAffiliate() {
@@ -121,12 +61,12 @@ public class UserAdmin implements Serializable {
 		this.affiliate = affiliate;
 	}
 
-	public BigDecimal getLimitAmount() {
-		return limitAmount;
+	public boolean isActive() {
+		return active;
 	}
 
-	public void setLimitAmount(BigDecimal limitAmount) {
-		this.limitAmount = limitAmount;
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public String getUserRolesStr() {
@@ -153,12 +93,28 @@ public class UserAdmin implements Serializable {
 		this.fullName = fullName;
 	}
 
-	public String getPasswordExpiryPolicy() {
-		return passwordExpiryPolicy;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setPasswordExpiryPolicy(String passwordExpiryPolicy) {
-		this.passwordExpiryPolicy = passwordExpiryPolicy;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public boolean isAuthorised() {
@@ -169,16 +125,28 @@ public class UserAdmin implements Serializable {
 		this.authorised = authorised;
 	}
 
-	public void setActive(boolean active) {
-		this.active = active;
+	public String getAdUsername() {
+		return adUsername;
 	}
 
-	public Long getUserID() {
-		return userID;
+	public void setAdUsername(String adUsername) {
+		this.adUsername = adUsername;
 	}
 
-	public void setUserID(Long userID) {
-		this.userID = userID;
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Set<UserProfileAdmin> getUserProfiles() {
+		return userProfiles;
+	}
+
+	public void setUserProfiles(Set<UserProfileAdmin> userProfiles) {
+		this.userProfiles = userProfiles;
 	}
 
 	public String getCurrentLoginIPAddress() {
@@ -189,93 +157,73 @@ public class UserAdmin implements Serializable {
 		this.currentLoginIPAddress = currentLoginIPAddress;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}  
-
-    public boolean isActive() {
-		return active;
+	public String getUserFullName() {
+		return userFullName;
 	}
 
-	public String getBranchCode() {
-        return branchCode;
-    }
-
-    public void setBranchCode(String branchCode) {
-        this.branchCode = branchCode;
-    }
- 
-    public String getAdUsername() {
-        return adUsername;
-    }
-
-    public void setAdUsername(String adUsername) {
-        this.adUsername = adUsername;
-    } 
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Set<UserProfileAdmin> getUserProfiles() {
-        return userProfiles;
-    }
-
-    public void setUserProfiles(Set<UserProfileAdmin> userProfiles) {
-        this.userProfiles = userProfiles;
-    }
-     
- 
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((adUsername == null) ? 0 : adUsername.hashCode());
-		result = prime * result + ((userID == null) ? 0 : userID.hashCode());
-		return result;
+	public void setUserFullName(String userFullName) {
+		this.userFullName = userFullName;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserAdmin other = (UserAdmin) obj;
-		if (adUsername == null) {
-			if (other.adUsername != null)
-				return false;
-		} else if (!adUsername.equals(other.adUsername))
-			return false;
-		if (userID == null) {
-			if (other.userID != null)
-				return false;
-		} else if (!userID.equals(other.userID))
-			return false;
-		return true;
+	public List<String> getCustomActivities() {
+		return customActivities;
+	}
+
+	public void setCustomActivities(List<String> customActivities) {
+		this.customActivities = customActivities;
+	}
+
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public boolean isEditedFlag() {
+		return editedFlag;
+	}
+
+	public void setEditedFlag(boolean editedFlag) {
+		this.editedFlag = editedFlag;
+	}
+
+	public boolean isEditedRoleFlag() {
+		return editedRoleFlag;
+	}
+
+	public void setEditedRoleFlag(boolean editedRoleFlag) {
+		this.editedRoleFlag = editedRoleFlag;
+	}
+
+	public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
 	}
 
 	@Override
 	public String toString() {
-		return "User [userID=" + userID + ", affiliate=" + affiliate + ", limitAmount=" + limitAmount + ", active="
-				+ active + ", userRolesStr=" + userRolesStr + ", operationUser=" + operationUser + ", fullName="
-				+ fullName + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", branchCode=" + branchCode + ", passwordExpiryPolicy=" + passwordExpiryPolicy + ", authorised="
-				+ authorised + ", adUsername=" + adUsername + ", password=" + password + ", userProfiles="
-				+ userProfiles + ", currentLoginIPAddress=" + currentLoginIPAddress + ", userFullName=" + userFullName
+		return "UserAdmin [userID=" + userID + ", affiliate=" + affiliate + ", active=" + active + ", userRolesStr="
+				+ userRolesStr + ", operationUser=" + operationUser + ", fullName=" + fullName + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", email=" + email + ", authorised=" + authorised
+				+ ", adUsername=" + adUsername + ", password=" + password + ", userProfiles=" + userProfiles
+				+ ", currentLoginIPAddress=" + currentLoginIPAddress + ", userFullName=" + userFullName
 				+ ", customActivities=" + customActivities + ", dateCreated=" + dateCreated + ", editedFlag="
-				+ editedFlag + ", editedRoleFlag=" + editedRoleFlag + "]";
+				+ editedFlag + ", editedRoleFlag=" + editedRoleFlag + ", phoneNo=" + phoneNo + "]";
 	}
+	
+	
 
 
-
+	
+	
+     
+    
+	
 
  
  

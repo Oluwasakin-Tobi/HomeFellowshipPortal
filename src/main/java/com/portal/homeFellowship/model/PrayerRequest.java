@@ -10,6 +10,29 @@ public class PrayerRequest implements Serializable{
 	private static final long serialVersionUID = 8260821927528693361L;
 	private String name;
 	private String prayer;
+	private String prayerId;
+	private String status;
+	private String comment;
+	
+	
+	public String getPrayerId() {
+		return prayerId;
+	}
+	public void setPrayerId(String prayerId) {
+		this.prayerId = prayerId;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 	public String getName() {
 		return name;
 	}
@@ -24,8 +47,10 @@ public class PrayerRequest implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "PrayerRequest [name=" + name + ", prayer=" + prayer + "]";
+		return "PrayerRequest [name=" + name + ", prayer=" + prayer + ", prayerId=" + prayerId + ", status=" + status
+				+ ", comment=" + comment + "]";
 	}
+	
 	
 	
 }

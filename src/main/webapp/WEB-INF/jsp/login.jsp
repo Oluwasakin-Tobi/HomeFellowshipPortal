@@ -130,6 +130,9 @@
 						</div>
 
 					</mvc:form>
+					
+					<h1><a href="<c:url value='/createuser'/>"><b>Register</b></a></h1>
+					
 				</div>
 
 			</div>

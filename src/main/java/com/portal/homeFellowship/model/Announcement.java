@@ -14,7 +14,39 @@ public class Announcement implements Serializable{
 	private String eventDate;
 	private String createdBy;
 	private String category;
+	private String meetingLink;
+	private String meetingType;
+	private String sendTo;
+	private String sendToAUser;
 	
+	
+	
+	
+	
+	public String getSendToAUser() {
+		return sendToAUser;
+	}
+	public void setSendToAUser(String sendToAUser) {
+		this.sendToAUser = sendToAUser;
+	}
+	public String getSendTo() {
+		return sendTo;
+	}
+	public void setSendTo(String sendTo) {
+		this.sendTo = sendTo;
+	}
+	public String getMeetingType() {
+		return meetingType;
+	}
+	public void setMeetingType(String meetingType) {
+		this.meetingType = meetingType;
+	}
+	public String getMeetingLink() {
+		return meetingLink;
+	}
+	public void setMeetingLink(String meetingLink) {
+		this.meetingLink = meetingLink;
+	}
 	public String getCategory() {
 		return category;
 	}
@@ -48,9 +80,12 @@ public class Announcement implements Serializable{
 	@Override
 	public String toString() {
 		return "Announcement [name=" + name + ", announce=" + announce + ", eventDate=" + eventDate + ", createdBy="
-				+ createdBy + ", category=" + category + "]";
+				+ createdBy + ", category=" + category + ", meetingLink=" + meetingLink + ", meetingType=" + meetingType
+				+ ", sendTo=" + sendTo + ", sendToAUser=" + sendToAUser + "]";
 	}
 	
+
+
 
 	
 

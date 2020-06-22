@@ -11,6 +11,29 @@ public class Welfare implements Serializable{
 
 	private String name;
 	private String welfare;
+	private String welfareId;
+	private String status;
+	private String comment
+	
+	;
+	public String getWelfareId() {
+		return welfareId;
+	}
+	public void setWelfareId(String welfareId) {
+		this.welfareId = welfareId;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 	public String getName() {
 		return name;
 	}
@@ -25,8 +48,11 @@ public class Welfare implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "Welfare [name=" + name + ", welfare=" + welfare + "]";
+		return "Welfare [name=" + name + ", welfare=" + welfare + ", welfareId=" + welfareId + ", status=" + status
+				+ ", comment=" + comment + "]";
 	}
+	
+
 	
 	
 }

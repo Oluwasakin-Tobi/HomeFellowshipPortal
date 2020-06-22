@@ -33,11 +33,22 @@ public class User implements Serializable {
 	private boolean editedFlag;
 	private boolean editedRoleFlag;
 	private String password;
+	private String phoneNo;
+	
+	
 
 
  
 	
-    public String getPassword() {
+    public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
+	}
+
+	public String getPassword() {
 		return password;
 	}
 
@@ -222,7 +233,8 @@ public class User implements Serializable {
 				+ authorisedUserFlag + ", userName=" + userName + ", serverIP=" + serverIP + ", serviceClient="
 				+ serviceClient + ", affiliateCode=" + affiliateCode + ", tokenGroup=" + tokenGroup + ", createdBy="
 				+ createdBy + ", deleteFlag=" + deleteFlag + ", dateCreated=" + dateCreated + ", editedFlag="
-				+ editedFlag + ", editedRoleFlag=" + editedRoleFlag + ", password=" + password + "]";
+				+ editedFlag + ", editedRoleFlag=" + editedRoleFlag + ", password=" + password + ", phoneNo=" + phoneNo
+				+ "]";
 	}
 
 

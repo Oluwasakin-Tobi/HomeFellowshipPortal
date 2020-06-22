@@ -53,6 +53,7 @@ public class JdbcConfiguration {
 					.password(dataSourceProperties.getPassword())
 					.type(HikariDataSource.class)
 					.build();
+			dataSource.addDataSourceProperty( "oracle.jdbc.timezoneAsRegion" , false );
 			dataSource.setMaximumPoolSize(50);
 			// ++++++++++++++ To Fix connection.isValid() Hikari bug +++++++++++++++++++++
 			dataSource.setConnectionTestQuery("select sysdate from dual");

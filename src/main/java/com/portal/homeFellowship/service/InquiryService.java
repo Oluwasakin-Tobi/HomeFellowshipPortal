@@ -1,6 +1,10 @@
 package com.portal.homeFellowship.service;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.mail.MessagingException;
+import javax.validation.Valid;
 
 import com.portal.homeFellowship.model.*;
 
@@ -8,37 +12,12 @@ public interface InquiryService {
 
 	List<Role> getroles();
 
-	List<Branch> getAuthorisedBranchesForAffiliate(String affiliateCode);
+	//List<User> getpenduser(String affiliate);
+	List<UserDetails> getpenduser(String affiliate);
 
-	List<User> getpenduser(String affiliate);
-
-	List<UserToRoleApp> getpendusertorole(String adUsername);
-
-	List<User> getPendAuthEditUser(String flag, String affiliate);
-
-	List<User1> getUserDetails(String userName);
-
-	List<UserStepPositionResp> getSteps();
+	List<UserDetails> getUserDetails(String userName);
 
 	List<User> getuser(String userID, String pflag, String affiliate);
-
-	List<UserRemoveRole> getPendingRemoveUser(String affiliate);
-
-	UserToRoleResponse getRolesForUser(String adUsername, String currentLoginIPAddress, long userID);
-
-	Response getbranchname(String userBranch);
-
-	List<Affiliate> getAuthorisedAffiliates();
-
-	List<EditUser> getpendedituser1(String flag, String affiliate);
-
-	List<UserToRoleResp> getUserRoles(UserProfile user);
-
-	UserStepPositionResp getUserStepPosition(String adUsername);
-
-	List<Custactivities> getcustactivities(String flag);
-
-	List<Affiliate> getAffiliateDetails(String username);
 	//////////////////////////////////END OF ADMIN/////////////////////////////////////////////////
 
 	List<UserReport> getAllUserReportByAffiliate(String affiliate);
@@ -49,14 +28,44 @@ public interface InquiryService {
 	
 
 	Response sendSMS(Sms request);
+
+	Response sendMail(@Valid Sms request) throws MessagingException;
 	
 	
 	
 
-	List<PrayerRequest> getPrayerRequest();
+	List<PrayerRequest> getPrayerRequest(PrayerRequest request);
 
-	List<Welfare> getWelfareRequest();
+	List<Welfare> getWelfareRequest(Welfare request);
 
 	List<Announcement> getAnnouncement();
+
+	List<Incident> getIncident(Incident request);
+
+	List<Expenses> getCommunityProject(Expenses request);
+	
+	List<Expenses> getExpenses(Expenses request);
+
+	List<WeeklyOutline> getWeeklyOutline(WeeklyOutline request);
+
+	List<Incident> getWhistleBlowing(Incident request);
+
+	List<Otp> getOTP(Otp req);
+
+	List<CalendarDetail> getCalendarEvent(CalendarDetail req);
+
+	Response getCalendarEventToSend();
+
+	DocManagerRequest getOutlineDocument(String id) throws IOException ;
+
+	List<SocialEvent> getSocialEvent(SocialEvent request);
+
+	List<DocManagerRequest> getSocialEventDocument(String outlineID) throws IOException ;
+
+	List<WeeklyReport> getWeeklyReport(Filter request);
+
+	List<MonthlyReport> getMonthlyReport(Filter request);
+
+	List<DirectorReport> getDirectorReport(Filter request);
 
 }

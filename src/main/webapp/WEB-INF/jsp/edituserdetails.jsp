@@ -66,8 +66,10 @@
                                 <input class="form-control" type="email" name="userEmailAdd"
 										value="${user.userEmailAdd}" path="userEmailAdd" required autocomplete="off">
                             </div>
-                        
-                         <div class="form-group col-md-6">
+                           <c:choose>
+                           <c:when test="${userRole=='ADMIN'}">
+                           
+                            <div class="form-group col-md-6">
                             <label for="userBranch">Role</label>
                                 <select id="userRoles" name="userRoles" path="userRoles"
 										class="form-control" required >
@@ -78,6 +80,17 @@
 										</c:forEach> ${selectedUserrole}
 										</select>
                         </div> 
+                            </c:when>
+                        <c:otherwise>
+                        
+                        <div class="col-md-6">
+                                <label for="disabledTextInput">Role</label>
+                                <input class="form-control" type="text" name="userRoles"
+										value="${user.userRoles}" path="userRoles" required readonly autocomplete="off">
+                            </div>
+                         
+                        </c:otherwise>
+                        </c:choose> 
                     </div> 
                     
                     

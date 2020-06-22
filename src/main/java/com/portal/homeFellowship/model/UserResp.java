@@ -2,15 +2,15 @@ package com.portal.homeFellowship.model;
 
 
 public class UserResp {
-	private User1 userProfile;
+	private UserDetails userProfile;
 	private String responseCode;
 	private String responseMessage;
 	
 	
-	public User1 getUserProfile() {
+	public UserDetails getUserProfile() {
 		return userProfile;
 	}
-	public void setUserProfile(User1 userProfile) {
+	public void setUserProfile(UserDetails userProfile) {
 		this.userProfile = userProfile;
 	}
 	public String getResponseCode() {

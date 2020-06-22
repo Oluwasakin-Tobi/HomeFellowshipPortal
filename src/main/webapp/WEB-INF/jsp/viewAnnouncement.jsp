@@ -49,6 +49,11 @@
 				</div>
 				<div class="card-body">
 					${response.announce} to ${response.name}
+					<c:if test="${not empty response.meetingLink}">
+						<a target="_blank" href="${response.meetingLink}">
+                                Join a meeting <i class="fa fa-meeting"></i>
+                            </a>
+					</c:if>
 				</div>
 			</div>
 		</div>

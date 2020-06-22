@@ -139,7 +139,7 @@
 								</div>
 								
 								<div class="col-md-6">
-									<label for="disabledTextInput">No. of Children Present*</label> <input
+									<label for="disabledTextInput">No. of Children Present(0-13 years)*</label> <input
 										class="form-control" type="text" name="childPresent"
 										id="childPresent" value="${report.childPresent}"
 										path="childPresent" required autocomplete="off">
@@ -159,6 +159,50 @@
 								</div>
 							</div>
 
+							<div class="row">
+
+								<div class="col-md-6">
+									<label for="disabledTextInput">Host Name</label> <input
+										class="form-control" type="text" name="hostName"
+										id="hostName" value="${report.hostName}"
+										path="hostName" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="hostName" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Host Phone Number*</label> <input
+										class="form-control" type="number" name="hostPhoneNo"
+										id="hostPhoneNo" value="${report.hostPhoneNo}"
+										path="hostPhoneNo" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="hostPhoneNo" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Host EMail</label> <input
+										class="form-control" type="text" name="hostEmail"
+										id="hostEmail" value="${report.hostEmail}"
+										path="hostEmail" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="hostEmail" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Total Offering</label> <input
+										class="form-control" type="number" name="offering"
+										id="offering" value="${report.offering}"
+										path="offering" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="offering" class="help-inline" />
+									</div>
+								</div>
+							</div>
+							
+							
 
 							<div class="row">
 

@@ -41,16 +41,16 @@ public class UserAdminServiceImpl implements UserAdminService{
 	@Override
 	public synchronized Administration performBasicADAuthentication(final String userID, final String password,
 			final String ip) throws Exception{
-		User1 userprofile = null;
+		UserDetails userprofile = null;
 		user.setAdUsername(userID);
 		user.setCurrentLoginIPAddress(ip);
 		Boolean authenticate = false;
 		try {
 			LOGGER.info("********** The user is:" + userID + " *********");
 //			Response response = new Response();
-			
-//			TODO write a method to fetch password from db and check against the current password
-			
+//			
+////			TODO write a method to fetch password from db and check against the current password
+//			
 //			response = adminService.ADAuthenticateUser(userID, password);
 //			if ("00".equals(response.getResponseCode())) {
 //				authenticate=true;
@@ -92,9 +92,8 @@ public class UserAdminServiceImpl implements UserAdminService{
 					userProfile.setUserName(userID);
 					userProfile.setServerIP(ip);
 					UserResp userresp = inquiryDao.get_user_profile(userProfile);
-					 userprofile = (User1) userresp.getUserProfile();	
-					
-
+					 userprofile = (UserDetails) userresp.getUserProfile();	
+			
 					Boolean edited = false;
 					try {
 						edited = userprofile.isEditedFlag();
@@ -115,37 +114,24 @@ public class UserAdminServiceImpl implements UserAdminService{
 			            throw new BadCredentialsException(ex.getMessage());
 					}
 					
-					userprofile=userprofile==null?new User1():userprofile;
-					userprofile.setAffiliateID(userprofile.getAffiliateID());
+					userprofile=userprofile==null?new UserDetails():userprofile;
 					userprofile.setUserEmailAdd(userprofile.getUserEmailAdd());
 					userprofile.setAffiliateCode(userprofile.getAffiliateCode());
 
 					LOGGER.info("********userprofile ==> "+userprofile+"    *********");
 					
-					String[] parts = userprofile.getUserFullName().split(" ");
-					if (parts.length > 1 ) {
-					String part1 = parts[0]; 
-					String part2 = parts[1]; 
-					user.setFirstName(part1);
-					user.setLastName(part2);
-					}
-					else {
-						String part1 = parts[0];
-					user.setFirstName(part1);
-					}
-					
+					user.setFirstName(userprofile.getFirstName());
+					user.setLastName(userprofile.getSurname());
 					user.setEmail(userprofile.getUserEmailAdd());
 					user.setUserID(userprofile.getUserID());   
-					user.setBranchCode(userprofile.getUserBranch());
-					user.setLimitAmount(userprofile.getUserTransactionLimit());
+					user.setPhoneNo(userprofile.getPhoneNo());
 					user.setActive(userprofile.isActive());
 					user.setAdUsername(userprofile.getUserName());
 					user.setAffiliate(userprofile.getAffiliateCode());
 					user.setOperationUser(userprofile.isOperationUser());
-					user.setPasswordExpiryPolicy(userprofile.getPasswordExpiryPolicy());
-					user.setFullName(userprofile.getUserFullName());
-				    //user.setUserProfiles(userprofile);
+					user.setFullName(userprofile.getSurname()+" "+userprofile.getFirstName());
 					user.setUserRolesStr(userprofile.getUserRoles());
+					user.setPassword(userprofile.getPassword());
 					
 					LOGGER.info("***********userinfo***************" + user);
 

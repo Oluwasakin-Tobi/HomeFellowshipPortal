@@ -1,4 +1,4 @@
-<%@ include file="authheader.jsp"%>
+<%@ include file="authHeaderNewUser.jsp"%>
 
 
 <div class="content mt-3" role="main" ng-app="myModule">
@@ -34,7 +34,7 @@
 						<c:url var="loadcreateuser" value="/loadcreateuser" />
 						<mvc:form method="POST" action="${loadcreateuser}"
 							enctype="multipart/form-data" id="demo-form2"
-							modelAttribute="userWithRole"
+							modelAttribute="userDetails"
 							class="form-horizontal form-label-left">
 
 							<div class="row">
@@ -43,7 +43,7 @@
 									value="${_csrf.token}" />
 
 								<div class="col-md-6">
-									<label class="bmd-label-floating">UserName*</label> <input
+									<label class="bmd-label-floating">User Name*</label> <input
 										class="form-control" type="text" name="userName" id="userName"
 										value="${user.userName}" path="userName" required
 										autocomplete="off">
@@ -52,7 +52,7 @@
 									</div>
 								</div>
 
-								<div class="col-md-6">
+								<%-- <div class="col-md-6">
 									<label for="disabledTextInput">Full Name*</label> <input
 										class="form-control" type="text" name="userFullName"
 										id="userFullName" value="${user.userFullName}"
@@ -60,7 +60,7 @@
 									<div class="has-error" style="color: red">
 										<mvc:errors path="userFullName" class="help-inline" />
 									</div>
-								</div>
+								</div> --%>
 							</div>
 							<br>
 							<div class="row">
@@ -91,6 +91,29 @@
 							</div>
 							
 							<div class="row">
+							
+							<div class="col-md-6">
+									<label for="disabledTextInput">Phone Number*</label> <input
+										class="form-control" type="number" name="phoneNo"
+										id="phoneNo" value="${user.phoneNo}"
+										path="phoneNo" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="phoneNo" class="help-inline" />
+									</div>
+								
+								<button type="button" id="sendOTP" class="btn btn-success">Send OTP</button>
+								</div>
+								<!-- <button type="button" data-toggle="modal" id="submitbuttons"
+								data-target="#validateOTP" class="btn btn-success"> 
+
+								ENTER OTP</button>-->
+								
+								<div class="col-md-6" >
+											<label for="disabledTextInput">OTP</label>
+											<input type="number" name="otp" id="otp" path="otp" value="${user.otp}" required disabled
+												class="form-control" autocomplete="off">
+								<button type="button" id="validate" disabled class="btn btn-success">Validate</button>
+										</div>
 
 								<div class="col-md-6">
 									<label for="disabledTextInput">Password*</label> <input
@@ -104,11 +127,310 @@
 								
 								<div class="col-md-6">
 									<label for="disabledTextInput">Reconfirm Password*</label> <input
-										class="form-control" type="password" name="userBranch"
-										id="userBranch" value="${user.userBranch}"
-										path="userBranch" required autocomplete="off">
+										class="form-control" type="password" name="rePassword"
+										id="rePassword" value="${user.createdBy}"
+										path="createdBy" required autocomplete="off">
 									<div class="has-error" style="color: red">
-										<mvc:errors path="userBranch" typeclass="help-inline" />
+										<mvc:errors path="createdBy" typeclass="help-inline" />
+									</div>
+								</div>
+								
+							</div>
+		
+		<div class="row">
+							
+							<div class="col-md-6">
+									<label for="disabledTextInput">Surname*</label> <input
+										class="form-control" type="text" name="surname"
+										id="surname" value="${user.surname}"
+										path="surname" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="surname" class="help-inline" />
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<label for="disabledTextInput">First Name*</label> <input
+										class="form-control" type="text" name="firstName"
+										id="firstName" value="${user.firstName}"
+										path="firstName" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="firstName" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Middle Name*</label> <input
+										class="form-control" type="text" name="middleName"
+										id="middleName" value="${user.middleName}"
+										path="middleName" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="middleName" typeclass="help-inline" />
+									</div>
+								</div>
+								
+								<div class="form-group col-md-6">
+										<label for="exampleFormControlSelect1">Gender*</label> <select
+											id="gender" name="gender" path="gender"
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="MALE">MALE</option>
+											<option value="FEMALE">FEMALE</option>
+										</select>
+										<div class="has-error" style="color: red">
+											<mvc:errors path="gender" class="help-inline" />
+										</div>
+									</div>
+									
+								<div class="col-md-6">
+									<label for="disabledTextInput">Date of Birth*</label> <input
+										class="form-control" type="date" name="dateOfBirth"
+										id="dateOfBirth" value="${user.dateOfBirth}"
+										path="dateOfBirth" required onchange="checkDateOfBirth()" autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="dateOfBirth" class="help-inline" />
+									</div>
+								</div>
+								
+							</div>
+		
+		<div class="row">
+							
+							<div class="col-md-6">
+									<label for="disabledTextInput">Date Joined House On The Rock*</label> <input
+										class="form-control" type="date" name="dateJoinedHOTR"
+										id="dateJoinedHOTR" value="${user.dateJoinedHOTR}"
+										path="dateJoinedHOTR" required onchange="checkDateJoinedHOTR()" autocomplete="off" >
+									<div class="has-error" style="color: red">
+										<mvc:errors path="dateJoinedHOTR" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Date Joined Church In The Home*</label> <input
+										class="form-control" type="date" name="dateJoinedCITH"
+										id="dateJoinedCITH" value="${user.dateJoinedCITH}"
+										path="dateJoinedCITH" required onchange="checkDateJoinedCITH()" autocomplete="off" >
+									<div class="has-error" style="color: red">
+										<mvc:errors path="dateJoinedCITH" class="help-inline" />
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<label for="disabledTextInput">Completed Finding The Rock?*</label> <select
+											id="completedFindingTheRock" name="completedFindingTheRock" path="completedFindingTheRock"
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="YES">YES</option>
+											<option value="NO">NO</option>
+										</select>
+									<div class="has-error" style="color: red">
+										<mvc:errors path="completedFindingTheRock" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Completed Spiritual Authority?*</label> <select
+											id="completedFindingTheRock" name="completedSpiritualAuthority" path="completedSpiritualAuthority"
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="YES">YES</option>
+											<option value="NO">NO</option>
+										</select>
+									<div class="has-error" style="color: red">
+										<mvc:errors path="completedSpiritualAuthority" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Home Address*</label> <input
+										class="form-control" type="text" name="homeAddress"
+										id="homeAddress" value="${user.homeAddress}"
+										path="homeAddress" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="homeAddress" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Place Of Work*</label> <input
+										class="form-control" type="text" name="placeOfWork"
+										id="placeOfWork" value="${user.placeOfWork}"
+										path="placeOfWork" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="placeOfWork" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Place Of Work Address*</label> <input
+										class="form-control" type="text" name="placeOfWorkAddress"
+										id="placeOfWorkAddress" value="${user.dateJoinedHOTR}"
+										path="placeOfWorkAddress" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="placeOfWorkAddress" class="help-inline" />
+									</div>
+								</div>
+								
+							</div>
+		
+		<div class="row">
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Are you a worker?*</label> <select
+											id="aWorker" name="aWorker" ng-model="workerStatus"
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="YES">YES</option>
+											<option value="NO">NO</option>
+										</select>
+								</div>
+							
+							<div class="col-md-6" ng-show="workerStatus == 'YES'">
+									<label for="disabledTextInput">Church Department*</label> <input
+										class="form-control" type="text" name="churchDepartment"
+										id="churchDepartment" value="${user.churchDepartment}"
+										path="churchDepartment" ng-required="workerStatus == 'YES'" autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="churchDepartment" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6" ng-show="workerStatus == 'YES'">
+									<label for="disabledTextInput">Date Joined Church Department*</label> <input
+										class="form-control" type="date" name="dateJoinedChurchDept"
+										id="dateJoinedChurchDept" value="${user.dateJoinedChurchDept}"
+										path="dateJoinedChurchDept" ng-required="workerStatus == 'YES'" onchange="checkDateJoinedDept()" autocomplete="off" >
+									<div class="has-error" style="color: red">
+										<mvc:errors path="dateJoinedChurchDept" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Occupation*</label> <input
+										class="form-control" type="text" name="occupation"
+										id="occupation" value="${user.occupation}"
+										path="occupation" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="occupation" class="help-inline" />
+									</div>
+								</div>
+								
+								
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Marital Status*</label>
+										<select
+											id="maritalStatus" name="maritalStatus" path="maritalStatus" ng-model="maritalStatusAction"
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="SINGLE">SINGLE</option>
+											<option value="MARRIED">MARRIED</option>
+											<option value="DIVORCED">DIVORCED</option>
+											<option value="WIDOWED">WIDOWED</option>
+										</select>
+									<div class="has-error" style="color: red">
+										<mvc:errors path="maritalStatus" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6" ng-show="maritalStatusAction == 'MARRIED'">
+									<label for="disabledTextInput">Spouse Name*</label> <input
+										class="form-control" type="text" name="spouseName"
+										id="spouseName" value="${user.spouseName}" ng-required="maritalStatusAction == 'MARRIED'"
+										path="spouseName" autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="spouseName" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6" ng-show="maritalStatusAction == 'MARRIED'">
+									<label for="disabledTextInput">Spouse Phone Number*</label> <input
+										class="form-control" type="number" name="spousePhoneNumber"
+										id="spousePhoneNumber" value="${user.spouseName}" ng-required="maritalStatusAction == 'MARRIED'"
+										path="spousePhoneNumber" autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="spousePhoneNumber" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6" ng-show="maritalStatusAction == 'MARRIED'">
+									<label for="disabledTextInput">Wedding Anniversary*</label> <input
+										class="form-control" type="date" name="weddingAnniversary"
+										id="weddingAnniversary" value="${user.weddingAnniversary}" ng-required="maritalStatusAction == 'MARRIED'"
+										path="weddingAnniversary" required autocomplete="off" onchange="checkDateWeddingAnniversary()">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="weddingAnniversary" class="help-inline" />
+									</div>
+								</div>
+								
+							</div>
+		
+		<div class="row">
+							
+							<div class="col-md-6">
+									<label for="disabledTextInput">Centre*</label>
+										<select
+											id="centre" name="centre" path="centre"
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="LOVE">LOVE</option>
+											<option value="PEACE">PEACE</option>
+											<option value="JOY">JOY</option>
+											<option value="FAITH">FAITH</option>
+										</select>
+									<div class="has-error" style="color: red">
+										<mvc:errors path="centre" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Area*</label> <input
+										class="form-control" type="text" name="area"
+										id="area" value="${user.area}"
+										path="area" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="area" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Zone*</label> <input
+										class="form-control" type="text" name="zone"
+										id="zone" value="${user.zone}"
+										path="zone" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="zone" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">District*</label> <input
+										class="form-control" type="text" name="district"
+										id="district" value="${user.district}"
+										path="district" required autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="district" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">State*</label> <input
+										class="form-control" type="text" name="state"
+										id="state" value="${user.state}"
+										path="state" autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="state" class="help-inline" />
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Country*</label> <input
+										class="form-control" type="text" name="country"
+										id="country" value="${user.country}"
+										path="country" autocomplete="off">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="country" class="help-inline" />
 									</div>
 								</div>
 								
@@ -129,9 +451,6 @@
 											<option value="${userrole.roleName}">${userrole.roleName}</option>
 										</c:forEach> ${selectedUserrole}
 										</select>
-										<div class="has-error" style="color: red">
-											<mvc:errors path="userBranch" class="help-inline" />
-										</div>
 									</div>
 								</c:if>
 
@@ -143,9 +462,13 @@
 							</a>
 							<button class="btn btn-primary" type="reset">Reset</button>
 
-							<button type="submit" id="submitbutton" class="btn btn-success">Submit</button>
+							<button type="submit" id="submitbutton" disabled class="btn btn-success">Submit</button>
 
 						</mvc:form>
+						
+						
+						
+						
 
 
 
@@ -160,12 +483,54 @@
 </div>
 <!-- .content -->
 
+<div class="modal fade" id="validateOTP" tabindex="-1" role="dialog"
+						aria-labelledby="authModalCenterTitle" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered modal-lg"
+							role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title" id="authModalLongTitle">
+										<b>ENTER OTP</b>
+									</h4>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+
+								</div>
+
+								<%-- <c:url var="validateOTPs" value="/validateOTPs" /> --%>
+								<%-- <mvc:form method="POST" action="${validateOTPs}"
+									enctype="multipart/form-data" id="demo-form2"
+									modelAttribute="Otp"
+									class="form-horizontal form-label-left"> --%>
+									<div class="modal-body">
+
+
+										<div class="col-md-6">
+											<label for="disabledTextInput">OTP</label>
+											<input type="number" name="otp" id="otp" required
+												class="form-control" autocomplete="off">
+										</div>
+										<p>&nbsp;</p>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-primary"
+												data-dismiss="modal">Close</button>
+
+											<button type="button" id="validatess" class="btn btn-success">Submit</button>
+										</div>
+									</div>
+								<%-- </mvc:form> --%>
+							</div>
+						</div>
+					</div>
+
 <script>
-	$('#userBranch')
+	$('#rePassword')
 			.on(
 					'change',
 					function(e) {
-						var rePassword = $('#userBranch').val();
+						var rePassword = $('#rePassword').val();
 						var password = $('#password').val();
 
 						if (password != rePassword) {
@@ -178,6 +543,244 @@
 
 					});
 </script>
+
+<script>
+function checkDateJoinedHOTR(){
+	 todaysDate = new Date();
+	 todaysDate2 = new Date();
+		console.log("todaysDate "+todaysDate);
+	var custDate =	$('#dateJoinedHOTR').val();
+	var dateDate = new Date (custDate);
+	 console.log("dateDate "+dateDate);
+	if((dateDate > todaysDate)){
+	 /* alertjs.show({
+            title: 'Error!',
+            text: "Customer Instruction date not valid",
+            effect: 'ease-in-bounce',
+        }); */
+        alert('Date joined HOTR cannot be less than today');
+	  $('#submitbutton').prop('disabled',true);
+	   }
+	
+	else{
+		  $('#submitbutton').prop('disabled',false);
+	}
+  };
+</script>
+
+<script>
+function checkDateJoinedCITH(){
+	 todaysDate = new Date();
+	 todaysDate2 = new Date();
+		console.log("todaysDate "+todaysDate);
+	var custDate =	$('#dateJoinedCITH').val();
+	var dateDate = new Date (custDate);
+	 console.log("dateDate "+dateDate);
+	if((dateDate > todaysDate)){
+	 /* alertjs.show({
+            title: 'Error!',
+            text: "Customer Instruction date not valid",
+            effect: 'ease-in-bounce',
+        }); */
+        alert('Date joined CITH cannot be less than today');
+	  $('#submitbutton').prop('disabled',true);
+	   }
+	
+	else{
+		  $('#submitbutton').prop('disabled',false);
+	}
+  };
+</script>
+
+<script>
+function checkDateJoinedDept(){
+	 todaysDate = new Date();
+	 todaysDate2 = new Date();
+		console.log("todaysDate "+todaysDate);
+	var custDate =	$('#dateJoinedChurchDept').val();
+	var dateDate = new Date (custDate);
+	 console.log("dateDate "+dateDate);
+	if((dateDate > todaysDate)){
+	 /* alertjs.show({
+            title: 'Error!',
+            text: "Customer Instruction date not valid",
+            effect: 'ease-in-bounce',
+        }); */
+        alert('Date joined church department cannot be less than today');
+	  $('#submitbutton').prop('disabled',true);
+	   }
+	
+	else{
+		  $('#submitbutton').prop('disabled',false);
+	}
+  };
+</script>
+
+<script>
+function checkDateWeddingAnniversary(){
+	 todaysDate = new Date();
+	 todaysDate2 = new Date();
+		console.log("todaysDate "+todaysDate);
+	var custDate =	$('#weddingAnniversary').val();
+	var dateDate = new Date (custDate);
+	 console.log("dateDate "+dateDate);
+	if((dateDate > todaysDate)){
+	 /* alertjs.show({
+            title: 'Error!',
+            text: "Customer Instruction date not valid",
+            effect: 'ease-in-bounce',
+        }); */
+        alert('Wedding anniversary cannot be less than today');
+	  $('#submitbutton').prop('disabled',true);
+	   }
+	
+	else{
+		  $('#submitbutton').prop('disabled',false);
+	}
+  };
+</script>
+
+<script>
+function checkDateOfBirth(){
+	 todaysDate = new Date();
+	 todaysDate2 = new Date();
+		console.log("todaysDate "+todaysDate);
+	var custDate =	$('#dateOfBirth').val();
+	var dateDate = new Date (custDate);
+	 console.log("dateDate "+dateDate);
+	if((dateDate > todaysDate)){
+	 /* alertjs.show({
+            title: 'Error!',
+            text: "Customer Instruction date not valid",
+            effect: 'ease-in-bounce',
+        }); */
+        alert('Date of birth cannot be less than today');
+	  $('#submitbutton').prop('disabled',true);
+	   }
+	
+	else{
+		  $('#submitbutton').prop('disabled',false);
+	}
+  };
+</script>
+
+<script>
+$('#sendOTP')
+.on(
+		'click',
+		function(e) {alert("Successfully Fetched 1");
+						var phoneNo = $('#phoneNo').val();
+
+						if (phoneNo == "") {
+						}
+						;
+						if (phoneNo != "") {
+
+							$
+									.ajax({
+										type : "GET",
+										url : "${pageContext.request.contextPath}/phoneOTPs",
+										data : {
+											phoneNo : $("#phoneNo")
+													.val().trim()
+										},
+
+										async : true,
+										success : function(data) {
+											var response = JSON.stringify(data);
+											//alert(response);
+											var response2 = JSON
+													.parse(response);
+											
+											 if (data != null) {
+
+				                                    if (response2 != "")
+				                                    alert("Successfully Fetched");
+				                                    $('#otp').prop('disabled',false);
+				                                    $('#validate').prop('disabled',false);
+				                                    //$('#phoneOTP').prop('type','text');
+				                                } else {
+				                                    alert('No Account Found');
+				                                    /* $('#submitbutton').prop('disabled',true);
+				                                    $('#acctName-'+e).prop('type','hidden'); */
+				                                    return;
+				                                }
+
+													
+										},
+										error : function(xhr, status, text) {
+											//alert(text);
+											//alert("Session Timedout ");
+											location.href = '${pageContext.request.contextPath}/index';
+											return;
+										}
+									})
+
+						}
+
+					});
+</script> 
+
+<script>
+$('#validate')
+.on(
+		'click',
+		function(e) {
+						var otp = $('#otp').val();
+
+						if (otp == "") {
+						}
+						;
+						if (otp != "") {
+							$
+									.ajax({
+										type : "GET",
+										url : "${pageContext.request.contextPath}/validateOTPs",
+										data : {
+											otp : $("#otp")
+													.val().trim()
+										},
+
+										async : true,
+										success : function(data) {
+											var response = JSON.stringify(data);
+											//alert(response);
+											var response2 = JSON
+													.parse(response);
+											
+											 if (data != null) {
+
+
+
+				                                    if (response2.responseMessage != "Failed"){
+				                                    alert("OTP Successful");
+				                                    $('#submitbutton').prop('enabled',true);
+				                                    }
+				                                    else{
+				                                    	alert("OTP not correct");
+				                                    	$('#submitbutton').prop('disabled',true);
+				                                    }
+				                                } else {
+				                                    alert("OTP not correct");
+				                                    /* $('#submitbutton').prop('disabled',true);
+				                                    $('#acctName-'+e).prop('type','hidden'); */
+				                                    return;
+				                                }
+
+													
+										},
+										error : function(xhr, status, text) {
+											//alert(text);
+											//alert("Session Timedout ");
+											location.href = '${pageContext.request.contextPath}/index';
+											return;
+										}
+									})
+
+						}
+
+					});
+</script> 
 
 
 <script src="<c:url value='/js/app.js' />"></script>
