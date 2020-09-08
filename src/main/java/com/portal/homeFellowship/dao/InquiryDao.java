@@ -19,7 +19,7 @@ public interface InquiryDao {
 
 	//public List<User1> getUserDetails(String username);
 
-	public List<UserDetails> getUserDetails(String username);
+	public List<UserDetails> getUserDetails(String username, String role);
 
 	public List<UserReport> getAllUserReportByAffiliate(String affiliate);
 
@@ -70,6 +70,55 @@ public interface InquiryDao {
 
 
 	Response updateSentToCalendar(String calendarID);
+
+
+	List<WeeklyReport> getCentreReport(Filter request);
+
+	List<WeeklyReport> getAreaReport(Filter request);
+	
+	List<WeeklyReport> getZoneReport(Filter request);
+
+
+	List<WeeklyReport> getDistrictReport(Filter request);
+
+
+	List<WeeklyReport> getVisitorDetail(Filter request);
+
+
+	List<Training> getTraining(Training training);
+
+
+	List<Centre> getCentreDetail(Centre request);
+
+
+	List<Centre> viewCentre(Centre request);
+
+
+	List<Testimony> viewTestimony(Testimony request);
+
+
+	List<Message> viewMessage(Message request);
+
+
+	List<Country> getCountry();
+
+
+	List<SocialEvent> getLegalDocumentDetails(SocialEvent request);
+
+
+	DocManagerRequest getLegalDocuments(String id);
+
+
+	List<Centre> getCentreDetails(Centre request);
+
+
+	List<Quarterly> quarterlyCentre();
+
+
+	List<Quarterly> quarterlyMember();
+
+
+	List<Quarterly> quarterlyOffering();
 
 
 

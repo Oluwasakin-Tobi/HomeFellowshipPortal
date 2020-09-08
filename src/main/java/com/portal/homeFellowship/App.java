@@ -14,9 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import com.portal.homeFellowship.configuration.JdbcConfiguration;

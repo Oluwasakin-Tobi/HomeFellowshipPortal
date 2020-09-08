@@ -18,11 +18,19 @@ public class Announcement implements Serializable{
 	private String meetingType;
 	private String sendTo;
 	private String sendToAUser;
+	private String training;
 	
 	
 	
 	
 	
+	
+	public String getTraining() {
+		return training;
+	}
+	public void setTraining(String training) {
+		this.training = training;
+	}
 	public String getSendToAUser() {
 		return sendToAUser;
 	}
@@ -81,7 +89,7 @@ public class Announcement implements Serializable{
 	public String toString() {
 		return "Announcement [name=" + name + ", announce=" + announce + ", eventDate=" + eventDate + ", createdBy="
 				+ createdBy + ", category=" + category + ", meetingLink=" + meetingLink + ", meetingType=" + meetingType
-				+ ", sendTo=" + sendTo + ", sendToAUser=" + sendToAUser + "]";
+				+ ", sendTo=" + sendTo + ", sendToAUser=" + sendToAUser + ", training=" + training + "]";
 	}
 	
 

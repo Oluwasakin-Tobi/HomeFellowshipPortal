@@ -1,5 +1,6 @@
 package com.portal.homeFellowship.model;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -44,6 +47,38 @@ public class UserAdmin implements Serializable {
 	private boolean editedRoleFlag;
 	
 	private String phoneNo;
+	private String centre;
+
+
+	@JsonIgnore
+	private InputStream inputStream;
+	private String inputStreamStr;
+	
+
+	
+	public String getCentre() {
+		return centre;
+	}
+
+	public void setCentre(String centre) {
+		this.centre = centre;
+	}
+
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
+	}
+
+	public String getInputStreamStr() {
+		return inputStreamStr;
+	}
+
+	public void setInputStreamStr(String inputStreamStr) {
+		this.inputStreamStr = inputStreamStr;
+	}
 
 	public Long getUserID() {
 		return userID;
@@ -213,7 +248,8 @@ public class UserAdmin implements Serializable {
 				+ ", adUsername=" + adUsername + ", password=" + password + ", userProfiles=" + userProfiles
 				+ ", currentLoginIPAddress=" + currentLoginIPAddress + ", userFullName=" + userFullName
 				+ ", customActivities=" + customActivities + ", dateCreated=" + dateCreated + ", editedFlag="
-				+ editedFlag + ", editedRoleFlag=" + editedRoleFlag + ", phoneNo=" + phoneNo + "]";
+				+ editedFlag + ", editedRoleFlag=" + editedRoleFlag + ", phoneNo=" + phoneNo + ", centre=" + centre
+				+ ", inputStream=" + inputStream + ", inputStreamStr=" + inputStreamStr + "]";
 	}
 	
 	

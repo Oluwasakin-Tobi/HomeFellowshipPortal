@@ -100,7 +100,7 @@
 			<artifactId>commons-collections4</artifactId>
 			<version>4.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.docx4j</groupId>
 			<artifactId>docx4j</artifactId>
@@ -112,7 +112,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<!--For Excel -->
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 		<dependency>
@@ -132,13 +132,14 @@
 			<artifactId>ooxml-schemas</artifactId>
 			<version>1.4</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
 
-		<!-- RabbitMQ Starter Dependency (Not required if you're using the simple in-memory broker for STOMP) -->
+		<!-- RabbitMQ Starter Dependency (Not required if you're using the simple 
+			in-memory broker for STOMP) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
@@ -146,8 +147,8 @@
 
 		<!-- Following dependency is required for Full Featured STOMP Broker Relay -->
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-reactor-netty</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-reactor-netty</artifactId>
 		</dependency>
 
 		<dependency>
@@ -155,13 +156,13 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
@@ -196,6 +197,12 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<inherited>true</inherited>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

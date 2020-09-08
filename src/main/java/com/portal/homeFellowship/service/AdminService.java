@@ -69,4 +69,28 @@ public interface AdminService {
 
 	Response changePassword(ChangePassword request);
 
+	Response createVisitor(WeeklyReport request);
+
+	Response createTraining(Training request);
+
+	Response createCentre(Centre request);
+
+	Response createArea(Centre request);
+
+	Response createZone(Centre request);
+
+	Response createDistrict(Centre request);
+
+	Response createTestimony(Testimony req);
+
+	Response createMessage(Message request);
+
+	Response createLegalDocumentDetail(SocialEvent request);
+
+	Response createLegalDocuments(DocManagerRequest docMangerRequest) throws IOException;
+
+	Response updateLegalDocument(SocialEvent request);
+
+	Response createProfilePicture(DocManagerRequest docMangerRequest) throws IOException;
+
 }

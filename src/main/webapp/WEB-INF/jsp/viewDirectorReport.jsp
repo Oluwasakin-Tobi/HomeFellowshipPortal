@@ -1,42 +1,23 @@
 <%@ include file="authheader.jsp"%>
 
+<main>
 
-<div class="content mt-3">
-	<div class="row">
 
-		<c:if test="${errorMessage != null}">
+<div class="container-fluid">
+	<h1 class="mt-4">District Report</h1>
+	<ol class="breadcrumb mb-4">
+		<li class="breadcrumb-item"><a
+			href="<c:url value='/dashboard' />">Dashboard</a></li>
+		<li class="breadcrumb-item active">District Report</li>
+	</ol>
 
-			<div class="col-sm-4">
-				<div class="alert alert-danger alert-dismissable float-right">
-					<a class="alert-link" href="#"> <span class="alert-b"></span></a> <span
-						id="errshow alert-c">${errorMessage}</span> <a class="alert-link"
-						href="#"><span data-dismiss="alert" aria-label="close"
-						class="fa fa-times-circle alert-b float-right"></span></a>
-				</div>
+	<div class="col-md-12">
+		<div class="card shadow">
+			<div class="card-header">
+				<strong class="card-title">District Report</strong>
 			</div>
-
-		</c:if>
-		<c:if test="${successMessage != null}">
-
-
-			<div class="col-sm-4">
-				<div class="alert alert-success alert-dismissable float-right">
-					<a class="alert-link" href="#"> <span class="alert-c"></span></a> <span
-						id="errshow alert-c">${successMessage}</span> <a
-						class="alert-link" href="#"><span data-dismiss="alert"
-						aria-label="close" class="fa fa-times-circle alert-b float-right"></span></a>
-				</div>
-			</div>
-
-		</c:if>
-
-		<div class="col-md-12">
-			<div class="card">
-				<div class="card-header">
-					<strong class="card-title">Director Report</strong>
-				</div>
-
-				<div class="content mt-3">
+			
+			<div class="content mt-3">
 					<div class="row">
 						<div class="col-lg-12">
 							<h4>
@@ -76,10 +57,9 @@
 						<!-- /# column -->
 					</div>
 				</div>
-
-
-				<div class="card-body">
-					<table id="example"
+			
+			<div class="card-body">
+				<table id="example"
 						class="table table-striped table-bordered">
 						<thead>
 							<tr  style="font-weight: bold;">
@@ -147,13 +127,12 @@
 							</c:forEach>
 						</tbody>
 					</table>
-				</div>
 			</div>
 		</div>
-
 	</div>
-</div>
 
+</div>
+</main>
 
 <script>
 	$(document).ready(function() {
@@ -166,3 +145,5 @@
 	});
 
 </script>
+
+<%@ include file="footer.jsp"%>

@@ -84,6 +84,7 @@ public class WelcomeController {
 
 	static final Logger LOGGER = LoggerFactory.getLogger(WelcomeController.class);
 	final static DateFormat MARSHARLLERDATEFORMAT = new SimpleDateFormat("yyyy-MM-dd");
+	//final static DateFormat MARSHARLLERDATEFORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	final static ObjectMapper MAPPER = new ObjectMapper();
 
 	private static final Random RANDOMGENERATOR = new Random();
@@ -176,15 +177,41 @@ public class WelcomeController {
 				return true;
 		return false;
 	}
+	
+	public static String getRandomNumberString() {
+	    Random rnd = new Random();
+	    int number = rnd.nextInt(999999);
+	    return String.format("%06d", number);
+	}
+	
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = { "/createuser" }, method = RequestMethod.GET)
 	public String createUser(ModelMap model) throws Exception {
 
-		//model.addAttribute("loggedinuser", getPrincipal());
+		Centre request = new Centre();
+		
+		request.setCentre("CENTRE");
+		List<Centre> centreDetails = inquiryService.getCentreDetail(request);
+		model.addAttribute("centreDetails", centreDetails);
+		
+		request.setCentre("AREA");
+		List<Centre> areaDetails = inquiryService.getCentreDetail(request);
+		model.addAttribute("areaDetails", areaDetails);
+		
+		request.setCentre("ZONE");
+		List<Centre> zoneDetails = inquiryService.getCentreDetail(request);
+		model.addAttribute("zoneDetails", zoneDetails);
+		
+		request.setCentre("DISTRICT");
+		List<Centre> districtDetails = inquiryService.getCentreDetail(request);
+		model.addAttribute("districtDetails", districtDetails);
 
 		List<Role> userroles = inquiryService.getroles();
 		model.addAttribute("userroles", userroles);
+		
+		List<Country> country = inquiryService.getCountry();
+		model.addAttribute("country", country);
 
 		return "createuser";
 	}
@@ -195,6 +222,12 @@ public class WelcomeController {
 			ModelMap model) throws Exception {
 		LOGGER.info("** loadcreateuser ==> " + userDetails + " **");
 		
+
+		f(("DISTRICT PASTOR").equals(userDetails.getUserRoles())||("ASST. DISTRICT PASTOR").equals(userDetails.getUserRoles())) {
+			
+		}
+		
+		MultipartFile file = userDetails.getProfilePicture();
 		
 		HttpSession session = request.getSession();
 		  String sessionId = session.getId();
@@ -210,7 +243,7 @@ public class WelcomeController {
 			model.addAttribute("errorMessage",
 					(messageSource.getMessage("createrole.unsuccessful", new Object[] { "" }, Locale.getDefault()))
 							+ " - OTP not correct");
-
+			LOGGER.info("otp not correct ");
 			UserDetails user = new UserDetails();
 			user.setUserRoles(userDetails.getUserRoles());
 			user.setUserEmailAdd(userDetails.getUserEmailAdd());
@@ -251,10 +284,42 @@ public class WelcomeController {
 		}
 		
 		
-		
+		LOGGER.info("** here");
 
 		Response creatUserroleresp = adminService.createUser(userDetails);
 		LOGGER.info("** creatUserroleresp ==> " + creatUserroleresp + " **");
+		
+        
+        if ("00".equals(creatUserroleresp.getResponseCode())) {
+            if (file != null && !file.isEmpty()) {
+                String fileName = file.getOriginalFilename();
+                String douniqueid = BasicUtil.getFilename(fileName);
+                long length = file.getSize();
+                InputStream is = file.getInputStream();
+                String contentType = file.getContentType();
+                long id = Long.parseLong(creatUserroleresp.getResponseMessage());
+                DocManagerRequest docMangerRequest = new DocManagerRequest();
+                docMangerRequest.setDocumentID(id);
+                docMangerRequest.setDocumentUniqueID(douniqueid);
+                docMangerRequest.setUserName(getPrincipal().getAdUsername());
+                docMangerRequest.setDocName(fileName);
+                docMangerRequest.setFiletype(contentType);
+                //docMangerRequest.setId(response.getResponseMessage());
+
+                byte[] bytes = BasicUtil.loadFile(file.getInputStream(), length, fileName);
+                LOGGER.info(">>> bytes " + bytes.toString() + ". <<< ");
+
+                byte[] encodedBase64Bytes = Base64.encodeBase64(bytes);
+                String encodedBase64String = new String(encodedBase64Bytes, StandardCharsets.US_ASCII);
+                docMangerRequest.setInputStreamStr(encodedBase64String);
+
+                Response logit = adminService.createProfilePicture(docMangerRequest);
+                LOGGER.info("<<logit>>" + logit);
+
+
+            }
+            model.addAttribute("successMessage", "GE Form Submitted Sucessfully .");
+        }
 
 		if (creatUserroleresp == null || !("00".equals(creatUserroleresp.getResponseCode()))) {
 			model.addAttribute("errorMessage",
@@ -263,8 +328,6 @@ public class WelcomeController {
 							+ (creatUserroleresp != null && creatUserroleresp.getResponseMessage() != null
 									? creatUserroleresp.getResponseMessage()
 									: ""));
-
-			//model.addAttribute("loggedinuser", getPrincipal());
 
 			List<Role> userroles = inquiryService.getroles();
 			model.addAttribute("userroles", userroles);
@@ -452,7 +515,7 @@ public class WelcomeController {
 		
 		HttpSession session = request.getSession();
 		  String sessionId = session.getId();
-		  String otpp = "12345";
+		  String otpp = getRandomNumberString();
 		  
 		  System.out.println("am otpp "+otpp);
 		  
@@ -462,17 +525,16 @@ public class WelcomeController {
 		otp.setOtp(otpp);
 		
 		Sms request = new Sms();
-		request.setMessage(otpp);
+		request.setMessage(otpp+"\nUse this code for CITH Portal verification");
 		request.setPhoneNo(phoneNo);
 		
-
 		//LOGGER.info("affiliate " + getPrincipal().getAffiliate() + " acc -" + phoneNo);
 		Response phoneOTP = adminService.saveOTP(otp);
 		LOGGER.info("phoneOTP " + phoneOTP);
 		
-//		Response response = inquiryService.sendSMS(request);
-//
-//		LOGGER.info("response " + response);
+		Response response = inquiryService.sendSMS(request);
+
+		LOGGER.info("response " + response);
 		
 		return new ResponseEntity<>(phoneOTP, HttpStatus.OK);
 
@@ -657,7 +719,7 @@ public class WelcomeController {
 			throws Exception {
 		LOGGER.info("++i  got here ==> " + user);
 
-		List<UserDetails> getUserDetails = inquiryService.getUserDetails(user.getUserName());
+		List<UserDetails> getUserDetails = inquiryService.getUserDetails(user.getUserName(), "");
 
 		if (!getPrincipal().getUserRolesStr().contains("GROUPADMIN") && getUserDetails.size() > 0
 				&& !(getPrincipal().getAffiliate().equalsIgnoreCase(getUserDetails.get(0).getAffiliateCode()))) {
@@ -724,9 +786,41 @@ public class WelcomeController {
 	@RequestMapping(value = { "/", "/dashboard" }, method = RequestMethod.GET)
 	public String listUsers(ModelMap model, HttpServletRequest httpRequest) throws Exception {
 		LOGGER.info("+++ DASHBOARD ==> ");
-
+		
+//		List<Fruit> fruit = new ArrayList<>();
+//		Fruit fri1 = new Fruit("Banana", 2);
+//		Fruit fri2 = new Fruit("Apple", 1);
+//		Fruit fri3 = new Fruit("Orange", 3);
+//		fruit.add(fri1);
+//		fruit.add(fri2);
+//		fruit.add(fri3);
+//		List<Integer> fruits = new ArrayList<>();
+//
+//		fruits.add(2000);
+//		model.addAttribute("chartF", fruits);
+		List<Quarterly> quarterCentre = inquiryService.quarterlyCentre();
+		model.addAttribute("centreQuarter1", quarterCentre.get(0).getQuarter1());
+		model.addAttribute("centreQuarter2", quarterCentre.get(0).getQuarter2());
+		model.addAttribute("centreQuarter3", quarterCentre.get(0).getQuarter3());
+		model.addAttribute("centreQuarter4", quarterCentre.get(0).getQuarter4());
+		
+		List<Quarterly> quarterMember = inquiryService.quarterlyMember();
+		model.addAttribute("memberQuarter1", quarterMember.get(0).getQuarter1());
+		model.addAttribute("memberQuarter2", quarterMember.get(0).getQuarter2());
+		model.addAttribute("memberQuarter3", quarterMember.get(0).getQuarter3());
+		model.addAttribute("memberQuarter4", quarterMember.get(0).getQuarter4());
+		
+		List<Quarterly> quarterOffering = inquiryService.quarterlyOffering();
+		model.addAttribute("offeringQuarter1", quarterOffering.get(0).getQuarter1());
+		model.addAttribute("offeringQuarter2", quarterOffering.get(0).getQuarter2());
+		model.addAttribute("offeringQuarter3", quarterOffering.get(0).getQuarter3());
+		model.addAttribute("offeringQuarter4", quarterOffering.get(0).getQuarter4());
+		
+		LOGGER.info("+++ DASHBOARD ==> "+quarterOffering);
 		model.addAttribute("loggedinuser", getPrincipal());
+		
 
+		//return "index";
 		return "dashboard";
 	}
 	///////////////////// END OF
@@ -744,16 +838,77 @@ public class WelcomeController {
 		return "weeklyReport";
 	}
 	
+	 @RequestMapping(value = {"/getCentreDetails"}, method = RequestMethod.GET)
+	    public @ResponseBody
+	    ResponseEntity<Centre> getCustomerByAccount(@RequestParam String centre) throws Exception {
+
+			Centre request = new Centre();
+			request.setCentre(centre);
+		    List<Centre> getCentre = inquiryService.getCentreDetails(request);
+	    
+	    return new ResponseEntity<>(getCentre.get(0), HttpStatus.OK);
+
+	    }
+	
 	@RequestMapping(value = "/weeklyReport", method = RequestMethod.POST)
 	public String weeklyReport(@Valid WeeklyReport request, ModelMap model, RedirectAttributes redirectAttributes)
 			throws Exception {
 		request.setUserName(getPrincipal().getAdUsername());
+		request.setNoOfMale(request.getAttend()[0]);
+		request.setNoOfFemale(request.getAttend()[1]);
+		request.setChildPresent(request.getAttend()[2]);
 		Response response = adminService.weeklyReport(request);
 
 		LOGGER.info("response " + response);
+		LOGGER.info("response " + request);
+		LOGGER.info("visitors " + request.getVisitorNames());
+		
+		if (request.getVisitorNames()!=null && !(("0").equals(request.getVisitors()))) {
+			LOGGER.info("here "+request);
+			for(int i=0; i<request.getVisitorNames().length; i++) {
+				
+				//WeeklyReport req = new WeeklyReport();
+				request.setVisitorEmail(request.getVisitorEmails()[i]);
+				request.setVisitorGender(request.getVisitorGenders()[i]);
+				request.setVisitorName(request.getVisitorNames()[i]);
+				request.setVisitorPhoneNo(request.getVisitorPhoneNos()[i]);
+			
+			Response visitorResponse = adminService.createVisitor(request);
+			
+			LOGGER.info("visitorResponse " + visitorResponse);
+			
+			
+			}
+			
+		}
+		
+		if (request.getTestifierNames()!=null) {
+			LOGGER.info("here "+request);
+			for(int i=0; i<request.getTestifierNames().length; i++) {
+				
+				Testimony req = new Testimony();
+				req.setTestifierName(request.getTestifierNames()[i]);
+				req.setTestimonyTopic(request.getTestimonyTopics()[i]);
+				req.setTestimony(request.getTestimonys()[i]);
+				req.setCentre(request.getCentre());
+				req.setUserName(request.getUserName());
+			
+			Response testimonyResponse = adminService.createTestimony(req);
+			
+			LOGGER.info("testimonyResponse " + testimonyResponse);
+			
+			
+			}
+			
+		}
+//		else {
+//			redirectAttributes.addFlashAttribute("successMessage",
+//					(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+//			return "redirect:/weeklyReport";
+//		}
 
 		redirectAttributes.addFlashAttribute("successMessage",
-				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+				(messageSource.getMessage("successful.weekly.report", new Object[] { "" }, Locale.getDefault())));
 		return "redirect:/weeklyReport";
 	}
 	
@@ -875,19 +1030,19 @@ public class WelcomeController {
 
 	////////////////////// MESSAGING
 
-	@MessageMapping("/chat.sendMessage")
-	@SendTo("/topic/public")
-	public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-		return chatMessage;
-	}
-
-	@MessageMapping("/chat.addUser")
-	@SendTo("/topic/public")
-	public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-		// Add username in web socket session
-		headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-		return chatMessage;
-	}
+//	@MessageMapping("/chat.sendMessage")
+//	@SendTo("/topic/public")
+//	public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+//		return chatMessage;
+//	}
+//
+//	@MessageMapping("/chat.addUser")
+//	@SendTo("/topic/public")
+//	public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+//		// Add username in web socket session
+//		headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
+//		return chatMessage;
+//	}
 
 	@RequestMapping(value = { "/chat" }, method = RequestMethod.GET)
 	public String chatRoom(ModelMap model, HttpServletRequest request) {
@@ -951,6 +1106,10 @@ public class WelcomeController {
 	@RequestMapping(value = "/prayerRequest", method = RequestMethod.GET)
 	public String prayerRequest(ModelMap model) throws Exception {
 
+		PrayerRequest request = new PrayerRequest();
+		request.setName(getPrincipal().getAdUsername());
+		List<PrayerRequest> response = inquiryService.getPrayerRequest(request);
+		model.addAttribute("prayer", response);
 		model.addAttribute("loggedinuser", getPrincipal());
 		model.addAttribute("username", getPrincipal().getAdUsername());
 
@@ -965,7 +1124,7 @@ public class WelcomeController {
 		LOGGER.info("response " + response);
 
 		redirectAttributes.addFlashAttribute("successMessage",
-				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+				(messageSource.getMessage("successful.prayer", new Object[] { "" }, Locale.getDefault())));
 		return "redirect:/prayerRequest";
 	}
 	
@@ -1003,8 +1162,15 @@ public class WelcomeController {
 
 		LOGGER.info("response " + response);
 
+		if(("UNSHARED").equalsIgnoreCase(request.getStatus())){
+			
+			redirectAttributes.addFlashAttribute("successMessage",
+					(messageSource.getMessage("successful.prayer.unshared", new Object[] { "" }, Locale.getDefault())));
+			return "redirect:/viewPrayerRequest";
+			
+		}
 		redirectAttributes.addFlashAttribute("successMessage",
-				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+				(messageSource.getMessage("successful.prayer.shared", new Object[] { "" }, Locale.getDefault())));
 		return "redirect:/viewPrayerRequest";
 	}
 	
@@ -1013,7 +1179,11 @@ public class WelcomeController {
 	
 	@RequestMapping(value = "/welfareRequest", method = RequestMethod.GET)
 	public String welfareRequest(ModelMap model) throws Exception {
-
+		
+		Welfare request = new Welfare();
+		request.setName(getPrincipal().getAdUsername());
+		List<Welfare> response = inquiryService.getWelfareRequest(request);
+		model.addAttribute("welfare", response);
 		model.addAttribute("loggedinuser", getPrincipal());
 		model.addAttribute("username", getPrincipal().getAdUsername());
 
@@ -1078,6 +1248,9 @@ public class WelcomeController {
 
 		model.addAttribute("loggedinuser", getPrincipal());
 		model.addAttribute("username", getPrincipal().getAdUsername());
+//		Training training = new Training();
+//		List<Training> getTraining = inquiryService.getTraining(training);
+//		model.addAttribute("getTraining", getTraining);
 
 		return "announcement";
 	}
@@ -1121,6 +1294,11 @@ public class WelcomeController {
 	
 	@RequestMapping(value = "/incident", method = RequestMethod.GET)
 	public String incident(ModelMap model) throws Exception {
+		
+		Incident request = new Incident();
+		request.setName(getPrincipal().getAdUsername());
+		List<Incident> response = inquiryService.getIncident(request);
+		model.addAttribute("incident", response);
 
 		model.addAttribute("loggedinuser", getPrincipal());
 		model.addAttribute("username", getPrincipal().getAdUsername());
@@ -1186,6 +1364,11 @@ public class WelcomeController {
 	@RequestMapping(value = "/whistleBlowing", method = RequestMethod.GET)
 	public String whistleBlowing(ModelMap model) throws Exception {
 
+		Incident request = new Incident();
+		request.setName(getPrincipal().getAdUsername());
+		List<Incident> response = inquiryService.getWhistleBlowing(request);
+		model.addAttribute("whistleBlowing", response);
+		
 		model.addAttribute("loggedinuser", getPrincipal());
 		model.addAttribute("username", getPrincipal().getAdUsername());
 
@@ -1387,7 +1570,7 @@ public class WelcomeController {
         }
 
 		redirectAttributes.addFlashAttribute("successMessage",
-				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+				(messageSource.getMessage("successful.weekly.outline", new Object[] { "" }, Locale.getDefault())));
 		return "redirect:/weeklyOutline";
 	}
 	
@@ -1444,6 +1627,47 @@ public class WelcomeController {
     }
 
 }
+	
+	@RequestMapping(value = "/preview", method = RequestMethod.POST)
+    public void getImageAsByteArray(@Valid Filter req, ModelMap model, HttpServletRequest request,
+                                    HttpServletResponse response) throws Exception {
+        InputStream inputStream = null;
+        try {
+            LOGGER.info("++++ ***** In Preview Now ***** ++++");// 17819006_1527677662753_620x3482018-08-07.20:24:09.jpg
+
+            DocManagerRequest document = inquiryService.getOutlineDocument(req.getValue());
+            LOGGER.info("** document ==> " + document + " **");
+
+            String encodedString = document.getInputStreamStr();
+            encodedString = encodedString != null ? encodedString : "";
+
+            byte[] decodedBase64Bytes = Base64.decodeBase64(encodedString);
+            // LOGGER.info("++++ decodedbytes ==> " + decodedBase64Bytes + "
+            // ++++");
+            // LOGGER.info("++++ decodedBase64Bytes bytes ==> " + new String
+            // (decodedBase64Bytes) + " ++++");
+
+            // byte[] array = Base64.decodeBase64(encodedString);
+            inputStream = new ByteArrayInputStream(decodedBase64Bytes);
+
+            LOGGER.info("++++ Filetype ==> " + document.getFiletype() + " ++++");
+            response.setContentType(document.getFiletype());
+            //response.setHeader("Content-Disposition", "attachment; filename=" + document.getDocName());
+            IOUtils.copy(inputStream, response.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("********Oops Something went wrong **********" + e);
+        } finally {
+            if (inputStream != null)
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    LOGGER.error("********Oops Something went wrong **********" + e);
+                }
+        }
+
+    }
 
 	
 	
@@ -1741,17 +1965,19 @@ public class WelcomeController {
 	public String getWeeklyReport(@Valid Filter request, ModelMap model, RedirectAttributes redirectAttributes)
 			throws Exception {
 		
-		
+		LOGGER.info("request " + request);
 		request.setName(getPrincipal().getAdUsername());
 		List<WeeklyReport> response = inquiryService.getWeeklyReport(request);
 
 		LOGGER.info("response " + response);
 
 		model.addAttribute("loggedinuser", getPrincipal()); 
+		model.addAttribute("userCentre", getPrincipal().getCentre());
 		model.addAttribute("weeklyReport", response); 
 
 		return "viewWeeklyReport";
 	}
+//	<c:when test="${loggedinuser.centre}=='ADMIN'"></c:when>
 	
 	@RequestMapping(value = "/getMonthlyReport", method = RequestMethod.GET)
 	public String getMonthlyReport(ModelMap model) throws Exception {
@@ -1831,7 +2057,7 @@ public class WelcomeController {
 	public String centreDirectory(@Valid Filter request, ModelMap model, RedirectAttributes redirectAttributes)
 			throws Exception {
 		
-		List<UserDetails> response = inquiryService.getUserDetails(request.getCentre());
+		List<UserDetails> response = inquiryService.getUserDetails(request.getCentre(), "");
 
 		LOGGER.info("response " + response);
 
@@ -1843,227 +2069,638 @@ public class WelcomeController {
 	}
 	
 	
-//	@SuppressWarnings("unchecked")
-//	@RequestMapping(value = { "/uploadaccount" }, method = RequestMethod.POST)
-//	public String uploadAccount(@Valid CentreDirectory request, BindingResult result,
-//			RedirectAttributes redirectAttributes, ModelMap model) throws Exception {
+	@RequestMapping(value = "/getCentreReport", method = RequestMethod.GET)
+	public String getCentreReport(ModelMap model) throws Exception {
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+
+		return "viewCentreReport";
+	}
+	
+	@RequestMapping(value = "/getCentreReport", method = RequestMethod.POST)
+	public String getCentreReport(@Valid Filter request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		
+		
+		request.setName(getPrincipal().getAdUsername());
+		request.setDateFrom(MARSHARLLERDATEFORMAT.parse(request.getDateFromStr()));
+		request.setDateTo(MARSHARLLERDATEFORMAT.parse(request.getDateToStr()));
+		
+		LOGGER.info("request " + request);
+		List<WeeklyReport> response = inquiryService.getCentreReport(request);
+
+		LOGGER.info("response " + response);
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+		model.addAttribute("centreReport", response); 
+
+		return "viewCentreReport";
+	}
+	
+	@RequestMapping(value = "/getAreaReport", method = RequestMethod.GET)
+	public String getAreaReport(ModelMap model) throws Exception {
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+
+		return "viewAreaReport";
+	}
+	
+	@RequestMapping(value = "/getAreaReport", method = RequestMethod.POST)
+	public String getAreaReport(@Valid Filter request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		
+		
+		request.setName(getPrincipal().getAdUsername());
+		request.setDateFrom(MARSHARLLERDATEFORMAT.parse(request.getDateFromStr()));
+		request.setDateTo(MARSHARLLERDATEFORMAT.parse(request.getDateToStr()));
+		List<WeeklyReport> response = inquiryService.getAreaReport(request);
+
+		LOGGER.info("response " + response);
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+		model.addAttribute("areaReport", response); 
+
+		return "viewAreaReport";
+	}
+	
+	@RequestMapping(value = "/getZoneReport", method = RequestMethod.GET)
+	public String getZoneReport(ModelMap model) throws Exception {
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+
+		return "viewZoneReport";
+	}
+	
+	@RequestMapping(value = "/getZoneReport", method = RequestMethod.POST)
+	public String getZoneReport(@Valid Filter request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		
+		
+		request.setName(getPrincipal().getAdUsername());
+		request.setDateFrom(MARSHARLLERDATEFORMAT.parse(request.getDateFromStr()));
+		request.setDateTo(MARSHARLLERDATEFORMAT.parse(request.getDateToStr()));
+		List<WeeklyReport> response = inquiryService.getZoneReport(request);
+
+		LOGGER.info("response " + response);
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+		model.addAttribute("zoneReport", response); 
+
+		return "viewZoneReport";
+	}
+	
+	
+	@RequestMapping(value = "/getDistrictReport", method = RequestMethod.GET)
+	public String getDistrictReport(ModelMap model) throws Exception {
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+
+		return "viewDistrictReport";
+	}
+	
+	@RequestMapping(value = "/getDistrictReport", method = RequestMethod.POST)
+	public String getDistrictReport(@Valid Filter request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		
+		
+		request.setName(getPrincipal().getAdUsername());
+		request.setDateFrom(MARSHARLLERDATEFORMAT.parse(request.getDateFromStr()));
+		request.setDateTo(MARSHARLLERDATEFORMAT.parse(request.getDateToStr()));
+		List<WeeklyReport> response = inquiryService.getDistrictReport(request);
+
+		LOGGER.info("response " + response);
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+		model.addAttribute("districtReport", response); 
+
+		return "viewDistrictReport";
+	}
+	
+	@RequestMapping(value = "/getVisitorReport", method = RequestMethod.GET)
+	public String getVisitorReport(ModelMap model) throws Exception {
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+
+		return "viewVisitorDetail";
+	}
+	
+	@RequestMapping(value = "/getVisitorReport", method = RequestMethod.POST)
+	public String getVisitorReport(@Valid Filter request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		
+		
+		request.setName(getPrincipal().getAdUsername());
+		request.setDateFrom(MARSHARLLERDATEFORMAT.parse(request.getDateFromStr()));
+		request.setDateTo(MARSHARLLERDATEFORMAT.parse(request.getDateToStr()));
+		
+		
+		List<WeeklyReport> response = inquiryService.getVisitorDetail(request);
+
+		LOGGER.info("response " + response);
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+		model.addAttribute("visitorReport", response); 
+
+		return "viewVisitorDetail";
+	}
+	
+	
+	@RequestMapping(value = "/training", method = RequestMethod.GET)
+	public String training(ModelMap model) throws Exception {
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "training";
+	}
+
+	@RequestMapping(value = "/training", method = RequestMethod.POST)
+	public String training(@Valid Training request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		Response response = adminService.createTraining(request);
+
+		LOGGER.info("response " + response);
+
+		redirectAttributes.addFlashAttribute("successMessage",
+				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+		return "redirect:/training";
+	}
+	
+	@RequestMapping(value = "/scheduleTraining", method = RequestMethod.GET)
+	public String scheduleTraining(ModelMap model) throws Exception {
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+		Training training = new Training();
+		List<Training> getTraining = inquiryService.getTraining(training);
+		model.addAttribute("getTraining", getTraining);
+
+		return "scheduleTraining";
+	}
+	
+//	@RequestMapping(value = "/viewTraining", method = RequestMethod.GET)
+//	public String viewTraining(ModelMap model) throws Exception {
 //
+//		Expenses request = new Expenses();
+//		List<Training> response = inquiryService.getTraining(request);
+//		model.addAttribute("project", response);
 //		model.addAttribute("loggedinuser", getPrincipal());
+//		model.addAttribute("username", getPrincipal().getAdUsername());
 //
-//		LOGGER.info("here h");
-//
-//		MultipartFile file = (request.getDocuments() != null && request.getDocuments().length > 0)
-//				? request.getDocuments()[0]
-//				: null;
-//
-//		if (file != null && !file.isEmpty()) {
-//			String fileName = file.getOriginalFilename();
-//			String douniqueid = BasicUtil.getFilename(fileName);
-//			long length = file.getSize();
-//			InputStream is = file.getInputStream();
-//			String contentType = file.getContentType();
-//
-//			File targetFile = new File(System.getProperty("java.io.tmpdir") + File.separator + "tempFileBSS.tmp");
-//
-//			java.nio.file.Files.copy(is, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-//
-//			IOUtils.closeQuietly(is);
-//
-//			List<String[]> data = new ArrayList<>();
-//			try {
-//				if (!file.isEmpty()) {
-//					if ((fileName.substring(fileName.length() - 3).equalsIgnoreCase("xls")
-//							&& contentType.equalsIgnoreCase("application/vnd.ms-excel"))
-//							|| (fileName.substring(fileName.length() - 4).equalsIgnoreCase("xlsx")
-//									&& contentType.equalsIgnoreCase(
-//											"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))) {
-//						// start to read from file
-//
-//						BufferedInputStream bis = new BufferedInputStream(new FileInputStream(
-//								System.getProperty("java.io.tmpdir") + File.separator + "tempFileBSS.tmp"));
-//						data = BasicUtil.readXcelAccounts(bis, 1);
-//
-//						LOGGER.info("FirstRowMan" + data.get(1));
-//
-//						LOGGER.info("data" + data);
-//						LOGGER.info("data.size()" + data.size());
-//
-//						if (data.size() == 0) {
-//							redirectAttributes.addFlashAttribute("errorMessage",
-//									(messageSource.getMessage("no.data", new Object[] { "" },
-//											Locale.forLanguageTag(RequestContextUtils.getLocaleResolver(request)
-//													.resolveLocale(request).getLanguage()))));
-//							LOGGER.info("Excel file has no data");
-//							return "redirect:/account";
-//						}
-//						LOGGER.info("here 22");
-//						if (!"ACCOUNT NUMBER".equals(data.get(0)[0]) || !"GL NAME".equals(data.get(0)[1])
-//								|| !"GL CURRENCY".equals(data.get(0)[2])
-//								|| !"GL TYPE".equals(data.get(0)[3]) | !"BRANCH".equals(data.get(0)[4])
-//								|| !"CATEGORY".equals(data.get(0)[5])) {
-//							redirectAttributes.addFlashAttribute("errorMessage",
-//									(messageSource.getMessage("wrong.excel.upload", new Object[] { "" },
-//											Locale.forLanguageTag(RequestContextUtils.getLocaleResolver(request)
-//													.resolveLocale(request).getLanguage()))));
-//							LOGGER.info("Excel file value null");
-//							return "redirect:/account";
-//						}
-//
-//						else {
-//
-//							LOGGER.info("here 33");
-//							List<String> hasErrors = new ArrayList<>();
-//
-//							for (int i = 1; i < data.size(); i++) {
-//
-//								UserToAccount account = new UserToAccount();
-//								account.setAccountNumber(data.get(i)[0]);
-//								account.setGlName(data.get(i)[1]);
-//								account.setGlCurrency(data.get(i)[2]);
-//								account.setGlType(data.get(i)[3]);
-//								account.setBranch(data.get(i)[4]);
-//								account.setCategory(data.get(i)[5]);
-//								account.setAccountType(data.get(i)[6]);
-//								account.setAffiliateCode(data.get(i)[7]);
-//
-//								LOGGER.info("createAccount e" + account);
-//								Response createAccount = bssaService.createAccount(account, getPrincipal());
-//								LOGGER.info("createAccount e" + createAccount);
-//
-//								if (createAccount == null || ("99".equals(createAccount.getResponseCode()))) {
-//
-//									hasErrors.add((messageSource.getMessage("unsuccessful.acc", new Object[] { "" },
-//											Locale.getDefault())).replace("[account]", account.getAccountNumber())
-//											+ (" - ") + createAccount.getResponseMessage());
-//
-//								}
-//
-//								if (!"00".equals(createAccount.getResponseCode())) {
-//
-//									hasErrors.add((messageSource.getMessage("unsuccessful.acc", new Object[] { "" },
-//											Locale.getDefault())).replace("[account]", account.getAccountNumber())
-//											+ (" - ") + createAccount.getResponseMessage());
-//
-//								}
-//
-//								if ("00".equals(createAccount.getResponseCode())) {
-//									LocalDate date1 = LocalDate.now();
-//									java.util.Date date2 = java.sql.Date.valueOf(date1);
-//									String date = MARSHARLLERDATEFORMAT.format(date2);
-//
-//									account.setAccountNumber(data.get(i)[0]);
-//									account.setGlName(data.get(i)[1]);
-//									account.setGlCurrency(data.get(i)[2]);
-//									account.setGlType(data.get(i)[3]);
-//									account.setBranch(data.get(i)[4]);
-//									account.setCategory(data.get(i)[5]);
-//									AuditMasterDetail auditMasterDetail = new AuditMasterDetail();
-//									auditMasterDetail.setUserName(getPrincipal().getAdUsername());
-//									auditMasterDetail.setEventDesc(getPrincipal().getAdUsername() + " of affiliate "
-//											+ getPrincipal().getAffiliate()
-//											+ " created GL account with the following attributes. Account Number: "
-//											+ account.getAccountNumber() + ", Branch: " + account.getBranch()
-//											+ ", Category: " + account.getCategory() + ", GL Currency: "
-//											+ account.getGlCurrency() + ", GL Name: " + account.getGlCurrency()
-//											+ " and GL Type: " + account.getGlType() + " with account ID of "
-//											+ createAccount.getResponseMessage() + " on " + new Date());
-//									auditMasterDetail.setEventSrc("CREATE ACCOUNT");
-//									auditMasterDetail.setServerIp(getPrincipal().getCurrentLoginIPAddress());
-//									auditMasterDetail.setExtRef(createAccount.getResponseMessage() + "CA");
-//									Response insertIntoAuditmaster = bssaService.insertIntoAdminAudit(auditMasterDetail,
-//											getPrincipal());
-//								}
-//
-//							}
-//
-//							LOGGER.info("** hasErrors ==> " + hasErrors.size() + " **");
-//
-//							if (hasErrors.size() > 0 && hasErrors.size() == data.size()) {
-//
-//								redirectAttributes.addFlashAttribute("errorMessage",
-//										(messageSource.getMessage("unsuccessful.acc", new Object[] { "" },
-//												Locale.getDefault())) + (" because ") + hasErrors.toString());
-//
-//								return "redirect:/account";
-//							}
-//
-//							if (hasErrors.size() > 0 && hasErrors.size() < data.size()) {
-//
-//								redirectAttributes.addFlashAttribute("successMessage",
-//										(messageSource.getMessage("uploadacc.success", new Object[] { "" },
-//												Locale.getDefault())) + (" but ") + hasErrors.toString());
-//
-//								return "redirect:/account";
-//							}
-//
-//							redirectAttributes.addFlashAttribute("successMessage", (messageSource
-//									.getMessage("uploadacc.success", new Object[] { "" }, Locale.getDefault())));
-//
-//							if (targetFile.exists())
-//								targetFile.delete();
-//							targetFile.deleteOnExit();
-//							return "redirect:/account";
-//
-//						}
-//					} else {
-//						redirectAttributes.addFlashAttribute("errorMessage",
-//								(messageSource.getMessage("not.excel", new Object[] { "" },
-//										Locale.forLanguageTag(RequestContextUtils.getLocaleResolver(request)
-//												.resolveLocale(request).getLanguage()))));
-//						LOGGER.info("Not an Excel File");
-//						return "redirect:/account";
-//					}
-//				} else {
-//					redirectAttributes.addFlashAttribute("errorMessage",
-//							(messageSource.getMessage("no.data", new Object[] { "" },
-//									Locale.forLanguageTag(RequestContextUtils.getLocaleResolver(request)
-//											.resolveLocale(request).getLanguage()))));
-//					LOGGER.info("Excel file has no data");
-//					return "redirect:/account";
-//				}
-//			}
-//
-//			catch (Exception e) {
-//				e.printStackTrace();
-//				model.addAttribute("errorMessage",
-//						(messageSource.getMessage("wrong.excel.upload", new Object[] { "" }, Locale.forLanguageTag(
-//								RequestContextUtils.getLocaleResolver(request).resolveLocale(request).getLanguage()))));
-//				return "redirect:/account";
-//			}
-//
-//		}
-//
-//		redirectAttributes.addFlashAttribute("successMessage",
-//				(messageSource.getMessage("uploadacc.success", new Object[] { "" }, Locale.forLanguageTag(
-//						RequestContextUtils.getLocaleResolver(request).resolveLocale(request).getLanguage()))));
-//
-//		return "redirect:/account";
-//
-//	}
-//
-//	@RequestMapping(value = "/UserRoleTemplate", method = RequestMethod.POST)
-//	public void getImageAsByteArray1(ModelMap model, HttpServletRequest request,
-//			HttpServletResponse response) throws Exception {
-//		InputStream inputStream = null;
-//		try {
-//			inputStream = WelcomeController.class.getResourceAsStream("/UserRoleTemplate.xlsx");
-//
-//			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-//			IOUtils.copy(inputStream, response.getOutputStream());
-//			// }
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			LOGGER.error("********Oops Something went wrong **********" + e);
-//		} finally {
-//			if (inputStream != null)
-//				try {
-//					inputStream.close();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//					LOGGER.error("********Oops Something went wrong **********" + e);
-//				}
-//		}
-//
+//		return "viewCommProject";
 //	}
 	
+	@RequestMapping(value = "/centre", method = RequestMethod.GET)
+	public String centre(ModelMap model) throws Exception {
+		Centre request = new Centre();
+		
+		request.setCentre("CENTRE");
+		List<Centre> response = inquiryService.getCentreDetail(request);
+		model.addAttribute("response", response);
+		
+		request.setCentre("AREA");
+		List<Centre> areaDetails = inquiryService.getCentreDetail(request);
+		model.addAttribute("areaDetails", areaDetails);
+		
+		request.setCentre("ZONE");
+		List<Centre> zoneDetails = inquiryService.getCentreDetail(request);
+		model.addAttribute("zoneDetails", zoneDetails);
+		
+		request.setCentre("DISTRICT");
+		List<Centre> districtDetails = inquiryService.getCentreDetail(request);
+		model.addAttribute("districtDetails", districtDetails);
+		
+		List<User> centreLeaders = inquiryService.getuser("1", "CENTRE LEADER", getPrincipal().getAffiliate());
+		model.addAttribute("centreLeaders", centreLeaders);
+
+		
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "centre";
+	}
+	
+
+	@RequestMapping(value = "/createCentre", method = RequestMethod.POST)
+	public String createCentre(@Valid Centre request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		LOGGER.info("request " + request);
+		Response response = adminService.createCentre(request);
+
+		LOGGER.info("response " + response);
+		
+
+		redirectAttributes.addFlashAttribute("successMessage",
+				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+		return "redirect:/centre";
+	}
+	
+	@RequestMapping(value = "/area", method = RequestMethod.GET)
+	public String area(ModelMap model) throws Exception {
+		Centre request = new Centre();		
+		request.setCentre("AREA");
+		
+		List<Centre> response = inquiryService.getCentreDetail(request);
+		model.addAttribute("response", response);
+		
+		request.setCentre("ZONE");
+		List<Centre> zoneDetails = inquiryService.getCentreDetail(request);
+		model.addAttribute("zoneDetails", zoneDetails);
+		
+		request.setCentre("DISTRICT");
+		List<Centre> districtDetails = inquiryService.getCentreDetail(request);
+		model.addAttribute("districtDetails", districtDetails);
+		
+		List<User> areaLeaders = inquiryService.getuser("1", "AREA LEADER", getPrincipal().getAffiliate());
+		model.addAttribute("areaLeaders", areaLeaders);
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "area";
+	}
+	
+
+	@RequestMapping(value = "/createArea", method = RequestMethod.POST)
+	public String createArea(@Valid Centre request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		LOGGER.info("request " + request);
+		Response response = adminService.createArea(request);
+
+		LOGGER.info("response " + response);
+		
+
+		redirectAttributes.addFlashAttribute("successMessage",
+				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+		return "redirect:/area";
+	}
+	
+	@RequestMapping(value = "/zone", method = RequestMethod.GET)
+	public String zone(ModelMap model) throws Exception {
+		
+		Centre request = new Centre();
+		
+		request.setCentre("ZONE");
+		List<Centre> response = inquiryService.getCentreDetail(request);
+		model.addAttribute("response", response);
+		
+		request.setCentre("DISTRICT");
+		List<Centre> districtDetails = inquiryService.getCentreDetail(request);
+		model.addAttribute("districtDetails", districtDetails);
+		
+		List<User> zoneLeaders = inquiryService.getuser("1", "ZONE LEADER", getPrincipal().getAffiliate());
+		model.addAttribute("zoneLeaders", zoneLeaders);
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "zone";
+	}
+	
+
+	@RequestMapping(value = "/createZone", method = RequestMethod.POST)
+	public String createZone(@Valid Centre request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		LOGGER.info("request " + request);
+		Response response = adminService.createZone(request);
+
+		LOGGER.info("response " + response);
+		
+
+		redirectAttributes.addFlashAttribute("successMessage",
+				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+		return "redirect:/zone";
+	}
+	
+	@RequestMapping(value = "/district", method = RequestMethod.GET)
+	public String district(ModelMap model) throws Exception {
+		
+		Centre request = new Centre();		
+		request.setCentre("DISTRICT");
+		
+		List<Centre> response = inquiryService.getCentreDetail(request);
+		model.addAttribute("response", response);
+		
+		List<User> districtLeaders = inquiryService.getuser("1", "DISTRICT LEADER", getPrincipal().getAffiliate());
+		model.addAttribute("districtLeaders", districtLeaders);
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "district";
+	}
+	
+
+	@RequestMapping(value = "/createDistrict", method = RequestMethod.POST)
+	public String createDistrict(@Valid Centre request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		LOGGER.info("request " + request);
+		Response response = adminService.createDistrict(request);
+
+		LOGGER.info("response " + response);
+		
+
+		redirectAttributes.addFlashAttribute("successMessage",
+				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+		return "redirect:/district";
+	}
+	
+	@RequestMapping(value = "/viewCentre", method = RequestMethod.GET)
+	public String viewCentre(ModelMap model) throws Exception {
+		
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "viewCentre";
+	}
+	
+	@RequestMapping(value = "/viewCentre", method = RequestMethod.POST)
+	public String viewCentre(@Valid Centre request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		
+		List<Centre> response = inquiryService.viewCentre(request);
+
+		LOGGER.info("response " + response);
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+		model.addAttribute("response", response);  
+
+		return "viewCentre";
+	}
+	
+	@RequestMapping(value = "/testimony", method = RequestMethod.GET)
+	public String testimony(ModelMap model) throws Exception {
+		
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "testimony";
+	}
+	
+//	@RequestMapping(value = "/viewTestimony", method = RequestMethod.GET)
+//	public String viewTestimony(ModelMap model) throws Exception {
+//
+//		Testimony request = new Testimony();
+//		List<Testimony> response = inquiryService.viewTestimony(request);
+//
+//		LOGGER.info("response " + response);
+//		model.addAttribute("testimony", response);
+//		model.addAttribute("loggedinuser", getPrincipal());
+//		model.addAttribute("username", getPrincipal().getAdUsername());
+//
+//		return "testimony";
+//	}
+	
+	@RequestMapping(value = "/viewTestimony", method = RequestMethod.POST)
+	public String viewTestimony(@Valid Testimony request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+
+		List<Testimony> response = inquiryService.viewTestimony(request);
+
+		LOGGER.info("response " + response);
+		model.addAttribute("testimony", response);
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "testimony";
+	}
+	
+	
+	@RequestMapping(value = "/message", method = RequestMethod.GET)
+	public String message(ModelMap model) throws Exception {
+		
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+		model.addAttribute("sendTo", "");
+
+		return "message";
+	}
+	
+
+	@RequestMapping(value = "/createMessage", method = RequestMethod.POST)
+	public String createMessage(@Valid Message request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		LOGGER.info("request " + request);
+		request.setSender(getPrincipal().getAdUsername());
+		Response response = adminService.createMessage(request);
+
+		LOGGER.info("response " + response);
+		
+
+		redirectAttributes.addFlashAttribute("successMessage",
+				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+		return "redirect:/message";
+	}
+	
+	@RequestMapping(value = "/viewMessage", method = RequestMethod.GET)
+	public String viewMessage(ModelMap model) throws Exception {
+
+		Message request = new Message();
+		request.setSender(getPrincipal().getAdUsername());
+		List<Message> response = inquiryService.viewMessage(request);
+
+		LOGGER.info("response " + response);
+
+		model.addAttribute("message", response);
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+		model.addAttribute("sent", "No");
+
+		return "viewMessage";
+	}
+	
+	@RequestMapping(value = "/replyMessage-{sendTo}", method = RequestMethod.GET)
+	public String replyMessage(@PathVariable String sendTo, ModelMap model) throws Exception {
+		
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+		model.addAttribute("sendTo", sendTo);
+
+		return "message";
+	}
+	
+	@RequestMapping(value = "/viewSentMessage", method = RequestMethod.GET)
+	public String viewSentMessage(ModelMap model) throws Exception {
+
+		Message request = new Message();
+		request.setType("SENT");
+		request.setSender(getPrincipal().getAdUsername());
+		
+		List<Message> response = inquiryService.viewMessage(request);
+
+		LOGGER.info("response " + response);
+
+		model.addAttribute("message", response);
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+		model.addAttribute("sent", "Yes");
+
+		return "viewMessage";
+	}
+	
+	
+	@RequestMapping(value = "/documents", method = RequestMethod.GET)
+	public String documents(ModelMap model) throws Exception {
+
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "legalDocuments";
+	}
+	
+	@RequestMapping(value = "/loadDocuments", method = RequestMethod.POST)
+	public String loadDocuments(@Valid SocialEvent request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception, IOException {
+		LOGGER.info("response " + request);
+		
+		MultipartFile[] file = request.getGallerys();
+		request.setName(getPrincipal().getAdUsername());
+        if (file != null && !file[0].isEmpty()){
+        	request.setUploadFlag("Y");
+        }
+        
+        Response response = adminService.createLegalDocumentDetail(request);
+		LOGGER.info("response " + response);
+		
+		if (!"00".equals(response.getResponseCode())) {
+        	redirectAttributes.addAttribute("errorMessage", "Error Submitting Form");
+        	return "redirect:/documents";
+        }
+        
+        if ("00".equals(response.getResponseCode())) {
+        	
+            if (file != null && !file[0].isEmpty()) {
+            	
+            	for(int i=0; i<file.length;i++) {
+            		
+                String fileName = file[i].getOriginalFilename();
+                String douniqueid = BasicUtil.getFilename(fileName);
+                long length = file[i].getSize();
+                InputStream is = file[i].getInputStream();
+                String contentType = file[i].getContentType();
+                long id = Long.parseLong(response.getResponseMessage());
+                DocManagerRequest docMangerRequest = new DocManagerRequest();
+                docMangerRequest.setDocumentID(id);
+                docMangerRequest.setDocumentUniqueID(douniqueid);
+                docMangerRequest.setUserName(getPrincipal().getAdUsername());
+                docMangerRequest.setDocName(fileName);
+                docMangerRequest.setFiletype(contentType);
+                docMangerRequest.setTopic(request.getTopic());
+
+                byte[] bytes = BasicUtil.loadFile(file[i].getInputStream(), length, fileName);
+                LOGGER.info(">>> bytes " + bytes.toString() + ". <<< ");
+
+                byte[] encodedBase64Bytes = Base64.encodeBase64(bytes);
+                String encodedBase64String = new String(encodedBase64Bytes, StandardCharsets.US_ASCII);
+                docMangerRequest.setInputStreamStr(encodedBase64String);
+
+                Response logit = adminService.createLegalDocuments(docMangerRequest);
+                LOGGER.info("<<logit>>" + logit);
+
+            	}
+            }
+
+            model.addAttribute("successMessage", "GE Form Submitted Sucessfully .");
+        }
+
+		redirectAttributes.addFlashAttribute("successMessage",
+				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+		return "redirect:/documents";
+	}
+	
+	@RequestMapping(value = "/viewLegalDocuments", method = RequestMethod.GET)
+	public String viewLegalDocuments(ModelMap model) throws Exception {
+
+		SocialEvent request = new SocialEvent();
+		List<SocialEvent> response = inquiryService.getLegalDocumentDetails(request);
+		
+		model.addAttribute("legalDocument", response);
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("UserRole", getPrincipal().getUserRolesStr());
+		model.addAttribute("username", getPrincipal().getAdUsername());
+
+		return "viewLegalDocumentDetail";
+	}
+	
+	@RequestMapping(value = "/viewLegalDoc-{docID}", method = RequestMethod.GET)
+    public synchronized void viewLegalDoc(@PathVariable String docID, ModelMap model, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+
+    LocalDate date1 = LocalDate.now();
+    java.util.Date date2 = java.sql.Date.valueOf(date1);
+    String date = MARSHARLLERDATEFORMAT.format(date2);
+    //LOGGER.info("** dfdf ==> " + df + " **");
+    InputStream inputStream = null;
+    try {
+
+        DocManagerRequest document = inquiryService.getLegalDocuments(docID);
+        LOGGER.info("** document ==> " + document + " **");
+        response.setContentType(document.getFiletype());
+        response.setHeader("Content-Disposition", "attachment; filename=" + document.getDocName());
+        LOGGER.info("** inputStream ==> " + document.getInputStream() + " **");
+        String encodedString = document.getInputStreamStr();
+        LOGGER.info("** document2 ==> " + encodedString + " **");
+        encodedString = encodedString != null ? encodedString : "";
+
+        byte[] decodedBase64Bytes = Base64.decodeBase64(encodedString);
+        inputStream = new ByteArrayInputStream(decodedBase64Bytes);
+        IOUtils.copy(inputStream, response.getOutputStream());
+        // }
+    } catch (Exception e) {
+        e.printStackTrace();
+        LOGGER.error("********Oops Something went wrong **********" + e);
+    } finally {
+        if (inputStream != null)
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                LOGGER.error("********Oops Something went wrong **********" + e);
+            }
+    }
+
+}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/deleteLegalDoc-{docID}", method = RequestMethod.GET)
+	public String deleteLegalDoc(@PathVariable String docID, ModelMap model, RedirectAttributes redirectAttributes) throws Exception {
+
+		SocialEvent request = new SocialEvent();
+		request.setEventID(docID);
+		request.setStatus("DELETE");
+		Response response = adminService.updateSocialEvent(request);
+		LOGGER.info("response " + response);
+		
+		redirectAttributes.addFlashAttribute("successMessage",
+				(messageSource.getMessage("successful.edituser.auth", new Object[] { "" }, Locale.getDefault())));
+		return "redirect:/viewLegalDocuments";
+	}
+	
+	
+	@RequestMapping(value = "/centreMembers", method = RequestMethod.GET)
+	public String centreMembers(ModelMap model) throws Exception {
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+
+		return "centreMembers";
+	}
+	
+	@RequestMapping(value = "/centreMembers", method = RequestMethod.POST)
+	public String centreMembers(@Valid Filter request, ModelMap model, RedirectAttributes redirectAttributes)
+			throws Exception {
+		
+		List<UserDetails> response = inquiryService.getUserDetails(request.getCentre(), "CITH MEMBER");
+
+		LOGGER.info("response " + response);
+
+		model.addAttribute("loggedinuser", getPrincipal()); 
+		model.addAttribute("member", response); 
+		model.addAttribute("fellowshipCentre", request.getCentre()); 
+
+		return "centreMembers";
+	}
 }

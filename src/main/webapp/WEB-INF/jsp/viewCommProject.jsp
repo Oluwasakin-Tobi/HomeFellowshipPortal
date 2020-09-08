@@ -1,18 +1,23 @@
 <%@ include file="authheader.jsp"%>
 
-
-<div class="content mt-3">
-	<!-- <div class="animated fadeIn"> -->
-	<div class="row">
+<main>
 
 
-		<div class="col-md-12">
-			<div class="card">
-				<div class="card-header">
-					<strong class="card-title">View Community Impact Project</strong>
-				</div>
-				<div class="card-body">
-					<table id="bootstrap-data-table-export"
+<div class="container-fluid">
+	<h1 class="mt-4">View Community Impact Project</h1>
+	<ol class="breadcrumb mb-4">
+		<li class="breadcrumb-item"><a
+			href="<c:url value='/dashboard' />">Dashboard</a></li>
+		<li class="breadcrumb-item active">View Community Impact Project</li>
+	</ol>
+
+	<div class="col-md-12">
+		<div class="card shadow">
+			<div class="card-header">
+				<strong class="card-title">View Community Impact Project</strong>
+			</div>
+			<div class="card-body">
+				<table id="bootstrap-data-table-export"
 						class="table table-striped table-bordered">
 						<thead>
 							<tr>
@@ -41,10 +46,11 @@
 							</c:forEach>
 						</tbody>
 					</table>
-				</div>
 			</div>
 		</div>
-
-
 	</div>
+
 </div>
+</main>
+
+<%@ include file="footer.jsp"%>

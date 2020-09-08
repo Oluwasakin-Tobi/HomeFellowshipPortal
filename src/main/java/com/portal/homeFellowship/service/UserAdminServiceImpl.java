@@ -133,6 +133,9 @@ public class UserAdminServiceImpl implements UserAdminService{
 					user.setUserRolesStr(userprofile.getUserRoles());
 					user.setPassword(userprofile.getPassword());
 					
+					user.setInputStreamStr(userprofile.getInputStreamStr());
+					user.setCentre(userprofile.getCentre());
+					
 					LOGGER.info("***********userinfo***************" + user);
 
 				} catch (Exception ex) {

@@ -29,14 +29,17 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter
         registry.addResourceHandler("/assets/**")
                 .addResourceLocations("/WEB-INF/assets/");
 
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("/WEB-INF/images/");
+//        registry.addResourceHandler("/images/**")
+//                .addResourceLocations("/WEB-INF/images/");
 
         registry.addResourceHandler("/js/**")
                 .addResourceLocations("/WEB-INF/js/");
         
-        registry.addResourceHandler("/vendors/**")
-        		.addResourceLocations("/WEB-INF/vendors/");
+//        registry.addResourceHandler("/vendors/**")
+//        		.addResourceLocations("/WEB-INF/vendors/");
+        
+        registry.addResourceHandler("/css/**")
+		.addResourceLocations("/WEB-INF/css/");
     }
     
 //    public void addViewControllers(ViewControllerRegistry registry) {

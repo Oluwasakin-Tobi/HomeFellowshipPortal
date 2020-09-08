@@ -1,9 +1,16 @@
 <%@ include file="authheader.jsp"%>
 
+<main  ng-app="myModule">
+<div class="container-fluid">
+	<h1 class="mt-4">Donations</h1>
+	<ol class="breadcrumb mb-4">
+		<li class="breadcrumb-item"><a
+			href="<c:url value = '/dashboard'/>">Dashboard</a></li>
+		<li class="breadcrumb-item active">Donations</li>
+	</ol>
+	<div class="col-md-12">
+		<div class="card shadow">
 
-<div class="content mt-3" role="main" ng-app="myModule">
-	<div class="animated fadeIn">
-		<div class="row">
 			<c:if test="${errorMessage != null}">
 
 				<div class="alert alert-danger alert-dismissable float-right">
@@ -25,13 +32,11 @@
 
 			</c:if>
 
-			<div class="col-md-12">
-				<div class="card">
-					<div class="card-header">
-						<strong class="card-title">DONATIONS</strong>
-					</div>
-					<div class="card-body">
-						<c:url var="welfareRequest" value="/welfareRequest" />
+			<div class="card-header">
+				<strong class="card-title">DONATIONS</strong>
+			</div>
+			<div class="card-body">
+				<c:url var="welfareRequest" value="/welfareRequest" />
 						<mvc:form method="POST" action="${welfareRequest}"
 							enctype="multipart/form-data" id="demo-form2"
 							modelAttribute="Welfare"
@@ -75,36 +80,30 @@
 								</div>
 								
 							</div>
-							
 
-							<a href="<c:url value="/dashboard" />">
+
+					<div class="row">
+						<div class="col-md-6 mt-3">
+							<a>
 								<button class="btn btn-primary" type="button">Cancel</button>
 							</a>
-							
+							<button class="btn btn-warning" type="reset">Reset</button>
 
- 							<button type="button" class="btn btn-primary" onclick="payWithPaystack()"> Pay </button> 
 							<button type="submit" id="submitbutton" class="btn btn-success">Submit</button>
-
-						</mvc:form>
-
-
-
-  							
-  							
-
+						</div>
 					</div>
-				</div>
+				</mvc:form>
+
+
+
 			</div>
-
-
 		</div>
 	</div>
-	<!-- .animated -->
+
 </div>
-<!-- .content -->
+</main>
 
-
-
+<%@ include file="footer.jsp"%>
 <script src="<c:url value='/js/app.js' />"></script>
 
   <script src="https://js.paystack.co/v1/inline.js"></script>

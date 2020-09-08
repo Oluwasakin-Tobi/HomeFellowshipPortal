@@ -15,7 +15,7 @@ public interface InquiryService {
 	//List<User> getpenduser(String affiliate);
 	List<UserDetails> getpenduser(String affiliate);
 
-	List<UserDetails> getUserDetails(String userName);
+	List<UserDetails> getUserDetails(String userName, String role);
 
 	List<User> getuser(String userID, String pflag, String affiliate);
 	//////////////////////////////////END OF ADMIN/////////////////////////////////////////////////
@@ -67,5 +67,39 @@ public interface InquiryService {
 	List<MonthlyReport> getMonthlyReport(Filter request);
 
 	List<DirectorReport> getDirectorReport(Filter request);
+
+	List<WeeklyReport> getCentreReport(Filter request);
+
+	List<WeeklyReport> getAreaReport(Filter request);
+
+	List<WeeklyReport> getZoneReport(Filter request);
+
+	List<WeeklyReport> getDistrictReport(Filter request);
+
+	List<WeeklyReport> getVisitorDetail(Filter request);
+
+	List<Training> getTraining(Training training);
+
+	List<Centre> getCentreDetail(Centre request);
+
+	List<Centre> viewCentre(Centre request);
+
+	List<Testimony> viewTestimony(Testimony request);
+
+	List<Message> viewMessage(Message request);
+
+	List<Country> getCountry();
+
+	List<SocialEvent> getLegalDocumentDetails(SocialEvent request);
+
+	DocManagerRequest getLegalDocuments(String docID) throws IOException;
+
+	List<Centre> getCentreDetails(Centre request);
+
+	List<Quarterly> quarterlyCentre();
+
+	List<Quarterly> quarterlyMember();
+
+	List<Quarterly> quarterlyOffering();
 
 }

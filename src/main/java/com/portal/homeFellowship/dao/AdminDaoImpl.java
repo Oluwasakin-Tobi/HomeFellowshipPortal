@@ -3,6 +3,10 @@ package com.portal.homeFellowship.dao;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +31,8 @@ import com.portal.homeFellowship.model.*;
 public class AdminDaoImpl implements AdminDao {
 
 	final static Logger LOGGER = LoggerFactory.getLogger(AdminDaoImpl.class);
+
+	final static DateFormat MARSHARLLERDATEFORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Autowired
 	private Environment environment;
@@ -121,9 +127,35 @@ public class AdminDaoImpl implements AdminDao {
 						new SqlParameter("pDISTRICT", Types.VARCHAR),
 						new SqlParameter("pSTATE", Types.VARCHAR),
 						new SqlParameter("pCOUNTRY", Types.VARCHAR),
+						new SqlParameter("pADMIN_TEAM", Types.VARCHAR),
+						
+						new SqlParameter("pBAPTISED", Types.VARCHAR),
+						new SqlParameter("pBAPTISM_TYPE", Types.VARCHAR),
+						new SqlParameter("pDATE_BAPTISED", Types.DATE),
+						new SqlParameter("pLAST_CHURCH", Types.VARCHAR),
+						new SqlParameter("pLAST_CHURCH_ADDRESS", Types.VARCHAR), 
+						new SqlParameter("pDATE_BORN_AGAIN", Types.DATE),
+						new SqlParameter("pUSER_TITLE", Types.VARCHAR), 
 						new SqlOutParameter("p_code", Types.VARCHAR),
 						new SqlOutParameter("p_message", Types.VARCHAR))
 				.compile();
+		
+		LocalDate date1 = LocalDate.now();
+		java.util.Date date2 = java.sql.Date.valueOf(date1);
+		String date = MARSHARLLERDATEFORMAT.format(date2);
+		
+		if(user.getWeddingAnniversary().length()<2) {
+			LOGGER.info("request22");
+			user.setWeddingAnniversary(date);
+		}
+		if(user.getDateJoinedChurchDept().length()<2) {
+			LOGGER.info("request11");
+			user.setDateJoinedChurchDept(date);
+		}
+		if(user.getDateBaptised().length()<2) {
+			LOGGER.info("request33");
+			user.setDateBaptised(date);
+		}
 		
 
 		SqlParameterSource inParams = new MapSqlParameterSource()
@@ -160,8 +192,21 @@ public class AdminDaoImpl implements AdminDao {
 				.addValue("pZONE", user.getZone())
 				.addValue("pDISTRICT", user.getDistrict())
 				.addValue("pSTATE", user.getState())
-				.addValue("pCOUNTRY", user.getCountry());
+				.addValue("pCOUNTRY", user.getCountry())
+				.addValue("pADMIN_TEAM", user.getAdminTeam())
 
+				.addValue("pBAPTISED", user.getBaptised())
+				.addValue("pBAPTISM_TYPE", user.getTypeOfBaptism())
+				.addValue("pDATE_BAPTISED", user.getDateBaptised())
+				.addValue("pLAST_CHURCH", user.getLastChurch())
+				.addValue("pLAST_CHURCH_ADDRESS", user.getLastChurchAddress())
+				.addValue("pDATE_BORN_AGAIN", user.getDateBornAgain())
+				.addValue("pUSER_TITLE", user.getUserTitle())
+				;
+
+		
+		LOGGER.info("request " + user);
+		
 		Map<String, Object> returningResult = createUser.execute(inParams);
 		String responseCode = (String) returningResult.get("p_code");
 		String validResponseCode = responseCode != null ? responseCode : "99";
@@ -332,6 +377,7 @@ public class AdminDaoImpl implements AdminDao {
 						   new SqlParameter("p_meeting_link", Types.VARCHAR),
 						   new SqlParameter("p_send_to", Types.VARCHAR),
 						   new SqlParameter("p_sendto_user", Types.VARCHAR),
+						   new SqlParameter("p_meeting_type", Types.VARCHAR),
 						   new SqlOutParameter("p_code", Types.VARCHAR),
 						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
 		
@@ -342,7 +388,8 @@ public class AdminDaoImpl implements AdminDao {
 									 .addValue("p_username", request.getCreatedBy())
 									 .addValue("p_meeting_link", request.getMeetingLink())
 									 .addValue("p_send_to", request.getSendTo())
-									 .addValue("p_sendto_user", request.getSendToAUser());
+									 .addValue("p_sendto_user", request.getSendToAUser())
+									 .addValue("p_meeting_type", request.getMeetingType());
 		
 		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
 		String responseCode = (String) resultSet.get("p_code");
@@ -548,13 +595,16 @@ public class AdminDaoImpl implements AdminDao {
 						   new SqlParameter("p_intern", Types.VARCHAR),
 						   new SqlParameter("p_worshipLeader", Types.VARCHAR),
 						   new SqlParameter("p_outlineTopic", Types.VARCHAR),
-						   new SqlParameter("p_adultPresent", Types.NUMERIC),
+						   new SqlParameter("p_noOfMale", Types.NUMERIC),
+						   new SqlParameter("p_noOfFemale", Types.NUMERIC),
 						   new SqlParameter("p_childPresent", Types.NUMERIC),
 						   new SqlParameter("p_visitors", Types.NUMERIC),
 						   new SqlParameter("p_hostName", Types.VARCHAR),
 						   new SqlParameter("p_hostPhoneNo", Types.VARCHAR),
 						   new SqlParameter("p_hostEmail", Types.VARCHAR),
 						   new SqlParameter("p_offering", Types.NUMERIC),
+						   new SqlParameter("p_zone", Types.VARCHAR),
+						   new SqlParameter("p_district", Types.VARCHAR),
 						   new SqlOutParameter("p_code", Types.VARCHAR),
 						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
 		
@@ -568,14 +618,17 @@ public class AdminDaoImpl implements AdminDao {
 									 .addValue("p_intern", request.getIntern())
 									 .addValue("p_worshipLeader", request.getWorshipLeader())
 									 .addValue("p_outlineTopic", request.getOutlineTopic())
-									 .addValue("p_adultPresent", request.getAdultPresent())
+									 .addValue("p_noOfMale", request.getNoOfMale())
+									 .addValue("p_noOfFemale", request.getNoOfFemale())
 									 .addValue("p_childPresent", request.getChildPresent())
 									 .addValue("p_visitors", request.getVisitors())
 									 
 									 .addValue("p_hostName", request.getHostName())
 									 .addValue("p_hostPhoneNo", request.getHostPhoneNo())
 									 .addValue("p_hostEmail", request.getHostEmail())
-									 .addValue("p_offering", request.getOffering());
+									 .addValue("p_offering", request.getOffering())
+									 .addValue("p_zone", request.getZone())
+									 .addValue("p_district", request.getDistrict());
 		
 		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
 		String responseCode = (String) resultSet.get("p_code");
@@ -781,13 +834,15 @@ public class AdminDaoImpl implements AdminDao {
 						   new SqlParameter("p_eventDate", Types.DATE),
 						   new SqlParameter("p_createdBy", Types.VARCHAR),
 						   new SqlParameter("p_sendTo", Types.VARCHAR),
+						   new SqlParameter("p_meetingLink", Types.VARCHAR),
 						   new SqlOutParameter("p_code", Types.VARCHAR),
 						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
 		
 		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_event", request.getEvent())
 									 .addValue("p_eventDate", request.getEventDate())
 									 .addValue("p_createdBy", request.getCreatedBy())
-									 .addValue("p_sendTo", request.getSendTo());
+									 .addValue("p_sendTo", request.getSendTo())
+									 .addValue("p_meetingLink", request.getMeetingLink());
 		
 		Map<String, Object> resultSet = calendarEvent.execute(inparam);
 		String responseCode = (String) resultSet.get("p_code");
@@ -1084,6 +1139,446 @@ public class AdminDaoImpl implements AdminDao {
 		
 		return response;
 	}
+
+	@Override
+	public Response createVisitor(WeeklyReport request) {
+		SimpleJdbcCall prayerRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		prayerRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".create_visitor")
+		.declareParameters(new SqlParameter("p_visitorName", Types.VARCHAR),
+						   new SqlParameter("p_visitorPhoneNo", Types.VARCHAR),
+						   new SqlParameter("p_visitorEmailAdd", Types.VARCHAR),
+						   new SqlParameter("p_visitorGender", Types.VARCHAR),
+						   new SqlParameter("p_leaderName", Types.VARCHAR),
+						   new SqlParameter("p_centre", Types.VARCHAR),
+						   new SqlParameter("p_area", Types.VARCHAR),
+						   new SqlParameter("p_zone", Types.VARCHAR),
+						   new SqlParameter("p_district", Types.VARCHAR),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_visitorName", request.getVisitorName())
+									 .addValue("p_visitorPhoneNo", request.getVisitorPhoneNo())
+									 .addValue("p_visitorEmailAdd", request.getVisitorEmail())
+									 .addValue("p_visitorGender", request.getVisitorGender())
+									 .addValue("p_leaderName", request.getLeaderName())
+									 .addValue("p_centre", request.getCentre())
+									 .addValue("p_area", request.getArea())
+									 .addValue("p_zone", request.getZone())
+									 .addValue("p_district", request.getDistrict());
+									 
+		
+		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
+
+	//////////////////////////////////////NO DATABASE
+	@Override
+	public Response createTraining(Training request) {
+		SimpleJdbcCall prayerRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		prayerRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".create_training")
+		.declareParameters(new SqlParameter("p_trainingName", Types.VARCHAR),
+						   new SqlParameter("p_trainingDescription", Types.VARCHAR),
+						   new SqlParameter("p_userName", Types.VARCHAR),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_trainingName", request.getTrainingName())
+									 .addValue("p_userName", request.getUserName())
+									 .addValue("p_trainingDescription", request.getTrainingDescription());
+									 
+		
+		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
+
+	@Override
+	public Response createCentre(Centre request) {
+		SimpleJdbcCall prayerRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		prayerRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".create_centre")
+		.declareParameters(new SqlParameter("p_centre", Types.VARCHAR),
+						   new SqlParameter("p_parentCentre", Types.VARCHAR),
+						   new SqlParameter("p_leader", Types.VARCHAR),
+						   new SqlParameter("p_userName", Types.VARCHAR),
+						   new SqlParameter("p_area", Types.VARCHAR),
+						   new SqlParameter("p_zone", Types.VARCHAR),
+						   new SqlParameter("p_district", Types.VARCHAR),
+						   new SqlParameter("p_centre_address", Types.VARCHAR),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_centre", request.getCentre())
+									 .addValue("p_parentCentre", request.getParentCentre())
+									 .addValue("p_leader", request.getLeaderInCharge())
+									 .addValue("p_userName", request.getUserName())
+									 .addValue("p_area", request.getArea())
+									 .addValue("p_zone", request.getZone())
+									 .addValue("p_district", request.getDistrict())
+									 .addValue("p_centre_address", request.getCentreAddress());
+									 
+		
+		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
+	
+	@Override
+	public Response createArea(Centre request) {
+		SimpleJdbcCall prayerRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		prayerRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".create_area")
+		.declareParameters(new SqlParameter("p_area", Types.VARCHAR),
+						   new SqlParameter("p_parentArea", Types.VARCHAR),
+						   new SqlParameter("p_leader", Types.VARCHAR),
+						   new SqlParameter("p_userName", Types.VARCHAR),
+						   new SqlParameter("p_zone", Types.VARCHAR),
+						   new SqlParameter("p_district", Types.VARCHAR),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_area", request.getCentre())
+									 .addValue("p_parentArea", request.getParentCentre())
+									 .addValue("p_leader", request.getLeaderInCharge())
+									 .addValue("p_userName", request.getUserName())
+									 .addValue("p_zone", request.getZone())
+									 .addValue("p_district", request.getDistrict());
+									 
+		
+		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
+	
+	@Override
+	public Response createZone(Centre request) {
+		SimpleJdbcCall prayerRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		prayerRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".create_zone")
+		.declareParameters(new SqlParameter("p_zone", Types.VARCHAR),
+						   new SqlParameter("p_parentZone", Types.VARCHAR),
+						   new SqlParameter("p_leader", Types.VARCHAR),
+						   new SqlParameter("p_userName", Types.VARCHAR),
+						   new SqlParameter("p_district", Types.VARCHAR),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_zone", request.getCentre())
+									 .addValue("p_parentZone", request.getParentCentre())
+									 .addValue("p_leader", request.getLeaderInCharge())
+									 .addValue("p_userName", request.getUserName())
+									 .addValue("p_district", request.getDistrict());
+									 
+		
+		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
+	
+	@Override
+	public Response createDistrict(Centre request) {
+		SimpleJdbcCall prayerRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		prayerRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".create_district")
+		.declareParameters(new SqlParameter("p_district", Types.VARCHAR),
+						   new SqlParameter("p_parentDistrict", Types.VARCHAR),
+						   new SqlParameter("p_leader", Types.VARCHAR),
+						   new SqlParameter("p_userName", Types.VARCHAR),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_district", request.getCentre())
+									 .addValue("p_parentDistrict", request.getParentCentre())
+									 .addValue("p_leader", request.getLeaderInCharge())
+									 .addValue("p_userName", request.getUserName());
+									 
+		
+		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
+
+	@Override
+	public Response createTestimony(Testimony request) {
+		SimpleJdbcCall prayerRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		prayerRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".create_testimony")
+		.declareParameters(new SqlParameter("p_centre", Types.VARCHAR),
+						   new SqlParameter("p_testifier", Types.VARCHAR),
+						   new SqlParameter("p_topic", Types.VARCHAR),
+						   new SqlParameter("p_testimony", Types.VARCHAR),
+						   new SqlParameter("p_userName", Types.VARCHAR),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_centre", request.getCentre())
+									 .addValue("p_testifier", request.getTestifierName())
+									 .addValue("p_topic", request.getTestimonyTopic())
+									 .addValue("p_testimony", request.getTestimony())
+									 .addValue("p_userName", request.getUserName());
+									 
+		
+		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
+
+	@Override
+	public Response createMessage(Message request) {
+		SimpleJdbcCall prayerRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		prayerRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".create_message")
+		.declareParameters(new SqlParameter("p_sender", Types.VARCHAR),
+						   new SqlParameter("p_sendTo", Types.VARCHAR),
+						   new SqlParameter("p_message_content", Types.VARCHAR),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_sender", request.getSender())
+									 .addValue("p_message_content", request.getMessage())
+									 .addValue("p_sendTo", request.getSendTo());
+									 
+		
+		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
+	
+	@Override
+	public Response createLegalDocumentDetail(SocialEvent request) {
+		SimpleJdbcCall prayerRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		prayerRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".legal_document")
+		.declareParameters(new SqlParameter("p_name", Types.VARCHAR),
+						   new SqlParameter("p_title", Types.VARCHAR),
+						   new SqlParameter("p_about", Types.VARCHAR),
+						   new SqlParameter("p_uploadFlag", Types.VARCHAR),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_name", request.getName())
+									 .addValue("p_title", request.getTopic())
+									 .addValue("p_about", request.getEvent())
+									 .addValue("p_uploadFlag", request.getUploadFlag());
+		
+		Map<String, Object> resultSet = prayerRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
+
+	@Override
+	public Response createLegalDocuments(DocManagerRequest docMangerRequest) {
+
+        SimpleJdbcCall create_save_documentSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        create_save_documentSimpleJdbcCall.withProcedureName(baseUtilityPackage + ".create_legal_document")
+                .withoutProcedureColumnMetaDataAccess().declareParameters(
+                new SqlParameter("p_doc_id", Types.VARCHAR),
+                new SqlParameter("p_document_name", Types.VARCHAR),
+                new SqlParameter("p_document_unique_id", Types.VARCHAR),
+                new SqlParameter("p_inputstream", Types.BLOB),
+                new SqlParameter("p_content_type", Types.VARCHAR),
+                new SqlParameter("p_document_length", Types.NUMERIC),
+                new SqlParameter("p_compressed", Types.NUMERIC),
+                new SqlParameter("p_username", Types.VARCHAR),
+                new SqlParameter("p_serverip", Types.VARCHAR),
+                new SqlParameter("p_topic", Types.VARCHAR),
+                new SqlOutParameter("p_code", Types.VARCHAR),
+                new SqlOutParameter("p_message", Types.VARCHAR))
+                .compile();
+
+        SqlLobValue xmlSerializedBlob = new SqlLobValue(docMangerRequest.getInputStream(), (int) docMangerRequest.getInputStreamLength());//, lobHandler);
+        // CLOB creation
+
+        LOGGER.info("xmlSerializedBlob"+xmlSerializedBlob);
+
+        SqlParameterSource inparams = new MapSqlParameterSource()
+                .addValue("p_doc_id", docMangerRequest.getDocumentID())
+                .addValue("p_document_name", docMangerRequest.getDocName())
+                .addValue("p_document_unique_id", docMangerRequest.getDocumentUniqueID())
+                .addValue("P_inputstream", xmlSerializedBlob)
+                .addValue("p_content_type", docMangerRequest.getFiletype())
+                .addValue("p_document_length", docMangerRequest.getInputStreamLength())
+                .addValue("p_compressed", docMangerRequest.isCompressed())
+                .addValue("p_username", docMangerRequest.getUserName())
+                .addValue("p_serverip", docMangerRequest.getServerIP())
+                .addValue("p_topic", docMangerRequest.getTopic());
+
+        Map<String, Object> returningResult = create_save_documentSimpleJdbcCall.execute(inparams);
+        String responseCode = (String) returningResult.get("p_code");
+        String validResponseCode = responseCode != null ? responseCode : "99";
+        String responseMsg = (String) returningResult.get("p_message");
+        String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+        Response response = new Response();
+        response.setResponseCode(validResponseCode);
+        response.setResponseMessage(validResponseMsg);
+
+        return response;
+	}
+	
+	@Override
+	public Response updateLegalDocument(SocialEvent request) {
+		SimpleJdbcCall incidentRequestJdbc = new SimpleJdbcCall(jdbcTemplate);
+		incidentRequestJdbc.withoutProcedureColumnMetaDataAccess().withProcedureName(baseUtilityPackage+".update_legal_document")
+		.declareParameters(new SqlParameter("p_legal_id", Types.NUMERIC),
+						   new SqlParameter("p_status", Types.VARCHAR),
+						   new SqlParameter("p_about", Types.VARCHAR),
+						   new SqlParameter("p_topic", Types.VARCHAR),
+						   new SqlParameter("p_name", Types.VARCHAR),
+						   new SqlOutParameter("p_code", Types.VARCHAR),
+						   new SqlOutParameter("p_message", Types.VARCHAR)).compile();
+		
+		SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_legal_id", request.getEventID())
+									 .addValue("p_status", request.getStatus())
+									 .addValue("p_about", request.getEvent())
+									 .addValue("p_topic", request.getTopic())
+									 .addValue("p_name", request.getName());
+		
+		Map<String, Object> resultSet = incidentRequestJdbc.execute(inparam);
+		String responseCode = (String) resultSet.get("p_code");
+		
+		String validResponseCode = responseCode != null ? responseCode : "99";
+		String responseMsg = (String) resultSet.get("p_message");
+		String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+		Response response = new Response();
+		response.setResponseCode(validResponseCode);
+		response.setResponseMessage(validResponseMsg);
+		
+		return response;
+	}
+	
+	@Override
+	public Response createProfilePicture(DocManagerRequest docMangerRequest) {
+
+        SimpleJdbcCall create_save_documentSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        create_save_documentSimpleJdbcCall.withProcedureName(baseUtilityPackage + ".create_profile_picture")
+                .withoutProcedureColumnMetaDataAccess().declareParameters(
+                new SqlParameter("p_doc_id", Types.VARCHAR),
+                new SqlParameter("p_document_name", Types.VARCHAR),
+                new SqlParameter("p_document_unique_id", Types.VARCHAR),
+                new SqlParameter("p_inputstream", Types.BLOB),
+                new SqlParameter("p_content_type", Types.VARCHAR),
+                new SqlParameter("p_document_length", Types.NUMERIC),
+                new SqlParameter("p_compressed", Types.NUMERIC),
+                new SqlParameter("p_username", Types.VARCHAR),
+                new SqlParameter("p_serverip", Types.VARCHAR),
+                new SqlOutParameter("p_code", Types.VARCHAR),
+                new SqlOutParameter("p_message", Types.VARCHAR))
+                .compile();
+
+        SqlLobValue xmlSerializedBlob = new SqlLobValue(docMangerRequest.getInputStream(), (int) docMangerRequest.getInputStreamLength());//, lobHandler);
+        // CLOB creation
+
+        LOGGER.info("xmlSerializedBlob"+xmlSerializedBlob);
+
+        SqlParameterSource inparams = new MapSqlParameterSource()
+                .addValue("p_doc_id", docMangerRequest.getDocumentID())
+                .addValue("p_document_name", docMangerRequest.getDocName())
+                .addValue("p_document_unique_id", docMangerRequest.getDocumentUniqueID())
+                .addValue("P_inputstream", xmlSerializedBlob)
+                .addValue("p_content_type", docMangerRequest.getFiletype())
+                .addValue("p_document_length", docMangerRequest.getInputStreamLength())
+                .addValue("p_compressed", docMangerRequest.isCompressed())
+                .addValue("p_username", docMangerRequest.getUserName())
+                .addValue("p_serverip", docMangerRequest.getServerIP());
+
+        Map<String, Object> returningResult = create_save_documentSimpleJdbcCall.execute(inparams);
+        String responseCode = (String) returningResult.get("p_code");
+        String validResponseCode = responseCode != null ? responseCode : "99";
+        String responseMsg = (String) returningResult.get("p_message");
+        String validResponseMsg = responseMsg != null ? responseMsg : "";
+
+        Response response = new Response();
+        response.setResponseCode(validResponseCode);
+        response.setResponseMessage(validResponseMsg);
+
+        return response;
+
+    }
 
 	
 }

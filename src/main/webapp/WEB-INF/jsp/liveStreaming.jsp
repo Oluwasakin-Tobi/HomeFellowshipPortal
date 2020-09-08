@@ -1,18 +1,17 @@
 <%@ include file="authheader.jsp"%>
 
+<main>
 
-<div class="content mt-3">
-	<!-- <div class="animated fadeIn"> -->
-	<div class="row">
 
-<div class="col-md-12">
-			<div class="card">
-				<div class="card-header">
-					<h2><strong class="card-title">Streaming</strong></h2>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-12">
+<div class="container-fluid">
+	<h1 class="mt-4">View Live Streaming</h1>
+	<ol class="breadcrumb mb-4">
+		<li class="breadcrumb-item"><a
+			href="<c:url value='/dashboard' />">Dashboard</a></li>
+		<li class="breadcrumb-item active">Live Streaming</li>
+	</ol>
+
+	<div class="col-md-12">
 			<div class="card">
 				<div class="card-body">
 					<div class="hero-btn">
@@ -24,5 +23,7 @@
 			</div>
 		</div>
 
-	</div>
 </div>
+</main>
+
+<%@ include file="footer.jsp"%>

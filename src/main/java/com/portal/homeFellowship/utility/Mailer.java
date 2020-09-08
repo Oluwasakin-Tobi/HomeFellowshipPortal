@@ -64,7 +64,7 @@ public class Mailer {
         session = Session.getInstance(mailServerProperties, 
         		new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("abtcoolb7@gmail.com", "08101899045");
+                return new PasswordAuthentication("deleajisebutu@gmail.com", "hotr2011");
             }
         });
 	}

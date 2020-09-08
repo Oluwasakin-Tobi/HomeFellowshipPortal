@@ -1,114 +1,106 @@
 <%@ include file="authheader.jsp"%>
 
+<main>
 
-<div class="content mt-3">
-	<div class="row">
 
-		<c:if test="${errorMessage != null}">
+<div class="container-fluid">
+	<h1 class="mt-4">Weekly Report</h1>
+	<ol class="breadcrumb mb-4">
+		<li class="breadcrumb-item"><a
+			href="<c:url value='/dashboard' />">Dashboard</a></li>
+		<li class="breadcrumb-item active">Weekly Centre Report</li>
+	</ol>
 
-			<div class="col-sm-4">
-				<div class="alert alert-danger alert-dismissable float-right">
-					<a class="alert-link" href="#"> <span class="alert-b"></span></a> <span
-						id="errshow alert-c">${errorMessage}</span> <a class="alert-link"
-						href="#"><span data-dismiss="alert" aria-label="close"
-						class="fa fa-times-circle alert-b float-right"></span></a>
-				</div>
+	<div class="col-md-12">
+		<div class="card shadow">
+			<div class="card-header">
+				<strong class="card-title">Weekly Centre Report</strong>
 			</div>
 
-		</c:if>
-		<c:if test="${successMessage != null}">
+			<div class="content mt-3">
+				<div class="row">
+					<div class="col-lg-12">
+						<h4>
+							<b>Query Report</b>
+						</h4>
+						<div class="col-md-12">
+							<hr />
+						</div>
 
+						<div class="card">
+							<div class="card-body" style="min-height: 100px;">
+								<c:url var="getWeeklyReport" value="/getWeeklyReport" />
+								<mvc:form method="POST" action="${getWeeklyReport}"
+									enctype="multipart/form-data" id="demo-form2"
+									modelAttribute="Filter" class="form-horizontal form-label-left">
 
-			<div class="col-sm-4">
-				<div class="alert alert-success alert-dismissable float-right">
-					<a class="alert-link" href="#"> <span class="alert-c"></span></a> <span
-						id="errshow alert-c">${successMessage}</span> <a
-						class="alert-link" href="#"><span data-dismiss="alert"
-						aria-label="close" class="fa fa-times-circle alert-b float-right"></span></a>
-				</div>
-			</div>
-
-		</c:if>
-
-		<div class="col-md-12">
-			<div class="card">
-				<div class="card-header">
-					<strong class="card-title">Weekly Report</strong>
-				</div>
-
-				<div class="content mt-3">
-					<div class="row">
-						<div class="col-lg-12">
-							<h4>
-								<b>Query Report</b>
-							</h4>
-							<div class="col-md-12">
-								<hr />
-							</div>
-
-							<div class="card">
-								<div class="card-body" style="min-height: 100px;">
-									<c:url var="getWeeklyReport"
-										value="/getWeeklyReport" />
-									<mvc:form method="POST" action="${getWeeklyReport}"
-										enctype="multipart/form-data" id="demo-form2"
-										modelAttribute="Filter"
-										class="form-horizontal form-label-left">
-
-										<div class="row">
-
-											<div class=" col-md-6">
-												<label for="disabledTextInput">Date From*</label> <input id="dateFromStr" name="dateFromStr" type="date"
-													path="dateFromStr" class="form-control" required/>
-											</div>
-											<div class=" col-md-6">
-												<label for="disabledTextInput">Date To*</label> <input id="dateToStr" name="dateToStr" type="date"
-													path="dateToStr" class="form-control" required/>
+									<div class="row">
+										<div class="col-md-6">
+											<label for="disabledTextInput">Centre*</label> <select
+												id="centre" name="centre" path="centre" class="form-control">
+												<option value="">Select option</option>
+												<option value="LOVE">LOVE</option>
+												<option value="PEACE">PEACE</option>
+												<option value="JOY">JOY</option>
+												<option value="FAITH">FAITH</option>
+											</select>
+											<div class="has-error" style="color: red">
+												<mvc:errors path="centre" class="help-inline" />
 											</div>
 										</div>
+										<BR>
 
-										<button type="submit" class="btn btn-success">Submit</button>
+										<div class=" col-md-6">
+											<label for="disabledTextInput">Date From*</label> <input
+												id="dateFromStr" name="dateFromStr" type="date"
+												path="dateFromStr" class="form-control" required />
+										</div>
+										<div class=" col-md-6">
+											<label for="disabledTextInput">Date To*</label> <input
+												id="dateToStr" name="dateToStr" type="date" path="dateToStr"
+												class="form-control" required />
+										</div>
+									</div>
 
-									</mvc:form>
-								</div>
+									<button type="submit" class="btn btn-success">Submit</button>
+
+								</mvc:form>
 							</div>
 						</div>
-						<!-- /# column -->
 					</div>
-				</div>
-
-
-				<div class="card-body">
-					<table id="example"
-						class="table table-striped table-bordered">
-						<thead>
-							<tr  style="font-weight: bold;">
-								<th>Centre</th>
-								<th>Centre Address</th>
-								<th>Host Name</th>
-								<th>Leader's Name</th>
-								<th>Offering</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${weeklyReport}" var="response">
-								<tr>
-									<td>${response.centre}</td>
-									<td>${response.centreAddress}</td>
-									<td>${response.hostName}</td>
-									<td>${response.leaderName}</td>
-									<td>${response.offering}</td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+					<!-- /# column -->
 				</div>
 			</div>
+
+			<div class="card-body">
+				<table id="example" class="table table-striped table-bordered">
+					<thead>
+						<tr style="font-weight: bold;">
+							<th>Centre</th>
+							<th>Centre Address</th>
+							<th>Host Name</th>
+							<th>Leader's Name</th>
+							<th>Offering</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${weeklyReport}" var="response">
+							<tr>
+								<td>${response.centre}</td>
+								<td>${response.centreAddress}</td>
+								<td>${response.hostName}</td>
+								<td>${response.leaderName}</td>
+								<td>${response.offering}</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
 		</div>
-
 	</div>
-</div>
 
+</div>
+</main>
 
 <script>
 	$(document).ready(function() {
@@ -119,5 +111,6 @@
 			responsive : true
 		});
 	});
-
 </script>
+
+<%@ include file="footer.jsp"%>

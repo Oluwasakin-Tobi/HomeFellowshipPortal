@@ -1,7 +1,12 @@
 package com.portal.homeFellowship.model;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDetails implements Serializable{
 	
@@ -57,7 +62,100 @@ public class UserDetails implements Serializable{
 		private String state;
 		private String country;
 		
+		private MultipartFile profilePicture;
 		
+		private String adminTeam;
+		
+		private String baptised;
+		private String dateBaptised;
+		private String typeOfBaptism;
+		private String lastChurch;
+		private String lastChurchAddress;
+		private String dateBornAgain;
+		private String userTitle;
+		private String uniqueID;
+		
+		@JsonIgnore
+		private InputStream inputStream;
+		private String inputStreamStr;
+		
+		
+		
+		
+		
+		
+		public String getUniqueID() {
+			return uniqueID;
+		}
+		public void setUniqueID(String uniqueID) {
+			this.uniqueID = uniqueID;
+		}
+		public String getUserTitle() {
+			return userTitle;
+		}
+		public void setUserTitle(String userTitle) {
+			this.userTitle = userTitle;
+		}
+		public InputStream getInputStream() {
+			return inputStream;
+		}
+		public void setInputStream(InputStream inputStream) {
+			this.inputStream = inputStream;
+		}
+		public String getInputStreamStr() {
+			return inputStreamStr;
+		}
+		public void setInputStreamStr(String inputStreamStr) {
+			this.inputStreamStr = inputStreamStr;
+		}
+		public String getBaptised() {
+			return baptised;
+		}
+		public void setBaptised(String baptised) {
+			this.baptised = baptised;
+		}
+		public String getDateBaptised() {
+			return dateBaptised;
+		}
+		public void setDateBaptised(String dateBaptised) {
+			this.dateBaptised = dateBaptised;
+		}
+		public String getTypeOfBaptism() {
+			return typeOfBaptism;
+		}
+		public void setTypeOfBaptism(String typeOfBaptism) {
+			this.typeOfBaptism = typeOfBaptism;
+		}
+		public String getLastChurch() {
+			return lastChurch;
+		}
+		public void setLastChurch(String lastChurch) {
+			this.lastChurch = lastChurch;
+		}
+		public String getLastChurchAddress() {
+			return lastChurchAddress;
+		}
+		public void setLastChurchAddress(String lastChurchAddress) {
+			this.lastChurchAddress = lastChurchAddress;
+		}
+		public String getDateBornAgain() {
+			return dateBornAgain;
+		}
+		public void setDateBornAgain(String dateBornAgain) {
+			this.dateBornAgain = dateBornAgain;
+		}
+		public String getAdminTeam() {
+			return adminTeam;
+		}
+		public void setAdminTeam(String adminTeam) {
+			this.adminTeam = adminTeam;
+		}
+		public MultipartFile getProfilePicture() {
+			return profilePicture;
+		}
+		public void setProfilePicture(MultipartFile profilePicture) {
+			this.profilePicture = profilePicture;
+		}
 		public String getOtp() {
 			return otp;
 		}
@@ -317,19 +415,26 @@ public class UserDetails implements Serializable{
 					+ ", operationUser=" + operationUser + ", userFullName=" + userFullName + ", userEmailAdd="
 					+ userEmailAdd + ", authorisedUserFlag=" + authorisedUserFlag + ", userName=" + userName
 					+ ", serverIP=" + serverIP + ", createdBy=" + createdBy + ", dateCreated=" + dateCreated
-					+ ", phoneNo=" + phoneNo + ", affiliateCode=" + affiliateCode + ", editedFlag=" + editedFlag
-					+ ", editedRoleFlag=" + editedRoleFlag + ", otp=" + otp + ", surname=" + surname + ", firstName="
-					+ firstName + ", middleName=" + middleName + ", gender=" + gender + ", dateOfBirth=" + dateOfBirth
-					+ ", weddingAnniversary=" + weddingAnniversary + ", dateJoinedHOTR=" + dateJoinedHOTR
-					+ ", dateJoinedCITH=" + dateJoinedCITH + ", completedFindingTheRock=" + completedFindingTheRock
-					+ ", completedSpiritualAuthority=" + completedSpiritualAuthority + ", homeAddress=" + homeAddress
-					+ ", placeOfWork=" + placeOfWork + ", placeOfWorkAddress=" + placeOfWorkAddress
-					+ ", churchDepartment=" + churchDepartment + ", occupation=" + occupation
-					+ ", dateJoinedChurchDept=" + dateJoinedChurchDept + ", maritalStatus=" + maritalStatus
-					+ ", spouseName=" + spouseName + ", spousePhoneNumber=" + spousePhoneNumber + ", centre=" + centre
-					+ ", area=" + area + ", zone=" + zone + ", district=" + district + ", state=" + state + ", country="
-					+ country + "]";
+					+ ", password=" + password + ", phoneNo=" + phoneNo + ", affiliateCode=" + affiliateCode
+					+ ", editedFlag=" + editedFlag + ", editedRoleFlag=" + editedRoleFlag + ", otp=" + otp
+					+ ", surname=" + surname + ", firstName=" + firstName + ", middleName=" + middleName + ", gender="
+					+ gender + ", dateOfBirth=" + dateOfBirth + ", weddingAnniversary=" + weddingAnniversary
+					+ ", dateJoinedHOTR=" + dateJoinedHOTR + ", dateJoinedCITH=" + dateJoinedCITH
+					+ ", completedFindingTheRock=" + completedFindingTheRock + ", completedSpiritualAuthority="
+					+ completedSpiritualAuthority + ", homeAddress=" + homeAddress + ", placeOfWork=" + placeOfWork
+					+ ", placeOfWorkAddress=" + placeOfWorkAddress + ", churchDepartment=" + churchDepartment
+					+ ", occupation=" + occupation + ", dateJoinedChurchDept=" + dateJoinedChurchDept
+					+ ", maritalStatus=" + maritalStatus + ", spouseName=" + spouseName + ", spousePhoneNumber="
+					+ spousePhoneNumber + ", centre=" + centre + ", area=" + area + ", zone=" + zone + ", district="
+					+ district + ", state=" + state + ", country=" + country + ", profilePicture=" + profilePicture
+					+ ", adminTeam=" + adminTeam + ", baptised=" + baptised + ", dateBaptised=" + dateBaptised
+					+ ", typeOfBaptism=" + typeOfBaptism + ", lastChurch=" + lastChurch + ", lastChurchAddress="
+					+ lastChurchAddress + ", dateBornAgain=" + dateBornAgain + ", userTitle=" + userTitle
+					+ ", uniqueID=" + uniqueID + ", inputStream=" + inputStream + ", inputStreamStr=" + inputStreamStr
+					+ "]";
 		}
+		
+
 		
 
 	

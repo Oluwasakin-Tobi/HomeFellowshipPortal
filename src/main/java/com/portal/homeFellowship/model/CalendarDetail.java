@@ -17,11 +17,20 @@ public class CalendarDetail implements Serializable{
 	private String sendTo;
 	private Date eventDateD;
 	private String sendToUser;
+	private String meetingLink;
 	
 	
 	
 	
 	
+	
+	
+	public String getMeetingLink() {
+		return meetingLink;
+	}
+	public void setMeetingLink(String meetingLink) {
+		this.meetingLink = meetingLink;
+	}
 	public String getSendToUser() {
 		return sendToUser;
 	}
@@ -74,7 +83,7 @@ public class CalendarDetail implements Serializable{
 	public String toString() {
 		return "CalendarDetail [event=" + event + ", eventDate=" + eventDate + ", status=" + status + ", createdBy="
 				+ createdBy + ", calendarID=" + calendarID + ", sendTo=" + sendTo + ", eventDateD=" + eventDateD
-				+ ", sendToUser=" + sendToUser + "]";
+				+ ", sendToUser=" + sendToUser + ", meetingLink=" + meetingLink + "]";
 	}
 	
 

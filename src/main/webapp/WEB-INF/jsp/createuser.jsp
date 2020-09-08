@@ -52,15 +52,20 @@
 									</div>
 								</div>
 
-								<%-- <div class="col-md-6">
-									<label for="disabledTextInput">Full Name*</label> <input
-										class="form-control" type="text" name="userFullName"
-										id="userFullName" value="${user.userFullName}"
-										path="userFullName" required autocomplete="off">
-									<div class="has-error" style="color: red">
-										<mvc:errors path="userFullName" class="help-inline" />
-									</div>
-								</div> --%>
+								<div class="col-md-6">
+									<label for="disabledTextInput">Title*</label>
+										<select
+											id="userTitle" name="userTitle" path="userTitle"
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="PASTOR">PASTOR</option>
+											<option value="DEACON">DEACON</option>
+											<option value="DEACONESS">DEACONESS</option>
+											<option value="MR">MR</option>
+											<option value="MRS">MRS</option>
+											<option value="MISS">MISS</option>
+										</select>
+								</div>
 							</div>
 							<br>
 							<div class="row">
@@ -88,6 +93,23 @@
 										<mvc:errors path="userRoles" class="help-inline" />
 									</div>
 								</div>
+								
+								<div class="col-md-6" ng-show="roleAction=='ADMIN'">
+									<label for="disabledTextInput">Admin Team*</label>
+										<select
+											id="adminTeam" name="adminTeam" path="adminTeam" ng-required="roleAction=='ADMIN'"
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="">None</option>
+											<option value="Secretariat">Secretariat</option>
+											<option value="Discipleship">Discipleship</option>
+											<option value="Support System">Support System</option>
+										</select>
+									<div class="has-error" style="color: red">
+										<mvc:errors path="adminTeam" class="help-inline" />
+									</div>
+								</div>
+								
 							</div>
 							
 							<div class="row">
@@ -364,11 +386,62 @@
 									</div>
 								</div>
 								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Are you a Baptised?*</label> <select
+											id="baptised" name="baptised" path="baptised" ng-model="baptisedStatus" required
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="YES">YES</option>
+											<option value="NO">NO</option>
+										</select>
+								</div>
+							
+							<div class="col-md-6" ng-show="baptisedStatus == 'YES'">
+									<label for="disabledTextInput">Date Baptised*</label> <input
+										class="form-control" type="date" name="dateBaptised" onchange="checkDateWeddingAnniversary()"
+										id="dateBaptised" value="${user.dateBaptised}" path="dateBaptised" ng-required="baptisedStatus == 'YES'" 
+										path="dateBaptised" autocomplete="off">
+								</div>
+								
+								<div class="col-md-6" ng-show="baptisedStatus == 'YES'">
+									<label for="disabledTextInput">Type of Baptism*</label> <select
+											id="typeOfBaptism" name="typeOfBaptism" path="typeOfBaptism" ng-required="baptisedStatus == 'YES'" 
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="By Immersion">By Immersion</option>
+											<option value="By Aspersion">By Aspersion(Sprinkling of waters)</option>
+										</select>
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Name of last church before HOTR*</label> <input
+										class="form-control" type="text" name="lastChurch"
+										id="lastChurch" value="${user.lastChurch}" required
+										path="lastChurch" autocomplete="off">
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Last Church Address*</label> <input
+										class="form-control" type="text" name="lastChurchAddress"
+										id="lastChurchAddress" value="${user.lastChurchAddress}" required
+										path="lastChurchAddress" autocomplete="off">
+								</div>
+								
+								<div class="col-md-6">
+									<label for="disabledTextInput">Date Born-Again*</label> <input
+										class="form-control" type="date" name="dateBornAgain"
+										id="dateBornAgain" value="${user.dateBornAgain}" required
+										path="dateBornAgain" required autocomplete="off" onchange="checkDateWeddingAnniversary()">
+									<div class="has-error" style="color: red">
+										<mvc:errors path="dateBornAgain" class="help-inline" />
+									</div>
+								</div>
+								
 							</div>
 		
 		<div class="row">
 							
-							<div class="col-md-6">
+							<%-- <div class="col-md-6">
 									<label for="disabledTextInput">Centre*</label>
 										<select
 											id="centre" name="centre" path="centre"
@@ -382,36 +455,100 @@
 									<div class="has-error" style="color: red">
 										<mvc:errors path="centre" class="help-inline" />
 									</div>
+								</div> --%>
+								
+								<div class=" col-md-6">
+									<label for="disabledTextInput">Centre*</label> <select
+										id="centre" name="centre" path="centre"
+										class="form-control" required>
+										<option value="">Select option</option>
+										<c:forEach items="${centreDetails}" varStatus="current"
+											var="centreDetails">
+											<option value="${centreDetails.centre}">${centreDetails.centre}</option>
+										</c:forEach>
+									</select>
 								</div>
 								
-								<div class="col-md-6">
-									<label for="disabledTextInput">Area*</label> <input
-										class="form-control" type="text" name="area"
-										id="area" value="${user.area}"
-										path="area" required autocomplete="off">
+								<%-- <div class="col-md-6">
+									<label for="disabledTextInput">Area*</label>
+										<select
+											id="area" name="area" path="area"
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="AREA1">AREA1</option>
+											<option value="AREA2">AREA2</option>
+											<option value="AREA3">AREA3</option>
+										</select>
 									<div class="has-error" style="color: red">
 										<mvc:errors path="area" class="help-inline" />
 									</div>
+								</div> --%>
+								
+								<div class=" col-md-6">
+									<label for="disabledTextInput">Area*</label> <select
+										id="area" name="area" path="area"
+										class="form-control" required>
+										<option value="">Select option</option>
+										<c:forEach items="${areaDetails}" varStatus="current"
+											var="areaDetails">
+											<option value="${areaDetails.centre}">${areaDetails.centre}</option>
+										</c:forEach>
+									</select>
 								</div>
 								
-								<div class="col-md-6">
-									<label for="disabledTextInput">Zone*</label> <input
-										class="form-control" type="text" name="zone"
-										id="zone" value="${user.zone}"
-										path="zone" required autocomplete="off">
+								
+								<%-- <div class="col-md-6">
+									<label for="disabledTextInput">Zone*</label>
+										<select
+											id="zone" name="zone" path="zone"
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="ZONE1">ZONE1</option>
+											<option value="ZONE2">ZONE2</option>
+											<option value="ZONE3">ZONE3</option>
+										</select>
 									<div class="has-error" style="color: red">
 										<mvc:errors path="zone" class="help-inline" />
 									</div>
+								</div> --%>
+								
+								<div class=" col-md-6">
+									<label for="disabledTextInput">Zone*</label> <select
+										id="zone" name="zone" path="zone"
+										class="form-control" required>
+										<option value="">Select option</option>
+										<c:forEach items="${zoneDetails}" varStatus="current"
+											var="zoneDetails">
+											<option value="${zoneDetails.centre}">${zoneDetails.centre}</option>
+										</c:forEach>
+									</select>
 								</div>
 								
-								<div class="col-md-6">
-									<label for="disabledTextInput">District*</label> <input
-										class="form-control" type="text" name="district"
-										id="district" value="${user.district}"
-										path="district" required autocomplete="off">
+								<%-- <div class="col-md-6">
+									<label for="disabledTextInput">District*</label>
+										<select
+											id="district" name="district" path="district"
+											class="form-control">
+											<option value="">Select option</option>
+											<option value="DISTRICT1">DISTRICT1</option>
+											<option value="DISTRICT2">DISTRICT2</option>
+											<option value="DISTRICT3">DISTRICT3</option>
+										</select>
 									<div class="has-error" style="color: red">
 										<mvc:errors path="district" class="help-inline" />
 									</div>
+								</div> --%>
+								
+								<div class=" col-md-6">
+									<label for="disabledTextInput">District*</label> <select
+										id="district" name="district" path="district"
+										class="form-control" required>
+										<option value="">Select option</option>
+										<c:forEach items="${districtDetails}" varStatus="current"
+											var="districtDetails">
+											<option value="${districtDetails.centre}">${districtDetails.centre}</option>
+										</c:forEach>
+									</select>
 								</div>
 								
 								<div class="col-md-6">
@@ -424,7 +561,7 @@
 									</div>
 								</div>
 								
-								<div class="col-md-6">
+								<%-- <div class="col-md-6">
 									<label for="disabledTextInput">Country*</label> <input
 										class="form-control" type="text" name="country"
 										id="country" value="${user.country}"
@@ -432,6 +569,18 @@
 									<div class="has-error" style="color: red">
 										<mvc:errors path="country" class="help-inline" />
 									</div>
+								</div> --%>
+								
+								<div class=" col-md-6">
+									<label for="disabledTextInput">Country*</label> <select
+										id="country" name="country" path="country"
+										class="form-control" required>
+										<option value="">Select option</option>
+										<c:forEach items="${country}" varStatus="current"
+											var="country">
+											<option value="${country.countryName}">${country.countryName}</option>
+										</c:forEach>
+									</select>
 								</div>
 								
 							</div>
@@ -439,20 +588,12 @@
 
 							<div class="row">
 
-								<c:if test="${groupAdmin == true}">
-									<div class="form-group col-md-6"
-										ng-show="roleAction != 'GROUPADMIN'">
-										<label for="exampleFormControlSelect1">Roles*</label> <select
-											id="affiliateCode" name="affiliateCode" path="affiliateCode"
-											class="form-control" ng-required="roleAction != 'GROUPADMIN'">
-											<option value="">Select option</option>
-											<c:forEach items="${userroles}" varStatus="current"
-											var="userrole">
-											<option value="${userrole.roleName}">${userrole.roleName}</option>
-										</c:forEach> ${selectedUserrole}
-										</select>
-									</div>
-								</c:if>
+								<div class="col-md-6">
+									<label class="bmd-label-floating">Profile Picture</label> <input
+										class="form-control" type="file" name="profilePicture" id="profilePicture" required
+										value="${request.profilePicture}" path="profilePicture" accept="image/*"
+										autocomplete="off">
+								</div>
 
 							</div>
 							<br>
@@ -668,7 +809,7 @@ function checkDateOfBirth(){
 $('#sendOTP')
 .on(
 		'click',
-		function(e) {alert("Successfully Fetched 1");
+		function(e) {//alert("Successfully Fetched 1");
 						var phoneNo = $('#phoneNo').val();
 
 						if (phoneNo == "") {
@@ -695,7 +836,7 @@ $('#sendOTP')
 											 if (data != null) {
 
 				                                    if (response2 != "")
-				                                    alert("Successfully Fetched");
+				                                    alert("OTP Successfully Sent");
 				                                    $('#otp').prop('disabled',false);
 				                                    $('#validate').prop('disabled',false);
 				                                    //$('#phoneOTP').prop('type','text');
@@ -783,4 +924,4 @@ $('#validate')
 </script> 
 
 
-<script src="<c:url value='/js/app.js' />"></script>
+ <script src="<c:url value='/js/app.js' />"></script> 

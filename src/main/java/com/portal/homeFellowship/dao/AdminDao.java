@@ -69,5 +69,29 @@ public interface AdminDao {
 
 	Response authenticateUser(String username, String pwd);
 
+	Response createVisitor(WeeklyReport request);
+
+	Response createTraining(Training request);
+
+	Response createCentre(Centre request);
+
+	Response createArea(Centre request);
+
+	Response createZone(Centre request);
+
+	Response createDistrict(Centre request);
+
+	Response createTestimony(Testimony request);
+
+	Response createMessage(Message request);
+
+	Response createLegalDocumentDetail(SocialEvent request);
+
+	Response createLegalDocuments(DocManagerRequest docMangerRequest);
+
+	Response updateLegalDocument(SocialEvent request);
+
+	Response createProfilePicture(DocManagerRequest docMangerRequest);
+
 	
 }

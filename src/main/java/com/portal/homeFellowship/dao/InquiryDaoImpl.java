@@ -81,6 +81,13 @@ public class InquiryDaoImpl implements InquiryDao {
 						user.setFirstName(rs.getString("FIRST_NAME"));
 						user.setSurname(rs.getString("SURNAME"));
 						user.setPassword(rs.getString("USER_PASSWORD"));
+						user.setCentre(rs.getString("CENTRE"));
+						
+						LobHandler lobHandler = new DefaultLobHandler();
+						user.setInputStream(lobHandler.getBlobAsBinaryStream(rs, 61));
+						
+						String returnedEncodedBase64String = BasicUtil.getStringFromInputStream(user.getInputStream());
+						user.setInputStreamStr(returnedEncodedBase64String);
 
 						return user;
 
@@ -220,10 +227,11 @@ public class InquiryDaoImpl implements InquiryDao {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<UserDetails> getUserDetails(String username) {
+	public List<UserDetails> getUserDetails(String username, String role) {
 		SimpleJdbcCall getUserDetails = new SimpleJdbcCall(jdbcTemplate);
 		getUserDetails.withProcedureName(baseUtilityPackage + ".get_user_detail").withoutProcedureColumnMetaDataAccess()
 				.declareParameters(new SqlParameter("p_username", Types.VARCHAR),
+						new SqlParameter("p_role", Types.VARCHAR),
 						new SqlOutParameter("r_details", Types.REF_CURSOR))
 				.returningResultSet("r_details", new RowMapper<UserDetails>() {
 
@@ -240,7 +248,8 @@ public class InquiryDaoImpl implements InquiryDao {
 
 		getUserDetails.compile();
 
-		SqlParameterSource inparams = new MapSqlParameterSource().addValue("p_username", username);
+		SqlParameterSource inparams = new MapSqlParameterSource().addValue("p_username", username)
+				.addValue("p_role", role);
 
 		Map<String, Object> returningResultSet = getUserDetails.execute(inparams);
 
@@ -385,7 +394,7 @@ public class InquiryDaoImpl implements InquiryDao {
 					public PrayerRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
 						PrayerRequest request = new PrayerRequest();
 						request.setPrayerId(rs.getString("prayer_id"));
-						request.setStatus(rs.getString("status"));
+						request.setStatus(rs.getString("status")==""||rs.getString("status")==null?"NOT SHARED":rs.getString("status"));
 						request.setName(rs.getString("requester"));
 						request.setPrayer(rs.getString("prayer_request"));
 						return request;
@@ -452,9 +461,10 @@ public class InquiryDaoImpl implements InquiryDao {
 						Announcement request = new Announcement();
 						request.setName(rs.getString("REQUESTER"));
 						request.setAnnounce(rs.getString("ANNOUNCEMENT"));
-						request.setCategory(rs.getString("CATEGORY_ID").replace(",", ""));
+						request.setCategory((rs.getString("CATEGORY_ID").replace(",", "")).contains("MEETING")?rs.getString("MEETING_TYPE"):rs.getString("CATEGORY_ID").replace(",", ""));
 						request.setEventDate(rs.getString("EVENT_DATE"));
 						request.setMeetingLink(rs.getString("MEETING_LINK"));
+						//request.setMeetingType(rs.getString("MEETING_TYPE"));
 						return request;
 					}
 				});
@@ -728,6 +738,7 @@ public class InquiryDaoImpl implements InquiryDao {
 			get_user_profileSimpleJdbcCall.withProcedureName(baseUtilityPackage + ".get_userto_sendreminder")
 					.withoutProcedureColumnMetaDataAccess().declareParameters(
 							new SqlParameter("p_value", Types.VARCHAR), 
+							new SqlParameter("p_value_user", Types.VARCHAR), 
 							new SqlOutParameter("r_details", Types.REF_CURSOR))
 					.returningResultSet("r_details", new RowMapper<UserDetails>() {
 						@Override
@@ -756,11 +767,13 @@ public class InquiryDaoImpl implements InquiryDao {
 
 			SqlParameterSource inParams = new MapSqlParameterSource().addValue("p_value", value).addValue("p_value_user", user);
 
+			LOGGER.info("Hereresp  ");
 			Map<String, Object> returningResultSet = get_user_profileSimpleJdbcCall.execute(inParams);
 
 
 			List<UserDetails> response = (List<UserDetails>) returningResultSet.get("r_details");
 
+			LOGGER.info("Hereresp  "+response);
 			return response == null || response.isEmpty() ? new ArrayList<>() : response;
 
 		}
@@ -939,9 +952,9 @@ public class InquiryDaoImpl implements InquiryDao {
 					});
 
 			getIncident.compile();
-			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFrom())
-					.addValue("p_to", request.getDateTo())
-					.addValue("p_value", request.getDateToStr());
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFromStr())
+					.addValue("p_to", request.getDateToStr())
+					.addValue("p_value", request.getCentre());
 
 			Map<String, Object> returningResultSet = getIncident.execute(inparam);
 
@@ -980,8 +993,8 @@ public class InquiryDaoImpl implements InquiryDao {
 					});
 
 			getIncident.compile();
-			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFrom())
-					.addValue("p_to", request.getDateTo())
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFromStr())
+					.addValue("p_to", request.getDateToStr())
 					.addValue("p_value", request.getDateToStr());
 
 			Map<String, Object> returningResultSet = getIncident.execute(inparam);
@@ -1034,8 +1047,8 @@ public class InquiryDaoImpl implements InquiryDao {
 					});
 
 			getIncident.compile();
-			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFrom())
-					.addValue("p_to", request.getDateTo())
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFromStr())
+					.addValue("p_to", request.getDateToStr())
 					.addValue("p_value", request.getDateToStr());
 
 			Map<String, Object> returningResultSet = getIncident.execute(inparam);
@@ -1069,6 +1082,620 @@ public class InquiryDaoImpl implements InquiryDao {
 			return response;
 		}
 
+		
+		@SuppressWarnings("all")
+		@Override
+		public List<WeeklyReport> getCentreReport(Filter request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_centre_report")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_from", Types.DATE),
+							new SqlParameter("p_to", Types.DATE),
+							new SqlParameter("p_centre", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<WeeklyReport>() {
+
+						@Override
+						public WeeklyReport mapRow(ResultSet rs, int rowNum) throws SQLException {
+							WeeklyReport request = new WeeklyReport();
+//							request.setAdultPresent(rs.getString("ADULT_PRESENT"));
+//							request.setArea(rs.getString("AREA"));
+//							request.setCentre(rs.getString("CENTRE"));
+//							request.setCentreAddress(rs.getString("CENTRE_ADDRESS"));
+//							request.setChildPresent(rs.getString("CHILD_PRESENT"));
+//							
+//							request.setHostName(rs.getString("HOST_NAME"));
+//							request.setLeaderName(rs.getString("LEADER_NAME"));
+//							request.setVisitors(rs.getString("VISITORS"));
+//							request.setOffering(rs.getString("OFFERING"));
+							
+							request.setCentre(rs.getString(1));
+							request.setCentreAddress(rs.getString(2));
+							request.setHostName(rs.getString(3));
+							request.setLeaderName(rs.getString(4));
+							request.setOffering(rs.getString(5));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFrom())
+					.addValue("p_to", request.getDateTo())
+					.addValue("p_centre", request.getCentre());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<WeeklyReport> response = (List<WeeklyReport>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+
+		@SuppressWarnings("all")
+		@Override
+		public List<WeeklyReport> getAreaReport(Filter request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_area_report")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_from", Types.DATE),
+							new SqlParameter("p_to", Types.DATE),
+							new SqlParameter("p_area", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<WeeklyReport>() {
+
+						@Override
+						public WeeklyReport mapRow(ResultSet rs, int rowNum) throws SQLException {
+							WeeklyReport request = new WeeklyReport();
+							
+							request.setArea(rs.getString(1));
+							request.setLeaderName(rs.getString(2));
+							request.setOffering(rs.getString(3));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFrom())
+					.addValue("p_to", request.getDateTo())
+					.addValue("p_area", request.getArea());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<WeeklyReport> response = (List<WeeklyReport>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+
+
+		@SuppressWarnings("all")
+		@Override
+		public List<WeeklyReport> getZoneReport(Filter request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_zone_report")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_from", Types.DATE),
+							new SqlParameter("p_to", Types.DATE),
+							new SqlParameter("p_zone", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<WeeklyReport>() {
+
+						@Override
+						public WeeklyReport mapRow(ResultSet rs, int rowNum) throws SQLException {
+							WeeklyReport request = new WeeklyReport();
+//							request.setAdultPresent(rs.getString("ADULT_PRESENT"));
+//							request.setArea(rs.getString("AREA"));
+//							request.setCentre(rs.getString("CENTRE"));
+//							request.setCentreAddress(rs.getString("CENTRE_ADDRESS"));
+//							request.setChildPresent(rs.getString("CHILD_PRESENT"));
+//							
+//							request.setHostName(rs.getString("HOST_NAME"));
+//							request.setLeaderName(rs.getString("LEADER_NAME"));
+//							request.setVisitors(rs.getString("VISITORS"));
+//							request.setOffering(rs.getString("OFFERING"));
+							
+							request.setZone(rs.getString(1));
+							request.setLeaderName(rs.getString(2));
+							request.setOffering(rs.getString(3));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFrom())
+					.addValue("p_to", request.getDateTo())
+					.addValue("p_zone", request.getZone());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<WeeklyReport> response = (List<WeeklyReport>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+
+
+		@SuppressWarnings("all")
+		@Override
+		public List<WeeklyReport> getDistrictReport(Filter request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_district_report")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_from", Types.DATE),
+							new SqlParameter("p_to", Types.DATE),
+							new SqlParameter("p_district", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<WeeklyReport>() {
+
+						@Override
+						public WeeklyReport mapRow(ResultSet rs, int rowNum) throws SQLException {
+							WeeklyReport request = new WeeklyReport();
+							
+							request.setDistrict(rs.getString(1));
+							request.setLeaderName(rs.getString(2));
+							request.setOffering(rs.getString(3));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFrom())
+					.addValue("p_to", request.getDateTo())
+					.addValue("p_district", request.getDistrict());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<WeeklyReport> response = (List<WeeklyReport>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+
+
+		@SuppressWarnings("all")
+		@Override
+		public List<WeeklyReport> getVisitorDetail(Filter request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_visitor_detail")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_from", Types.DATE),
+							new SqlParameter("p_to", Types.DATE),
+							new SqlParameter("p_type", Types.VARCHAR),
+							new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<WeeklyReport>() {
+
+						@Override
+						public WeeklyReport mapRow(ResultSet rs, int rowNum) throws SQLException {
+							WeeklyReport request = new WeeklyReport();
+							
+							request.setVisitorName(rs.getString("VISITOR_NAME"));
+							request.setVisitorEmail(rs.getString("VISITOR_EMAIL"));
+							request.setVisitorPhoneNo(rs.getString("VISITOR_PHONE_NO"));
+							request.setVisitorGender(rs.getString("VISITOR_GENDER"));
+							request.setCentre(rs.getString("CENTRE"));
+							request.setArea(rs.getString("AREA"));
+							request.setZone(rs.getString("ZONE"));
+							request.setDistrict(rs.getString("DISTRICT"));
+							request.setDateCreated(MARSHARLLERDATEFORMAT.format(rs.getDate("DATE_CREATED")));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_from", request.getDateFrom())
+					.addValue("p_to", request.getDateTo())
+					.addValue("p_type", request.getType())
+					.addValue("p_value", request.getValue());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<WeeklyReport> response = (List<WeeklyReport>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+
+		
+		///////////////////////////////NO DATABASE YET
+		@SuppressWarnings("all")
+		@Override
+		public List<Training> getTraining(Training training) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_training")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<Training>() {
+
+						@Override
+						public Training mapRow(ResultSet rs, int rowNum) throws SQLException {
+							Training request = new Training();
+							
+							request.setTrainingName(rs.getString("TRAINING_NAME"));
+							request.setTrainingDescription(rs.getString("TRAINING_DESCRIPTION"));
+							request.setDateCreated(MARSHARLLERDATEFORMAT.format(rs.getDate("DATE_CREATED")));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", training.getTrainingName());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<Training> response = (List<Training>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+
+		@SuppressWarnings("all")
+		@Override
+		public List<Centre> getCentreDetail(Centre request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_all_centre")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<Centre>() {
+
+						@Override
+						public Centre mapRow(ResultSet rs, int rowNum) throws SQLException {
+							Centre request = new Centre();
+							
+							request.setCentre(rs.getString(1));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getCentre());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<Centre> response = (List<Centre>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+
+		@SuppressWarnings("all")
+		@Override
+		public List<Centre> viewCentre(Centre request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_centre_details")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<Centre>() {
+
+						@Override
+						public Centre mapRow(ResultSet rs, int rowNum) throws SQLException {
+							Centre request = new Centre();
+							
+							request.setCentre(rs.getString(2));
+							request.setParentCentre(rs.getString(3));
+							request.setLeaderInCharge(rs.getString(4));
+							request.setDateCreated(MARSHARLLERDATEFORMAT.format(rs.getDate(6)));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getCentre());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<Centre> response = (List<Centre>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
+		@SuppressWarnings("all")
+		@Override
+		public List<Testimony> viewTestimony(Testimony request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_testimony")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<Testimony>() {
+
+						@Override
+						public Testimony mapRow(ResultSet rs, int rowNum) throws SQLException {
+							Testimony request = new Testimony();
+							
+							request.setCentre(rs.getString("CENTRE"));
+							request.setTestifierName(rs.getString("TESTIFIER"));
+							request.setTestimonyTopic(rs.getString("TOPIC"));
+							request.setTestimony(rs.getString("TESTIMONY"));
+							request.setDateCreated(MARSHARLLERDATEFORMAT.format(rs.getDate("DATE_CREATED")));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getCentre());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<Testimony> response = (List<Testimony>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+
+		@SuppressWarnings("all")
+		@Override
+		public List<Message> viewMessage(Message request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_message")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+							new SqlParameter("p_type", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<Message>() {
+
+						@Override
+						public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
+							Message request = new Message();
+							
+							request.setSender(rs.getString("SENDER"));
+							request.setMessage(rs.getString("MESSAGE"));
+							request.setDateCreated(MARSHARLLERDATEFORMAT.format(rs.getDate("DATE_CREATED")));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getSender()).addValue("p_type", request.getType());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<Message> response = (List<Message>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
+		
+		@SuppressWarnings("all")
+		@Override
+		public List<Country> getCountry() {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_country")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<Country>() {
+
+						@Override
+						public Country mapRow(ResultSet rs, int rowNum) throws SQLException {
+							Country request = new Country();
+							
+							request.setCountryName(rs.getString("COUNTRY_NAME"));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			
+			Map<String, Object> returningResultSet = getIncident.execute();
+
+			List<Country> response = (List<Country>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
+		
+		@SuppressWarnings("all")
+		@Override
+		public List<SocialEvent> getLegalDocumentDetails(SocialEvent request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_legal_doc_details")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<SocialEvent>() {
+
+						@Override
+						public SocialEvent mapRow(ResultSet rs, int rowNum) throws SQLException {
+							SocialEvent request = new SocialEvent();
+							request.setEvent(rs.getString("ABOUT_DOCUMENT"));
+							request.setName(rs.getString("REQUESTER"));
+							request.setTopic(rs.getString("TITLE"));
+							request.setUploadFlag(rs.getString("UPLOAD_FLAG"));
+							request.setEventID(rs.getString("DOC_ID"));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getName());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<SocialEvent> response = (List<SocialEvent>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
+		@SuppressWarnings("unchecked")
+	    @Override
+	    public DocManagerRequest getLegalDocuments(String id) {
+
+	        SimpleJdbcCall get_documentby_docuniqueidSimpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
+	        get_documentby_docuniqueidSimpleJdbcCall.withProcedureName(baseUtilityPackage+ ".get_legal_document")
+	                .withoutProcedureColumnMetaDataAccess()
+	                .declareParameters(new SqlParameter("p_value", Types.VARCHAR), 
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+	                .returningResultSet("r_details", new RowMapper<DocManagerRequest>() {
+
+	                    @Override
+	                    public DocManagerRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+	                        LobHandler lobHandler = new DefaultLobHandler();
+	                        DocManagerRequest docMangerRequest = new DocManagerRequest();
+
+	                        docMangerRequest.setDocName(rs.getString("DOCUMENT_NAME"));
+	                        docMangerRequest.setDocumentUniqueID(rs.getString("DOCUMENT_UNIQUE_ID"));
+	                        docMangerRequest.setInputStream(lobHandler.getBlobAsBinaryStream(rs, "INPUTSTREAM"));
+	                        docMangerRequest.setFiletype(rs.getString("CONTENT_TYPE"));
+	                        docMangerRequest.setInputStreamLength(rs.getInt("DOCUMENT_LENGTH"));
+	                        docMangerRequest.setCompressed(rs.getBoolean("COMPRESSED"));
+	                        LOGGER.info(
+	                                "++++ Document Manager Response ==> " + docMangerRequest.getInputStream() + " ++++");
+
+	                        return docMangerRequest;
+	                    }
+	                });
+	        get_documentby_docuniqueidSimpleJdbcCall.compile();
+
+	        SqlParameterSource inParams = new MapSqlParameterSource()
+	                .addValue("p_value", id);
+
+
+	        Map<String, Object> returningResultSet = get_documentby_docuniqueidSimpleJdbcCall.execute(inParams);
+	        String responseCode = (String) returningResultSet.get("p_code");
+	        String validResponseCode = responseCode != null ? responseCode : "99";
+	        LOGGER.info("+++ validResponseCode ==> " + validResponseCode + " +++");
+	        String responseMsg = (String) returningResultSet.get("p_message");
+	        String validResponseMsg = responseMsg != null ? responseMsg : "";
+	        LOGGER.info("+++ validResponseMsg ==> " + validResponseMsg + " +++");
+	        LOGGER.info("+++ returningResultSet ==> \n" + returningResultSet + " +++");
+
+	        List<DocManagerRequest> dbResponse1 = ((List<DocManagerRequest>) returningResultSet
+	                .get("r_details"));
+
+	        return dbResponse1==null||dbResponse1.isEmpty()?new DocManagerRequest():dbResponse1.get(0);
+
+	    }
+		
+		@SuppressWarnings("all")
+		@Override
+		public List<Centre> getCentreDetails(Centre request) {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".get_centre")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlParameter("p_value", Types.VARCHAR),
+							new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<Centre>() {
+
+						@Override
+						public Centre mapRow(ResultSet rs, int rowNum) throws SQLException {
+							Centre request = new Centre();
+							
+							request.setCentre(rs.getString("CENTRE"));
+							request.setParentCentre(rs.getString("PARENT_CENTRE"));
+							request.setLeaderInCharge(rs.getString("PASTOR_IN_CHARGE"));
+							request.setDateCreated(MARSHARLLERDATEFORMAT.format(rs.getDate("DATE_CREATED")));
+							request.setArea(rs.getString("AREA"));
+							request.setZone(rs.getString("ZONE"));
+							request.setDistrict(rs.getString("DISTRICT"));
+							request.setCentreAddress(rs.getString("CENTRE_ADDRESS"));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+			
+			SqlParameterSource inparam = new MapSqlParameterSource().addValue("p_value", request.getCentre());
+
+			Map<String, Object> returningResultSet = getIncident.execute(inparam);
+
+			List<Centre> response = (List<Centre>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
+		
+		@SuppressWarnings("all")
+		@Override
+		public List<Quarterly> quarterlyCentre() {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".quarterly_centre")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<Quarterly>() {
+
+						@Override
+						public Quarterly mapRow(ResultSet rs, int rowNum) throws SQLException {
+							Quarterly request = new Quarterly();
+							
+							request.setQuarter1(rs.getInt(1));
+							request.setQuarter2(rs.getInt(2));
+							request.setQuarter3(rs.getInt(3));
+							request.setQuarter4(rs.getInt(4));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+
+			Map<String, Object> returningResultSet = getIncident.execute();
+
+			List<Quarterly> response = (List<Quarterly>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
+		@SuppressWarnings("all")
+		@Override
+		public List<Quarterly> quarterlyMember() {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".quarterly_member")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<Quarterly>() {
+
+						@Override
+						public Quarterly mapRow(ResultSet rs, int rowNum) throws SQLException {
+							Quarterly request = new Quarterly();
+							
+							request.setQuarter1(rs.getInt(1));
+							request.setQuarter2(rs.getInt(2));
+							request.setQuarter3(rs.getInt(3));
+							request.setQuarter4(rs.getInt(4));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+
+			Map<String, Object> returningResultSet = getIncident.execute();
+
+			List<Quarterly> response = (List<Quarterly>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
+		@SuppressWarnings("all")
+		@Override
+		public List<Quarterly> quarterlyOffering() {
+			SimpleJdbcCall getIncident = new SimpleJdbcCall(jdbcTemplate);
+			getIncident.withProcedureName(baseUtilityPackage + ".quarterly_offering")
+					.withoutProcedureColumnMetaDataAccess()
+					.declareParameters(new SqlOutParameter("r_details", Types.REF_CURSOR))
+					.returningResultSet("r_details", new RowMapper<Quarterly>() {
+
+						@Override
+						public Quarterly mapRow(ResultSet rs, int rowNum) throws SQLException {
+							Quarterly request = new Quarterly();
+							
+							request.setQuarter1(rs.getInt(1));
+							request.setQuarter2(rs.getInt(2));
+							request.setQuarter3(rs.getInt(3));
+							request.setQuarter4(rs.getInt(4));
+							return request;
+						}
+					});
+
+			getIncident.compile();
+
+			Map<String, Object> returningResultSet = getIncident.execute();
+
+			List<Quarterly> response = (List<Quarterly>) returningResultSet.get("r_details");
+
+			return response == null || response.isEmpty() ? new ArrayList<>() : response;
+		}
+		
 		
 	
 

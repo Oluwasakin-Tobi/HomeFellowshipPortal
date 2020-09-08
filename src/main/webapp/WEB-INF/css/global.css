@@ -1,0 +1,26 @@
+.side-nav {
+    background-color: #45ca62 !important;
+    border-radius: 5px!important;
+    color: #fff !important;
+    font-weight: 600 !important;
+}
+
+.side-nav:hover {
+    background-color: #fff !important;
+    border-radius: 5px !important;
+    color: #45ca62 !important;
+}
+
+.login-btn {
+    background-color: #32609a !important;
+    color: #fff;
+}
+
+.login-btn:hover {
+    background-color: #206ac5 !important;
+    color: #fff;
+}
+
+.attend-span {
+    font-size: 12px;
+}

@@ -1,20 +1,48 @@
 <%@ include file="authheader.jsp"%>
 
-
-<div class="content mt-3">
-	<!-- <div class="animated fadeIn"> -->
-	<div class="row">
+<main> 
 
 
-		<div class="col-md-12">
-			<div class="card">
-				<div class="card-header">
-					<strong class="card-title">View Prayer Request</strong>
+<div class="container-fluid">
+	<h1 class="mt-4">View Prayer Request</h1>
+	<ol class="breadcrumb mb-4">
+		<li class="breadcrumb-item"><a
+			href="<c:url value='/dashboard' />">Dashboard</a></li>
+		<li class="breadcrumb-item active">View Prayer Request</li>
+	</ol>
+	
+
+	<div class="col-md-12">
+		<div class="card shadow">
+		
+		<c:if test="${errorMessage != null}">
+
+				<div class="alert alert-danger alert-dismissable float-right">
+					<a class="alert-link" href="#"> <span class="alert-b"></span></a> <span
+						id="errshow alert-c">${errorMessage}</span> <a class="alert-link"
+						href="#"><span data-dismiss="alert" aria-label="close"
+						class="fa fa-times-circle alert-b float-right"></span></a>
 				</div>
-				<div class="card-body">
-					<table id="bootstrap-data-table-export"
-						class="table table-striped table-bordered">
-						<thead>
+
+			</c:if>
+			<c:if test="${successMessage != null}">
+
+				<div class="alert alert-success alert-dismissable float-right">
+					<a class="alert-link" href="#"> <span class="alert-c"></span></a> <span
+						id="errshow alert-c">${successMessage}</span> <a
+						class="alert-link" href="#"><span data-dismiss="alert"
+						aria-label="close" class="fa fa-times-circle alert-b float-right"></span></a>
+				</div>
+
+			</c:if>
+		
+			<div class="card-header">
+				<strong class="card-title">View Prayer Request</strong>
+			</div>
+			<div class="card-body">
+				<table id="dataTable"
+					class="table table-striped table-bordered">
+					<thead>
 							<tr>
 								<th>Name</th>
 								<th>Prayer Request</th>
@@ -69,7 +97,7 @@
 											value="${response.prayerId}" path="prayerId">
 											
 										<input type="hidden" name="status"
-											value="SHARE" path="status">
+											value="SHARED" path="status">
 
 										<div class="col-md-6">
 											<label for="disabledTextInput">Why Sharing?</label>
@@ -116,7 +144,7 @@
 											value="${response.prayerId}" path="prayerId">
 											
 										<input type="hidden" name="status"
-											value="UNSHARE" path="status">
+											value="UNSHARED" path="status">
 
 										<p>Are you sure you want to unshare?</p>
 										<p>&nbsp;</p>
@@ -134,10 +162,11 @@
 							</c:forEach>
 						</tbody>
 					</table>
-				</div>
 			</div>
 		</div>
-
-
 	</div>
+
 </div>
+</main>
+
+<%@ include file="footer.jsp"%>

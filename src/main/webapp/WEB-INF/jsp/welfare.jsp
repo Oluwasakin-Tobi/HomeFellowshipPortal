@@ -1,10 +1,15 @@
 <%@ include file="authheader.jsp"%>
-
-
-<div class="content mt-3" role="main" ng-app="myModule">
-	<div class="animated fadeIn">
-		<div class="row">
-			<c:if test="${errorMessage != null}">
+<main>
+                <div class="container-fluid">
+                    <h1 class="mt-4">Welfare Request</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="<c:url value = '/welfareRequest'/>">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Welfare Request</li>
+                    </ol>
+                    <div class="col-md-12">
+                        <div class="card shadow">
+                        
+                        <c:if test="${errorMessage != null}">
 
 				<div class="alert alert-danger alert-dismissable float-right">
 					<a class="alert-link" href="#"> <span class="alert-b"></span></a> <span
@@ -25,70 +30,101 @@
 
 			</c:if>
 
-			<div class="col-md-12">
-				<div class="card">
-				
-				<a href="<c:url value = '/viewWelfarePerUser'/>">
-			<button type = "button" class="btn btn-primary">View Request</button></a>
-			
-					<div class="card-header">
-						<strong class="card-title">WELFARE REQUEST</strong>
-					</div>
-					<div class="card-body">
-						<c:url var="welfareRequest" value="/welfareRequest" />
+                            <div class="card-header">
+                                <strong class="card-title">WELFARE REQUEST</strong>
+                                <div class="float-right">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#viewWelfarePerUser">View Request</button>
+                                </div>
+
+
+                            </div>
+                            <div class="card-body">
+                                <c:url var="welfareRequest" value="/welfareRequest" />
 						<mvc:form method="POST" action="${welfareRequest}"
 							enctype="multipart/form-data" id="demo-form2"
 							modelAttribute="Welfare"
 							class="form-horizontal form-label-left">
+                                    <div class="row">
 
-							<div class="row">
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
-								<input type="hidden" name="${_csrf.parameterName}"
-									value="${_csrf.token}" />
+                                        <div class="col-md-6">
+                                            <label class="bmd-label-floating">Name*</label>
+                                            <input class="form-control" type="text" name="name" id="name" value="${username}" path="name" required readonly autocomplete="off">
+                                        </div>
 
-								<div class="col-md-6">
-									<label class="bmd-label-floating">Name*</label> <input
-										class="form-control" type="text" name="name" id="name"
-										value="${username}" path="name" required readonly
-										autocomplete="off">
-								</div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
 
-							</div>
-							<br>
-							<div class="row">
+                                        <div class="col-md-6">
+                                            <label class="bmd-label-floating">Welfare Request*</label>
+                                            <textarea class="form-control" type="text" name="welfare" id="welfare" value="${request.welfare}" path="welfare" required autocomplete="off"></textarea>
+                                        </div>
 
-								<div class="col-md-6">
-									<label class="bmd-label-floating">Welfare Request*</label> <textarea
-										class="form-control" type="text" name="welfare" id="welfare"
-										value="${request.welfare}" path="welfare" required
-										autocomplete="off"></textarea>
-								</div>
-								
-							</div>
-							
-
-							<a href="<c:url value="/dashboard" />">
-								<button class="btn btn-primary" type="button">Cancel</button>
-							</a>
-							<button class="btn btn-primary" type="reset">Reset</button>
-
-							<button type="submit" id="submitbutton" class="btn btn-success">Submit</button>
-
-						</mvc:form>
+                                    </div>
 
 
+                                    <div class="row">
+                                        <div class="col-md-6 mt-3">
+                                            <a>
+                                                <button class="btn btn-primary" type="button">Cancel</button>
+                                            </a>
+                                            <button class="btn btn-warning" type="reset">Reset</button>
 
-					</div>
-				</div>
-			</div>
+                                            <button type="submit" id="submitbutton" class="btn btn-success">Submit</button>
+                                        </div>
+                                    </div>
+                                </mvc:form>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="viewWelfarePerUser" tabindex="-1" role="dialog" aria-labelledby="viewWelfarePerUserLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="viewWelfarePerUserLabel">View Welfare Request</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="col-md-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Welfare Request</th>
+                                                                        <th>Status</th>
+                                                                        <th>Comment</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <c:forEach items="${welfare}" varStatus="current" var="response">
+                                                                        <tr>
+                                                                            <td>${response.name}</td>
+                                                                            <td>${response.welfare}</td>
+                                                                            <td>${response.status}</td>
+                                                                            <td>${response.comment}</td>
+                                                                        </tr>
+                                                                    </c:forEach>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
 
-		</div>
-	</div>
-	<!-- .animated -->
-</div>
-<!-- .content -->
+                            </div>
+                        </div>
+                    </div>
 
-
-
-<script src="<c:url value='/js/app.js' />"></script>
+                </div>
+            </main>
+            
+   <%@ include file="footer.jsp"%>

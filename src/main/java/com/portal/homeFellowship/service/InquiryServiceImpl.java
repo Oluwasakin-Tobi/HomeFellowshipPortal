@@ -117,8 +117,8 @@ public class InquiryServiceImpl implements InquiryService {
 	}
 
 	@Override
-	public List<UserDetails> getUserDetails(String userName) {
-		return dao.getUserDetails(userName);
+	public List<UserDetails> getUserDetails(String userName, String role) {
+		return dao.getUserDetails(userName, role);
 	}
 
 	@Override
@@ -160,7 +160,7 @@ public class InquiryServiceImpl implements InquiryService {
 		header.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		
 		HttpEntity<?> requestEntity = new HttpEntity<>(request, header);
-		String url = "https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=pS3c9ntVaLMeEBhrk1YzEmDEKERq8UFShQekaqAQElI6jgqDUQo9zs18H2Ak&from=CITHPortal&to="+request.getPhoneNo()+"&body="+request.getMessage();
+		String url = "https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=NwDWcQ9Vtoff5grSLsb52XzEcOlBYPnDLRcuGfW22fxG8AiPCZ67NqU2VI6L&from=BULKSMS.ng&to="+request.getPhoneNo()+"&body="+request.getMessage();
 		
 		LOGGER.info("sms response "+request);//support@bulksmsnigeria.com
 		
@@ -321,28 +321,32 @@ public class InquiryServiceImpl implements InquiryService {
 	}
 
 	@Override
-	@Scheduled(cron="${reminder.cron.expression}")
+	@Scheduled(cron="${cron.expression.remainder}")
 	public Response getCalendarEventToSend() {
+		LOGGER.info("Here");
 		List<CalendarDetail> resp = dao.getCalendarEventToSend();
 		
 		//TODO A SERVICE TO GET ALL THE PHONE NUMBERS AND MAILS OF ALL USERS
-		
+		LOGGER.info("Here2");
 		
 		Response response = new Response();
 		for(int i=0; i<resp.size();i++) {
 			
-
-			List<UserDetails> userDetails = dao.userToSendRemainder(resp.get(i).getSendTo(), resp.get(i).getSendToUser());
+			LOGGER.info("event"+resp);
 			
+			List<UserDetails> userDetails = dao.userToSendRemainder(resp.get(i).getSendTo(), resp.get(i).getSendToUser());
+			LOGGER.info("Here2"+userDetails);
 			for (int j=0; j<userDetails.size(); j++) {
 				Sms req = new Sms();
 				req.setMessage(resp.get(i).getEvent());
 				req.setPhoneNo(userDetails.get(j).getPhoneNo());
 				response = sendSMS(req);
+				LOGGER.info("sms"+response);
 				
 				Sms mailRequest = new Sms();
 				mailRequest.setPhoneNo(userDetails.get(j).getUserEmailAdd());
 				mailRequest.setMessage(resp.get(i).getEvent());
+				LOGGER.info("mail"+response);
 				try {
 					response = sendMail(mailRequest);
 				} catch (MessagingException e) {
@@ -459,90 +463,187 @@ public class InquiryServiceImpl implements InquiryService {
 	public List<DirectorReport> getDirectorReport(Filter request) {
 		return dao.getDirectorReport(request);
 	}
+	
+	
+	@Override
+	public List<WeeklyReport> getCentreReport(Filter request) {
+		return dao.getCentreReport(request);
+	}
 
-//	@Override
-//	public DocManagerRequest getOutlineDocument(String id) throws IOException {
-//
-//
-//        DocManagerRequest response = dao.getOutlineDocument(id);
-//        //return dao.getDocument(id);
-//
-//        String inputStreamStr = "";
-//
-//        if (response != null && response.getInputStream() != null) {
-//            String returnedEncodedBase64String = BasicUtil.getStringFromInputStream(response.getInputStream());
-//            // LOGGER.info("++++ returnedEncodedBase64String ==> " +
-//            // returnedEncodedBase64String + " ++++");
-//            
-//            if (response.isCompressed()) {
-//				ZipInputStream zis = null;
-//				InputStream inputStream =null;
-//				FileOutputStream fosUnzip =null;
-//				FileInputStream fis = null;
-//				File unZippedFile = null;
-//				try { 
-//					byte[] decodedBase64Bytes = Base64.decodeBase64(returnedEncodedBase64String);
-//					inputStream = new ByteArrayInputStream(decodedBase64Bytes);
-//
-//					File destDir = new File(System.getProperty("java.io.tmpdir"));
-//					byte[] buffer = new byte[1024];
-//					zis = new ZipInputStream(inputStream);
-//					ZipEntry zipEntryUnzip = zis.getNextEntry();
-//					while (zipEntryUnzip != null) {
-//						File newFile = BasicUtil.newFile(destDir, zipEntryUnzip);
-//						fosUnzip = new FileOutputStream(newFile);
-//						int len;
-//						while ((len = zis.read(buffer)) > 0) {
-//							fosUnzip.write(buffer, 0, len);
-//						}
-//						fosUnzip.close();
-//						zipEntryUnzip = zis.getNextEntry();
-//					}
-//					zis.closeEntry();
-//					zis.close();
-//
-//					try {
-//						unZippedFile = new File(destDir + File.separator + response.getDocName());
-//						fis = new FileInputStream(unZippedFile);
-//						inputStreamStr = BasicUtil.getStringFromInputStream(fis);
-//					} catch (Exception e) { 
-//						LOGGER.error("********Oops Something went wrong - maybe not found zip document because not able to zip **********" + e);
-//						inputStreamStr = returnedEncodedBase64String;
-//					}
-//					if (unZippedFile != null && unZippedFile.exists())
-//						unZippedFile.delete();
-//
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//					LOGGER.error("********Oops Something went wrong **********" + e);
-//					inputStreamStr = returnedEncodedBase64String;
-//				} finally {
-//					if (unZippedFile != null && unZippedFile.exists())
-//						unZippedFile.delete();
-//					if (zis != null) {
-//						zis.close();
-//					}
-//					if (fosUnzip != null) {
-//						fosUnzip.close();
-//					}
-//					if (inputStream != null) {
-//						inputStream.close();
-//					}
-//					if (fis != null) {
-//						fis.close();
-//					}
-//				}
-//
-//			} else {
-//				inputStreamStr = returnedEncodedBase64String;
-//			}
-//
-//            //if (response != null) {
-//                response.setInputStreamStr(inputStreamStr);
-//                return response;
-//               // return new ResponseEntity<>(response, HttpStatus.OK);
-//            } else
-//                throw new GlobalRestException("99", "Oops Something went wrong while getting document.");
-//        }
+	@Override
+	public List<WeeklyReport> getAreaReport(Filter request) {
+		return dao.getAreaReport(request);
+	}
 
+	@Override
+	public List<WeeklyReport> getZoneReport(Filter request) {
+		return dao.getZoneReport(request);
+	}
+
+	@Override
+	public List<WeeklyReport> getDistrictReport(Filter request) {
+		return dao.getDistrictReport(request);
+	}
+
+	@Override
+	public List<WeeklyReport> getVisitorDetail(Filter request) {
+		
+		if(("CENTRE").equalsIgnoreCase(request.getType())) {
+			request.setValue(request.getCentre());
+		}
+		else if(("AREA").equalsIgnoreCase(request.getType())) {
+			request.setValue(request.getArea());
+		}
+		else if(("ZONE").equalsIgnoreCase(request.getType())) {
+			request.setValue(request.getZone());
+		}
+		else{
+			request.setValue(request.getDistrict());
+		}
+		
+		return dao.getVisitorDetail(request);
+	}
+
+	@Override
+	public List<Training> getTraining(Training training) {
+		return dao.getTraining(training);
+	}
+
+	@Override
+	public List<Centre> getCentreDetail(Centre request) {
+		return dao.getCentreDetail(request);
+	}
+
+	@Override
+	public List<Centre> viewCentre(Centre request) {
+		return dao.viewCentre(request);
+	}
+
+	@Override
+	public List<Testimony> viewTestimony(Testimony request) {
+		return dao.viewTestimony(request);
+	}
+	
+	@Override
+	public List<Message> viewMessage(Message request) {
+		return dao.viewMessage(request);
+	}
+	
+	@Override
+	public List<Country> getCountry() {
+		return dao.getCountry();
+	}
+	
+	
+	@Override
+	public List<SocialEvent> getLegalDocumentDetails(SocialEvent request){
+		return dao.getLegalDocumentDetails(request);
+	}
+
+	
+
+	@Override
+	public DocManagerRequest getLegalDocuments(String id) throws IOException {
+
+
+        DocManagerRequest response = dao.getLegalDocuments(id);
+        //return dao.getDocument(id);
+
+        String inputStreamStr = "";
+
+        if (response != null && response.getInputStream() != null) {
+            String returnedEncodedBase64String = BasicUtil.getStringFromInputStream(response.getInputStream());
+            // LOGGER.info("++++ returnedEncodedBase64String ==> " +
+            // returnedEncodedBase64String + " ++++");
+            
+            if (response.isCompressed()) {
+				ZipInputStream zis = null;
+				InputStream inputStream =null;
+				FileOutputStream fosUnzip =null;
+				FileInputStream fis = null;
+				File unZippedFile = null;
+				try { 
+					byte[] decodedBase64Bytes = Base64.decodeBase64(returnedEncodedBase64String);
+					inputStream = new ByteArrayInputStream(decodedBase64Bytes);
+
+					File destDir = new File(System.getProperty("java.io.tmpdir"));
+					byte[] buffer = new byte[1024];
+					zis = new ZipInputStream(inputStream);
+					ZipEntry zipEntryUnzip = zis.getNextEntry();
+					while (zipEntryUnzip != null) {
+						File newFile = BasicUtil.newFile(destDir, zipEntryUnzip);
+						fosUnzip = new FileOutputStream(newFile);
+						int len;
+						while ((len = zis.read(buffer)) > 0) {
+							fosUnzip.write(buffer, 0, len);
+						}
+						fosUnzip.close();
+						zipEntryUnzip = zis.getNextEntry();
+					}
+					zis.closeEntry();
+					zis.close();
+
+					try {
+						unZippedFile = new File(destDir + File.separator + response.getDocName());
+						fis = new FileInputStream(unZippedFile);
+						inputStreamStr = BasicUtil.getStringFromInputStream(fis);
+					} catch (Exception e) { 
+						LOGGER.error("********Oops Something went wrong - maybe not found zip document because not able to zip **********" + e);
+						inputStreamStr = returnedEncodedBase64String;
+					}
+					if (unZippedFile != null && unZippedFile.exists())
+						unZippedFile.delete();
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					LOGGER.error("********Oops Something went wrong **********" + e);
+					inputStreamStr = returnedEncodedBase64String;
+				} finally {
+					if (unZippedFile != null && unZippedFile.exists())
+						unZippedFile.delete();
+					if (zis != null) {
+						zis.close();
+					}
+					if (fosUnzip != null) {
+						fosUnzip.close();
+					}
+					if (inputStream != null) {
+						inputStream.close();
+					}
+					if (fis != null) {
+						fis.close();
+					}
+				}
+
+			} else {
+				inputStreamStr = returnedEncodedBase64String;
+			}
+
+            //if (response != null) {
+                response.setInputStreamStr(inputStreamStr);
+                return response;
+               // return new ResponseEntity<>(response, HttpStatus.OK);
+            } else
+                throw new GlobalRestException("99", "Oops Something went wrong while getting document.");
+        }
+	
+	@Override
+	public List<Centre> getCentreDetails(Centre request) {
+		return dao.getCentreDetails(request);
+	}
+	
+	@Override
+	public List<Quarterly> quarterlyCentre() {
+		return dao.quarterlyCentre();
+	}
+	
+	@Override
+	public List<Quarterly> quarterlyMember() {
+		return dao.quarterlyMember();
+	}
+	
+	@Override
+	public List<Quarterly> quarterlyOffering() {
+		return dao.quarterlyOffering();
+	}
 }

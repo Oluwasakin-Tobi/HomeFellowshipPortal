@@ -1,9 +1,16 @@
 <%@ include file="authheader.jsp"%>
 
+<main  ng-app="myModule">
+<div class="container-fluid">
+	<h1 class="mt-4">Announcement</h1>
+	<ol class="breadcrumb mb-4">
+		<li class="breadcrumb-item"><a
+			href="<c:url value = '/dashboard'/>">Dashboard</a></li>
+		<li class="breadcrumb-item active">Announcement</li>
+	</ol>
+	<div class="col-md-12">
+		<div class="card shadow">
 
-<div class="content mt-3" role="main" ng-app="myModule">
-	<div class="animated fadeIn">
-		<div class="row">
 			<c:if test="${errorMessage != null}">
 
 				<div class="alert alert-danger alert-dismissable float-right">
@@ -25,13 +32,11 @@
 
 			</c:if>
 
-			<div class="col-md-12">
-				<div class="card">
-					<div class="card-header">
-						<strong class="card-title">CREATE SPECIAL ANNOUNCEMENT</strong>
-					</div>
-					<div class="card-body">
-						<c:url var="loadAnnouncement" value="/loadAnnouncement" />
+			<div class="card-header">
+				<strong class="card-title">ANNOUNCEMENT</strong>
+			</div>
+			<div class="card-body">
+				<c:url var="loadAnnouncement" value="/loadAnnouncement" />
 						<mvc:form method="POST" action="${loadAnnouncement}"
 							enctype="multipart/form-data" id="demo-form2"
 							modelAttribute="Announcement"
@@ -60,6 +65,7 @@
 										<option value="CHILD DEDICATION">CHILD DEDICATION</option>
 										<option value="WEDDING">WEDDING</option>
 										<option value="MEETING">MEETING</option>
+										<!-- <option value="TRAININGS">TRAININGS</option> -->
 										<option value="OTHERS">OTHERS</option>
 										 </select>
 										 
@@ -96,6 +102,19 @@
 										value="${request.meetingLink}" path="meetingLink"
 										autocomplete="off"></textarea>
 								</div> 
+								
+								<%-- <div class="col-md-6"
+										ng-show="choice=='TRAININGS'">
+										<label for="exampleFormControlSelect1">Training*</label> <select
+											id="training" name="training" path="training"
+											class="form-control" ng-required="choice=='TRAININGS'">
+											<option value="">Select option</option>
+											<c:forEach items="${getTraining}" varStatus="current"
+											var="training">
+											<option value="${training.trainingName}">${training.trainingName}</option>
+										</c:forEach>
+										</select>
+									</div> --%>
 
 							</div>
 							<br>
@@ -132,30 +151,28 @@
 								</div>  
 								
 							</div> 
-							
 
-							<a href="<c:url value="/dashboard" />">
+
+					<div class="row">
+						<div class="col-md-6 mt-3">
+							<a>
 								<button class="btn btn-primary" type="button">Cancel</button>
 							</a>
-							<button class="btn btn-primary" type="reset">Reset</button>
+							<button class="btn btn-warning" type="reset">Reset</button>
 
 							<button type="submit" id="submitbutton" class="btn btn-success">Submit</button>
-
-						</mvc:form>
-
-
-
+						</div>
 					</div>
-				</div>
+				</mvc:form>
+
+
+
 			</div>
-
-
 		</div>
 	</div>
-	<!-- .animated -->
+
 </div>
-<!-- .content -->
+</main>
 
-
-
+<%@ include file="footer.jsp"%>
 <script src="<c:url value='/js/app.js' />"></script>

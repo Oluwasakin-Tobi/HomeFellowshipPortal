@@ -1,49 +1,48 @@
 <%@ include file="authheader.jsp"%>
 
+<main> 
 
 
-<div class="content mt-3">
-	<div class="animated fadeIn">
-		<div class="row">
+<div class="container-fluid">
+	<h1 class="mt-4">Pending Users</h1>
+	<ol class="breadcrumb mb-4">
+		<li class="breadcrumb-item"><a
+			href="<c:url value='/dashboard' />">Dashboard</a></li>
+		<li class="breadcrumb-item active">Pending Users</li>
+	</ol>
+	
+	<c:if test="${errorMessage != null}">
 
-			<c:if test="${errorMessage != null}">
+	<div class="alert alert-danger alert-dismissable float-right">
+		<a class="alert-link" href="#"> <span class="alert-b"></span></a> <span
+			id="errshow alert-c">${errorMessage}</span> <a class="alert-link"
+			href="#"><span data-dismiss="alert" aria-label="close"
+			class="fa fa-times-circle alert-b float-right"></span></a>
+	</div>
 
-				<div class="col-sm-4">
-					<div class="alert alert-danger alert-dismissable float-right">
-						<a class="alert-link" href="#"> <span class="alert-b"></span></a>
-						<span id="errshow alert-c">${errorMessage}</span> <a
-							class="alert-link" href="#"><span data-dismiss="alert"
-							aria-label="close" class="fa fa-times-circle alert-b float-right"></span></a>
-					</div>
-				</div>
+</c:if> <c:if test="${successMessage != null}">
 
-			</c:if>
-			<c:if test="${successMessage != null}">
+	<div class="alert alert-success alert-dismissable float-right">
+		<a class="alert-link" href="#"> <span class="alert-c"></span></a> <span
+			id="errshow alert-c">${successMessage}</span> <a class="alert-link"
+			href="#"><span data-dismiss="alert" aria-label="close"
+			class="fa fa-times-circle alert-b float-right"></span></a>
+	</div>
 
+</c:if>
 
-				<div class="col-sm-4">
-					<div class="alert alert-success alert-dismissable float-right">
-						<a class="alert-link" href="#"> <span class="alert-c"></span></a>
-						<span id="errshow alert-c">${successMessage}</span> <a
-							class="alert-link" href="#"><span data-dismiss="alert"
-							aria-label="close" class="fa fa-times-circle alert-b float-right"></span></a>
-					</div>
-				</div>
-
-			</c:if>
-
-			<div class="col-md-12">
-				<div class="card">
-					<div class="card-header">
-						<strong class="card-title"> <c:if
+	<div class="col-md-12">
+		<div class="card shadow">
+			<div class="card-header">
+				<strong class="card-title"><c:if
 								test="${appuserdetails=='true'}"> Edited</c:if> <c:if
 								test="${approveeditrole=='true'}"> Removed User(s) Role</c:if>
 							User(s) Pending Authorization</strong>
-					</div>
-					<div class="card-body">
-						<table id="bootstrap-data-table-export"
-							class="table table-striped table-bordered">
-							<thead>
+			</div>
+			<div class="card-body">
+				<table id="bootstrap-data-table-export"
+					class="table table-striped table-bordered">
+					<thead>
 								<tr>
 
 									<th>User Name</th>
@@ -123,13 +122,11 @@
 								</c:forEach>
 							</tbody>
 						</table>
-					</div>
-				</div>
 			</div>
-
-
 		</div>
 	</div>
-	<!-- .animated -->
+
 </div>
-<%-- <%@ include file="footer.jsp"%> --%>
+</main>
+
+<%@ include file="footer.jsp"%>

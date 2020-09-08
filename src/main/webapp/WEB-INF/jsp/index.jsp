@@ -1,228 +1,151 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
 <head>
+ <script src="/assets/anyChart/anychart-base.min.js"></script> 
+ <script src="/assets/anyChart/anychart-exports.min.js"></script>
+ <script src="/assets/anyChart/anychart-jquery.min.js"></script>
+ <script src="/assets/anyChart/anychart-ui.min.css"></script>
+    <!-- <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-base.min.js" type="text/javascript"></script> -->
+    <script>
+anychart.onDocumentReady(function () {
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    // set stage
+    stage = anychart.graphics.create("container");
 
-  <title>Grayscale - Start Bootstrap Theme</title>
+    // set layers
 
-  <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    //for the Winter Sales chart
+    layer_1 = stage.layer();
+    layer_1.zIndex(80);
+    //for the Spring Sales chart
+    layer_2 = stage.layer();
+    //for the Summer Sales chart
+    layer_3 = stage.layer();
+    //for the Fall Sales chart
+    layer_4 = stage.layer();
+    //for the buttons
+    layer_5 = stage.layer();
+    layer_5.zIndex(100);
 
-  <!-- Custom fonts for this template -->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    // set data for the Winter Sales
+    var data_1 = [
+      {x: "Ice-Cream", value: (${chartF}[0]), fill:"#00FFFF"},
+      {x: "Sweets", value: 10000, fill:"#0DD9E6"},
+      {x: "Chocolates", value: 19000, fill:"#1AB2CC"},
+      {x: "Hot chocolate", value: 16000, fill:"#268CB2"},
+      {x: "Cookies", value: 9000, fill:"#336699"} 
+    ];
 
-  <!-- Custom styles for this template -->
-  <link href="css/grayscale.min.css" rel="stylesheet">
+    // chart type
+    var chart_1 = anychart.column();
+    chart_1.title("Winter Sales");
+    chart_1.padding(50, 0, 0, 0);
+    var series_1 = chart_1.column(data_1);
+    series_1.stroke(null);
 
+    // draw
+    chart_1.container(layer_1).draw();
+
+    // set data for the Spring Sales
+    var data_2 = [
+      {x: "Ice-Cream", value: 10000, fill:"#FFCC99"},
+      {x: "Sweets", value: 12000, fill:"#F2BFB2"},
+      {x: "Chocolates", value: 13000, fill:"#E6B2CC"},
+      {x: "Hot chocolate", value: 6000, fill:"#D9A6E6"},
+      {x: "Cookies", value: 3000, fill:"#CC99FF"}
+    ];
+
+    // set series data
+    var chart_2 = anychart.column();
+    chart_2.title("Spring Sales");
+    chart_2.padding(50, 0, 0, 0);
+    var series_2 = chart_2.column(data_2);
+    series_2.stroke(null);
+
+    // draw
+    chart_2.container(layer_2).draw();
+
+    //set data for the Summer Sales
+    var data_3 = [
+      {x: "Ice-Cream", value: 16350, fill:"#CCFF33"},
+      {x: "Sweets", value: 8930, fill:"#99EF50"},
+      {x: "Chocolates", value: 3400, fill:"#66DF6C"},
+      {x: "Hot chocolate", value: 2780, fill:"#33CF88"},
+      {x: "Cookies", value: 2000, fill:"#00bfa5"}
+    ];
+
+    // set series data
+    var chart_3 = anychart.column();
+    chart_3.title("Summer Sales");
+    chart_3.padding(50, 0, 0, 0);
+    var series_3 = chart_3.column(data_3);
+    series_3.stroke(null);
+
+    // draw
+    chart_3.container(layer_3);
+    chart_3.draw();
+
+    var data_4 = [
+      {x: "Ice-Cream", value: 5000, fill:"#FFA000"},
+      {x: "Sweets", value: 7000, fill:"#DF7800"},
+      {x: "Chocolates", value: 8440, fill:"#C05000"},
+      {x: "Hot chocolate", value: 9800, fill:"#A02800"},
+      {x: "Cookies", value: 10250, fill:"#800000"}
+    ];
+
+
+    // set series data
+    var chart_4 = anychart.column();
+    chart_4.title("Fall Sales");
+    chart_4.padding(50, 0, 0, 0);
+    var series_4 = chart_4.column(data_4);
+    series_4.stroke(null);
+
+    // draw
+    chart_4.container(layer_4).draw();
+});
+
+function winter() {
+  stage.suspend();
+  layer_1.zIndex(1000000);
+  layer_2.zIndex(0);
+  layer_3.zIndex(0);
+  layer_4.zIndex(0);
+  stage.resume();
+};
+
+function spring() {
+  stage.suspend();
+  layer_1.zIndex(0);
+  layer_2.zIndex(1000000);
+  layer_3.zIndex(0);
+  layer_4.zIndex(0);
+  stage.resume();
+};
+
+function summer() {
+  stage.suspend();
+  layer_1.zIndex(0);
+  layer_2.zIndex(0);
+  layer_3.zIndex(1000000);
+  layer_4.zIndex(0);
+  stage.resume();
+};
+
+function autumn() {
+  stage.suspend();
+  layer_1.zIndex(0);
+  layer_2.zIndex(0);
+  layer_3.zIndex(0);
+  layer_4.zIndex(1000000);
+  stage.resume();
+};
+</script>
 </head>
-
-<body id="page-top">
-
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-    <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="#page-top">Start Bootstrap</a>
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        Menu
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#about">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#projects">Projects</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#signup">Contact</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Header -->
-  <header class="masthead">
-    <div class="container d-flex h-100 align-items-center">
-      <div class="mx-auto text-center">
-        <h1 class="mx-auto my-0 text-uppercase">Grayscale</h1>
-        <h2 class="text-white-50 mx-auto mt-2 mb-5">A free, responsive, one page Bootstrap theme created by Start Bootstrap.</h2>
-        <a href="#about" class="btn btn-primary js-scroll-trigger">Get Started</a>
-      </div>
-    </div>
-  </header>
-
-  <!-- About Section -->
-  <section id="about" class="about-section text-center">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 mx-auto">
-          <h2 class="text-white mb-4">Built with Bootstrap 4</h2>
-          <p class="text-white-50">Grayscale is a free Bootstrap theme created by Start Bootstrap. It can be yours right now, simply download the template on
-            <a href="http://startbootstrap.com/template-overviews/grayscale/">the preview page</a>. The theme is open source, and you can use it for any purpose, personal or commercial.</p>
-        </div>
-      </div>
-      <img src="img/ipad.png" class="img-fluid" alt="">
-    </div>
-  </section>
-
-  <!-- Projects Section -->
-  <section id="projects" class="projects-section bg-light">
-    <div class="container">
-
-      <!-- Featured Project Row -->
-      <div class="row align-items-center no-gutters mb-4 mb-lg-5">
-        <div class="col-xl-8 col-lg-7">
-          <img class="img-fluid mb-3 mb-lg-0" src="img/bg-masthead.jpg" alt="">
-        </div>
-        <div class="col-xl-4 col-lg-5">
-          <div class="featured-text text-center text-lg-left">
-            <h4>Shoreline</h4>
-            <p class="text-black-50 mb-0">Grayscale is open source and MIT licensed. This means you can use it for any project - even commercial projects! Download it, customize it, and publish your website!</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project One Row -->
-      <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
-        <div class="col-lg-6">
-          <img class="img-fluid" src="img/demo-image-01.jpg" alt="">
-        </div>
-        <div class="col-lg-6">
-          <div class="bg-black text-center h-100 project">
-            <div class="d-flex h-100">
-              <div class="project-text w-100 my-auto text-center text-lg-left">
-                <h4 class="text-white">Misty</h4>
-                <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
-                <hr class="d-none d-lg-block mb-0 ml-0">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project Two Row -->
-      <div class="row justify-content-center no-gutters">
-        <div class="col-lg-6">
-          <img class="img-fluid" src="img/demo-image-02.jpg" alt="">
-        </div>
-        <div class="col-lg-6 order-lg-first">
-          <div class="bg-black text-center h-100 project">
-            <div class="d-flex h-100">
-              <div class="project-text w-100 my-auto text-center text-lg-right">
-                <h4 class="text-white">Mountains</h4>
-                <p class="mb-0 text-white-50">Another example of a project with its respective description. These sections work well responsively as well, try this theme on a small screen!</p>
-                <hr class="d-none d-lg-block mb-0 mr-0">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Signup Section -->
-  <section id="signup" class="signup-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-10 col-lg-8 mx-auto text-center">
-
-          <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
-          <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
-
-          <form class="form-inline d-flex">
-            <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter email address...">
-            <button type="submit" class="btn btn-primary mx-auto">Subscribe</button>
-          </form>
-
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section class="contact-section bg-black">
-    <div class="container">
-
-      <div class="row">
-
-        <div class="col-md-4 mb-3 mb-md-0">
-          <div class="card py-4 h-100">
-            <div class="card-body text-center">
-              <i class="fas fa-map-marked-alt text-primary mb-2"></i>
-              <h4 class="text-uppercase m-0">Address</h4>
-              <hr class="my-4">
-              <div class="small text-black-50">4923 Market Street, Orlando FL</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 mb-3 mb-md-0">
-          <div class="card py-4 h-100">
-            <div class="card-body text-center">
-              <i class="fas fa-envelope text-primary mb-2"></i>
-              <h4 class="text-uppercase m-0">Email</h4>
-              <hr class="my-4">
-              <div class="small text-black-50">
-                <a href="#">hello@yourdomain.com</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 mb-3 mb-md-0">
-          <div class="card py-4 h-100">
-            <div class="card-body text-center">
-              <i class="fas fa-mobile-alt text-primary mb-2"></i>
-              <h4 class="text-uppercase m-0">Phone</h4>
-              <hr class="my-4">
-              <div class="small text-black-50">+1 (555) 902-8832</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="social d-flex justify-content-center">
-        <a href="#" class="mx-2">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a href="#" class="mx-2">
-          <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="#" class="mx-2">
-          <i class="fab fa-github"></i>
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-black small text-center text-white-50">
-    <div class="container">
-      Copyright &copy; Your Website 2019
-    </div>
-  </footer>
-
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Plugin JavaScript -->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for this template -->
-  <script src="js/grayscale.min.js"></script>
-
+<body>
+<button onclick="winter()">Winter Sales</button>
+<button onclick="spring()">Spring Sales</button>
+<button onclick="summer()">Summer Sales</button>
+<button onclick="autumn()">Autumn Sales</button>
+    <div id="container" style="width: 500px; height: 400px;"></div>
 </body>
-
 </html>
